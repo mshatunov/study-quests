@@ -17,7 +17,7 @@ en:{
  hintMatch:'Tap a word on the left, then its match on the right. Tap a pair again to undo.',
  hintSort:'Choose a group for every card, then press Check.',
  hintFill:'Tap a word to put it in the next gap. Tap a filled gap to remove the word.',
- fillHead:'Fill in the gaps:', typeHere:'Type your answer', choose:'choose...',
+ fillHead:'Fill in the gaps:', typeHere:'Type your answer', choose:'choose...', writeHint:'Write 2-4 sentences in your own words, then press Check to see the model answer.', model:'Model answer:', keys:'Key ideas:',
  from:'From:', shouldBe:'should be:', correct:'Correct answer:',
  yes:['Yes! 🎉','Perfect!','Nailed it! 💪','Scientist level! 🔬'], almost:'Almost! Some parts were right.', no:'Not this time - read the fact below. 📚',
  practice:'Practice more:', redo:n=>'Retry my '+n+' mistakes', playAgain:'Play again', home:'Home',
@@ -35,7 +35,7 @@ ru:{
  hintMatch:'Нажми слово слева, потом пару справа. Нажми на пару еще раз, чтобы отменить.',
  hintSort:'Выбери группу для каждой карточки и нажми «Проверить».',
  hintFill:'Нажми слово, чтобы поставить его в следующий пропуск. Нажми на пропуск, чтобы убрать слово.',
- fillHead:'Заполни пропуски:', typeHere:'Введи ответ', choose:'выбери...',
+ fillHead:'Заполни пропуски:', typeHere:'Введи ответ', choose:'выбери...', writeHint:'Напиши 2-4 предложения своими словами и нажми «Проверить», чтобы увидеть образец ответа.', model:'Образец ответа:', keys:'Ключевые идеи:',
  from:'Из:', shouldBe:'правильно:', correct:'Правильный ответ:',
  yes:['Да! 🎉','Отлично!','Точно в цель! 💪','Уровень ученого! 🔬'], almost:'Почти! Часть ответа верная.', no:'Не в этот раз - прочитай факт ниже. 📚',
  practice:'Стоит повторить:', redo:n=>'Повторить ошибки ('+n+')', playAgain:'Еще раз', home:'Домой',
@@ -53,6 +53,8 @@ window.sort =(q,cats,items,e,s)=>({t:'sort',q,cats,items,e,s});
 window.fill =(q,ans,bank,e,s)=>({t:'fill',q,ans,bank,e,s});
 /* typed answer: accepted = array of accepted strings (case/space insensitive; numbers compare by value) */
 window.typed=(q,accepted,e,s,unit)=>({t:'typed',q,acc:[].concat(accepted),e,s,unit});
+/* written answer: keywords = array of key ideas, each 'a|b|c' (any alternative as a substring counts); model = model answer shown after Check */
+window.write=(q,keywords,model,e,s)=>({t:'write',q,keywords,model,e,s});
 /* label a picture: svg={vb:'0 0 440 370', body:'<rect .../>'}, points=[{n:'Aorta',x:385,y:258}, ...] */
 window.label=(q,svg,points,e,s)=>({t:'label',q,svg,points,e,s});
 
@@ -322,6 +324,21 @@ R.typed={
     return ok?1:0;
   }
 };
+R.write={
+  render(q,el){
+    el.innerHTML=`<p class="sub" style="margin:0 0 8px">${T.writeHint}</p><textarea class="typed" id="wi" rows="5" style="max-width:100%;resize:vertical" placeholder="${T.typeHere}"></textarea>`;
+    const wi=$('#wi');wi.oninput=()=>setReady(wi.value.trim().length>=8);
+    setTimeout(()=>wi.focus(),50);
+  },
+  check(q){
+    const wi=$('#wi');wi.disabled=true;const txt=wi.value.toLowerCase();
+    const hit=q.keywords.map(k=>k.split('|').some(a=>txt.includes(a.trim().toLowerCase())));
+    const n=hit.filter(Boolean).length;
+    wi.classList.add(n===q.keywords.length?'ok':'no');
+    wi.insertAdjacentHTML('afterend',`<div class="fix" style="margin-top:10px"><b>${T.model}</b> ${fmt(q.model)}</div><div class="fix" style="margin-top:6px;font-size:15px">${T.keys} ${q.keywords.map((k,i)=>(hit[i]?'✅ ':'⬜ ')+fmt(k.split('|')[0])).join(' · ')}</div>`);
+    return n/q.keywords.length;
+  }
+};
 R.label={
   render(q,el){
     S.cur.pick={};
@@ -348,6 +365,7 @@ function confetti(n){
 }
 document.addEventListener('keydown',e=>{
   if(!S)return;
+  if(e.target&&e.target.tagName==='TEXTAREA')return;
   if(e.key==='Enter'){const n=$('#next');if(n&&n.style.display!=='none'){e.preventDefault();n.click()}else{const c=$('#check');if(c&&!c.disabled&&c.style.display!=='none')c.click()}}
   const q=S.qs[S.i];
   if(q&&(q.t==='mc'||q.t==='tf')&&!S.answered){const k=+e.key;if(k>=1&&k<=q.opts.length){const b=document.querySelectorAll('.opt')[k-1];if(b)b.click()}}
@@ -371,6 +389,7 @@ function validate(){
       if(q.t==='sort'){chk(q.cats.length>=2&&q.items.length>=3,w+' needs >=2 groups and >=3 items');chk(q.items.every(it=>it[1]>=0&&it[1]<q.cats.length),w+' item group index out of range');chk(new Set(q.items.map(it=>it[1])).size>=2,w+' all items in one group')}
       if(q.t==='fill'){const n=(q.q.match(/___/g)||[]).length;chk(n===q.ans.length&&n>=1,w+' blanks ('+n+') != answers ('+q.ans.length+')');chk(q.ans.every(a=>q.bank.includes(a)),w+' answer missing from bank');chk(q.bank.length>=q.ans.length,w+' bank too small')}
       if(q.t==='typed')chk(q.acc.length>=1&&q.acc[0]!=='',w+' no accepted answer');
+      if(q.t==='write')chk(q.keywords&&q.keywords.length>=2&&q.model,w+' needs >=2 keywords and a model answer');
       if(q.t==='label'){chk(q.points.length>=2&&q.svg&&q.svg.vb&&q.svg.body,w+' needs svg + >=2 points');chk(new Set(q.points.map(p=>p.n)).size===q.points.length,w+' duplicate point names')}
     });
   });
@@ -387,6 +406,7 @@ function selftest(){
     else if(q.t==='sort'){q.items.forEach((it,i)=>body.querySelector(`.cb[data-i="${i}"][data-k="${it[1]}"]`).click());$('#check').click()}
     else if(q.t==='fill'){q.ans.forEach(a=>{const j=q.bankS.findIndex((w,k)=>w===a&&!S.cur.b.includes(k));body.querySelector(`.tile[data-j="${j}"]`).click()});$('#check').click()}
     else if(q.t==='typed'){const ti=$('#ti');ti.value=q.acc[0];ti.dispatchEvent(new Event('input'));$('#check').click()}
+    else if(q.t==='write'){const wi=$('#wi');wi.value=q.model;wi.dispatchEvent(new Event('input'));$('#check').click()}
     else if(q.t==='label'){body.querySelectorAll('select').forEach(s=>{s.value=s.dataset.i;s.dispatchEvent(new Event('change'))});$('#check').click()}
   };
   const ids=Q.topics.map(t=>t.id).concat(['boss']);
@@ -416,7 +436,8 @@ window.QuizEngine={
     if(/[?&]selftest/.test(location.search)){selftest();return}
     home();
     const pl=/[?&]play=([\w-]+)/.exec(location.search);   /* QA hook: ?play=<topicId|boss> opens a round directly */
-    if(pl&&(pl[1]==='boss'||Q.topics.some(t=>t.id===pl[1])))start(pl[1]);
+    if(pl&&(pl[1]==='boss'||Q.topics.some(t=>t.id===pl[1]))){start(pl[1]);const ot=/[&?]only=(\w+)/.exec(location.search),ix=/[&?]idx=(\d+)/.exec(location.search);   /* QA: &only=<type>&idx=<n> shows one question of that type */
+      if(ot){S.qs=S.qs.filter(q=>q.t===ot[1]);S.qs=[S.qs[ix?+ix[1]:0]||S.qs[0]];S.i=0;show()}}
   }
 };
 })();

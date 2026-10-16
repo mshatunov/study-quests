@@ -46,7 +46,7 @@ footer{margin-top:36px;color:var(--soft);font-size:15px}
 <footer>Progress is saved in this browser.</footer>
 </div>
 <script>
-const TESTS=[{"id": "science-unit1", "subject": "science", "title": "Unit 1: Human Body & Health", "blurb": "Heart and blood, lungs, puberty, insect bites, germs - ready for the End-of-Unit test.", "date": "2026-10-11", "questions": 77, "mascot": "🔬", "preview": ["#6c4cf1", "#8f78ff", "#f4f1ff"], "themeName": "Lab"}];
+const TESTS=[{"id": "science-unit1", "subject": "science", "title": "Unit 1: Human Body & Health", "blurb": "Heart and blood, lungs, puberty, insect bites, germs - ready for the End-of-Unit test.", "date": "2026-10-11", "questions": 104, "mascot": "🔬", "preview": ["#6c4cf1", "#8f78ff", "#f4f1ff"], "themeName": "Lab"}];
 const SUBJECTS={"science": "🔬"};
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function progress(id){try{const d=JSON.parse(localStorage.getItem('sq:'+id)||'{}');return {xp:d.xp||0,boss:(d.best||{}).boss||0}}catch(e){return {xp:0,boss:0}}}

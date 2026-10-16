@@ -41,7 +41,7 @@ const TOPICS = [
    ['Gas exchange happens through its thin walls',2]],
    'Arteries: away from heart, high pressure, thick walls. Veins: to the heart, low pressure, valves. Capillaries: tiny, thin walls, exchange.','Blood vessels slides + worksheet'),
  mc('Why do veins have valves?','To stop blood flowing backwards',['To make blood move faster','To add oxygen to the blood','To fight germs'],'Blood in veins is at low pressure, so valves prevent backflow.','Blood vessels slides'),
- mc('Why do arteries have thick, muscular walls?','Blood leaves the heart at high pressure',['They carry blood slowly','They need to exchange gases','They carry air'],'Blood travels at HIGH pressure in arteries (e.g. the aorta), so the walls must be thick and strong.','Blood vessels slides + Revision pack'),
+ mc('Why do arteries have thick, muscular walls?','Blood leaves the heart at high pressure',['They carry blood slowly','They need to exchange gases','They carry air'],'Arteries carry blood at HIGH pressure (e.g. the aorta), so they have thick, strong, muscular walls.','Blood vessels slides + Revision pack'),
  match('Match each part of blood to its job.',[
    ['Red blood cells','Transport oxygen around the body'],
    ['White blood cells','Fight infections (the body\'s soldiers)'],
@@ -86,7 +86,7 @@ const TOPICS = [
    'Inhale: diaphragm contracts and moves down, chest expands. Exhale: diaphragm relaxes and moves up.','Respiratory System slides + Revision pack'),
  tf('When you breathe in, the diaphragm contracts and moves downwards.',true,'Correct. It relaxes and moves upwards when you breathe out.','Respiratory System slides'),
  mc('Why do your body cells need oxygen?','For respiration, to release energy',['To make carbon dioxide only','To make bones grow','To warm the air'],'Body cells require oxygen for respiration - releasing energy.','Respiratory System slides'),
- mc('A runner is in a race. What happens to their breathing and why?','Faster and deeper, because muscles need more oxygen and make more carbon dioxide',['Slower, because they are tired','No change','Faster, because the trachea gets wider'],'During exercise muscle cells need much more energy, so you breathe faster and deeper to bring in more oxygen and remove more CO2.','Revision pack challenge'),
+ mc('A runner is in a race. What happens to their breathing and why?','Faster and deeper, because the muscle cells need much more energy, so more oxygen',['Slower, because they are tired','No change','Faster, because the trachea gets wider'],'During exercise muscle cells need much more energy, so you breathe faster and deeper to bring in more oxygen (and breathe out the carbon dioxide).','Revision pack challenge'),
  mc('Heart + lungs teamwork: how does oxygen from the air reach the cells in your legs?','Alveoli → capillaries → blood → heart pumps it round the body',['Trachea → stomach → legs','Diaphragm → veins → legs','Bronchi → plasma → skin'],'Oxygen diffuses into the blood in the alveoli, returns to the heart (left side), and the left ventricle pumps it out through the aorta.','Revision pack quick questions'),
  mc('Another name for the trachea is...','The windpipe',['The air sac','The food pipe','The lung muscle'],'The trachea is the windpipe, a long tube with cartilage rings.','Revision pack')
 ]},
@@ -126,11 +126,11 @@ const TOPICS = [
    'Female: ovary, oviduct, uterus, birth canal. Male: testes, sperm duct, penis.','Reproductive System slides + Revision pack'),
  order('From egg to baby: put the steps in order.',[
    'An ovary releases a mature egg',
-   'The egg travels along the oviduct',
-   'A sperm cell fertilises the egg',
+   'The egg is moved along the oviduct towards the uterus',
+   'If a sperm cell fertilises it, an embryo forms',
    'The embryo implants in the wall of the uterus',
    'The embryo develops into a baby during pregnancy'],
-   'Egg released → oviduct → fertilisation → implants in uterus → baby.','Reproductive System slides'),
+   'Egg released → moves along the oviduct → fertilised by a sperm → embryo implants in the uterus → baby.','Reproductive System slides'),
  mc('What are cilia in the oviduct?','Hair-like cells that help move the egg to the uterus',['Tiny sperm cells','Muscles that make a period','A type of hormone'],'The oviducts are lined with cilia (hair-like cells) to move the egg from the ovary to the uterus.','Reproductive System slides'),
  mc('If an egg is NOT fertilised, what happens to the lining of the uterus?','It comes away as a period',['It turns into a baby','It stays forever','It travels to the ovary'],'The lining of the uterus wall comes away as a period if the egg is not fertilised.','Reproductive System slides'),
  mc('What are the two key jobs of the testes?','Making sperm cells and hormones',['Carrying urine and making eggs','Pumping blood and breathing','Digesting food'],'The testes make millions of sperm and hormones that affect how the male body develops in puberty.','Reproductive System slides'),
@@ -146,27 +146,27 @@ const TOPICS = [
    'The infected insect bites a person',
    'The microorganism enters the person and the disease spreads'],
    'Step 1 infected insect - Step 2 it bites - Step 3 disease spreads.','Insect Bites slides'),
- match('Who spreads what? Match the disease to the insect.',[
-   ['Malaria','Infected female Anopheles mosquito'],
-   ['Sleeping sickness','Infected tsetse fly'],
-   ['Yellow fever','Infected mosquito']],
-   'Malaria and yellow fever: mosquitoes. Sleeping sickness: tsetse fly.','Insect Bites slides + Revision pack'),
+ sort('Who spreads what? Mosquito or tsetse fly?',['Mosquito','Tsetse fly'],[
+   ['Malaria',0],['Yellow fever',0],['Sleeping sickness',1],
+   ['Only the females bite (they need blood for their eggs)',0],
+   ['Both males and females drink blood',1]],
+   'Malaria (female Anopheles) and yellow fever: mosquitoes. Sleeping sickness: tsetse fly. Only female mosquitoes bite; both male and female tsetse flies drink blood.','Insect Bites slides + Revision pack'),
  match('What causes each disease?',[
    ['Malaria','A parasite called Plasmodium'],
    ['Sleeping sickness','A parasite called Trypanosoma'],
    ['Yellow fever','A virus (not a parasite)']],
    'Malaria and sleeping sickness: parasites. Yellow fever: a virus.','Insect Bites slides'),
- multi('Bite-proof your day! Tick ALL the things that help prevent insect bites.',['Use insect repellent as directed','Wear long sleeves, long trousers and socks','Sleep under a mosquito net','Keep doors and windows screened','Stay away from places with many biting insects'],['Wear shorts and short sleeves where insects are common','Leave doors and windows open without screens'],'5 ways to stay bite-free: repellent, cover up, mosquito nets, screens, stay away.','Insect Bites slides + Revision pack'),
+ multi('Bite-proof your day! Tick ALL the things that help prevent insect bites.',['Use insect repellent as directed','Wear long sleeves, long trousers and socks','Sleep under a mosquito net','Keep doors and windows screened','Use a mosquito coil only as directed, with an adult','Stay away from places with many biting insects'],['Wear shorts and short sleeves where insects are common','Leave doors and windows open without screens'],'5 ways to stay bite-free: repellent, cover up, mosquito nets, screens, stay away.','Insect Bites slides + Revision pack'),
  mc('Which insect spreads malaria?','The female Anopheles mosquito',['The tsetse fly','The head louse','The housefly'],'Malaria is spread by the infected female Anopheles mosquito.','Insect Bites slides'),
  mc('Only female mosquitoes bite. Why?','They need blood to make their eggs',['Males are too small','Males are asleep','Females eat insects'],'Only female mosquitoes bite because they need blood to make their eggs.','Insect Bites slides'),
  tf('Both male and female tsetse flies drink blood.',true,'Yes - unlike mosquitoes, both male and female tsetse flies drink blood. Tsetse flies live in parts of Africa.','Insect Bites slides'),
  mc('Which symptoms can malaria cause?','Fever, chills and headache, sometimes sweating, tiredness and vomiting',['Only a broken bone','A green tongue','Loss of hair only'],'Malaria: fever, chills, headache, sometimes sweating, tiredness and vomiting.','Insect Bites slides'),
  mc('If left untreated, sleeping sickness affects the...','Nervous system and sleep patterns (people feel sleepy in the day)',['Bones','Skin colour only','Eyesight only'],'It affects the nervous system and sleep patterns. Doctors can treat it, especially if found early.','Insect Bites slides'),
- mc('Which of these diseases can be prevented by vaccination?','Yellow fever',['Malaria','Sleeping sickness','All insect bites'],'Vaccination is an important way to prevent yellow fever. Avoiding mosquito bites helps too.','Insect Bites slides'),
+ mc('According to your lesson, which of these diseases can be prevented by vaccination?','Yellow fever',['Malaria','Sleeping sickness','All insect bites'],'Vaccination is an important way to prevent yellow fever. Avoiding mosquito bites helps too.','Insect Bites slides'),
  mc('When do malaria mosquitoes bite the most?','From dusk to dawn',['At noon only','Only in winter','Only on rainy mornings'],'Malaria mosquitoes bite most from dusk to dawn, mostly in warm, tropical places.','Insect Bites slides'),
  mc('Why is yellow fever called "yellow"?','Some patients\' skin and eyes turn yellow (jaundice)',['The mosquito is yellow','It happens only in yellow houses','The virus is yellow'],'The name comes from jaundice - skin and eyes turn yellow.','Insect Bites slides'),
  tf('Every insect bite causes a disease.',false,'Good news: not every insect bite causes disease!','Insect Bites slides'),
- fill('Malaria and sleeping sickness are caused by ___, but yellow fever is caused by a ___.',['parasites','virus'],['parasites','virus','bacteria','fungus'],'Malaria and sleeping sickness: parasites. Yellow fever: a virus.','Insect Bites slides'),
+ fill('Malaria and sleeping sickness are caused by ___, but yellow fever is caused by a ___.',['parasites','virus'],['parasites','virus','bacteria','fungus'],'Malaria and sleeping sickness: parasites (Unit 1.4 calls this group protists). Yellow fever: a virus.','Insect Bites slides'),
  mc('When should you use a mosquito net?','When sleeping in places where mosquitoes may carry disease',['Only in the daytime at school','Never - nets do not work','Only after you are ill'],'Use mosquito nets when sleeping in areas where mosquitoes may carry disease.','Insect Bites slides'),
  mc('You feel ill after being in a place with many mosquitoes. What should you do?','Tell an adult',['Say nothing','Take medicine from a friend','Go swimming'],'If you feel ill, tell an adult.','Insect Bites slides')
 ]},
@@ -174,23 +174,25 @@ const TOPICS = [
 {id:'germs', ico:'🦠', name:'Bonus: Germs & Body Defence', blurb:'Pathogen types (Unit 1.4), natural defences, hygiene', col:'#8b5cf6', bonus:true, Q:[
  mc('What is a pathogen?','A microorganism that causes disease',['A type of blood vessel','A hormone','A healthy cell'],'A pathogen is a microorganism that causes disease (often called germs).','Unit 1.4 slides'),
  mc('Which list shows the four types of pathogen from Unit 1.4?','Bacteria, viruses, fungi, protists',['Arteries, veins, capillaries, hearts','Estrogen, testosterone, plasma, platelets','Mosquitoes, tsetse flies, lice, ticks'],'Unit 1.4: bacteria, viruses, fungi and protists.','Unit 1.4 slides'),
- sort('Which type of pathogen causes each disease?',['Bacteria','Virus','Fungi','Protist'],[
+ sort('Which type of pathogen causes each disease?',['Bacteria','Virus','Fungi','Protist / parasite'],[
    ['Tuberculosis',0],['Cholera',0],['Pneumonia',0],
    ['COVID-19',1],['Influenza (flu)',1],['Foot-and-mouth disease',1],
    ['Athlete\'s foot',2],['Thrush',2],['Ringworm',2],
-   ['Malaria',3],['African sleeping sickness',3]],
-   'Bacteria: TB, pneumonia, cholera. Viruses: COVID-19, foot-and-mouth, flu. Fungi: athlete\'s foot, thrush, ringworm (a fungus, not a worm!). Protists: malaria, sleeping sickness (also called parasites in the Revision Pack).','Unit 1.4 slides'),
+   ['Malaria',3],['African sleeping sickness',3],
+   ['Strep throat',0],['Chickenpox',1],['Head lice',3],['Tapeworm',3]],
+   'Bacteria: TB, pneumonia, cholera. Viruses: COVID-19, foot-and-mouth, flu. Fungi: athlete\'s foot, thrush, ringworm (a fungus, not a worm!). Protists / parasites: malaria, sleeping sickness, head lice, tapeworm (Unit 1.4 says protists, the Revision Pack says parasites - same idea).','Unit 1.4 slides'),
  match('Match the pathogen to its usual treatment.',[
    ['Bacteria','A course of antibiotics'],
    ['Viruses','Anti-viral medicines'],
    ['Fungi','Anti-fungal medication'],
-   ['Protists','Preventative measures and targeted medicines']],
+   ['Protists / parasites','Preventative measures and targeted medicines']],
    'Treatment depends on the pathogen type.','Unit 1.4 slides'),
  mc('Doctors give antibiotics for a serious bacterial infection, but they do NOT work against colds and flu. Why?','Colds and flu are caused by viruses, and antibiotics only work on bacteria',['Colds are not real illnesses','Antibiotics are too small','Flu is caused by fungi'],'Antibiotics work against bacteria. Viruses need anti-viral medicines.','Revision pack challenge'),
  match('How are pathogens transmitted? Match the way to the example.',[
    ['Air','Sneezing without covering your mouth'],
    ['Contact','Shaking hands with someone who has unwashed skin'],
    ['Water','Drinking untreated pond water'],
+   ['Food','Eating food that was left out in a warm room'],
    ['Vector','A mosquito passing on malaria']],
    'Pathogens spread by contact, air, water, food or a vector (an insect or animal that carries them).','Unit 1.4 slides + Revision pack'),
  tf('All bacteria are harmful.',false,'Some bacteria can be useful! But some cause diseases like TB, pneumonia and cholera.','Unit 1.4 slides'),
@@ -256,6 +258,84 @@ germs:`<h3>Pathogens (Unit 1.4)</h3><table><tr><th>Type</th><th>Examples</th><th
 <h3>Body defences</h3><ul><li>Skin, tears, sticky mucus, stomach acid. Graze: wash + plaster.</li><li>Food hygiene: wash produce, separate boards (raw meat!), chill cooked food quickly.</li></ul>`
 };
 
+
+/* ---- additions from the audit (coverage of the Revision Pack tasks) ---- */
+const SV=(id)=>TOPICS.find(t=>t.id===id).Q;
+const RESP_SVG={vb:'0 0 400 400',body:`
+ <ellipse cx="200" cy="40" rx="48" ry="22" fill="#f9c9a8" stroke="#26224a" stroke-width="3"/>
+ <ellipse cx="112" cy="232" rx="82" ry="112" fill="#ffd1d1" stroke="#26224a" stroke-width="3"/><ellipse cx="288" cy="232" rx="82" ry="112" fill="#ffd1d1" stroke="#26224a" stroke-width="3"/>
+ <rect x="188" y="62" width="24" height="104" fill="#9ecbff" stroke="#26224a" stroke-width="3"/>
+ <path d="M200 166 L150 210 M200 166 L250 210" stroke="#5fa0ee" stroke-width="14" stroke-linecap="round" fill="none"/>
+ <path d="M150 210 L108 250 M150 210 L150 262 M150 210 L112 215 M250 210 L292 250 M250 210 L250 262 M250 210 L288 215" stroke="#5fa0ee" stroke-width="6" stroke-linecap="round" fill="none"/>
+ <g fill="#ff8f8f" stroke="#a02a2a" stroke-width="1.5"><circle cx="100" cy="268" r="10"/><circle cx="116" cy="276" r="10"/><circle cx="92" cy="286" r="10"/><circle cx="150" cy="280" r="10"/><circle cx="166" cy="288" r="10"/><circle cx="300" cy="268" r="10"/><circle cx="284" cy="276" r="10"/><circle cx="308" cy="286" r="10"/><circle cx="250" cy="280" r="10"/><circle cx="234" cy="288" r="10"/></g>
+ <rect x="30" y="352" width="340" height="28" rx="14" fill="#c084fc" stroke="#26224a" stroke-width="3"/>`};
+const RESP_PTS=[{n:'Nasal cavity',x:262,y:40},{n:'Trachea',x:240,y:112},{n:'Bronchus',x:232,y:178},{n:'Bronchioles',x:132,y:236},{n:'Alveoli',x:72,y:296},{n:'Diaphragm',x:200,y:366}];
+SV('lungs').push(label('Label the respiratory system! Choose the correct name for each number.',RESP_SVG,RESP_PTS,'Air: nasal cavity → trachea → two bronchi → bronchioles → alveoli. The diaphragm (muscle) sits under the lungs.','Respiratory System slides'));
+
+const FEM_SVG={vb:'0 0 400 340',body:`
+ <path d="M175 120 Q118 62 92 96" stroke="#e57399" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M225 120 Q282 62 308 96" stroke="#e57399" stroke-width="9" fill="none" stroke-linecap="round"/>
+ <ellipse cx="82" cy="100" rx="36" ry="26" fill="#f9d57a" stroke="#26224a" stroke-width="3"/><ellipse cx="318" cy="100" rx="36" ry="26" fill="#f9d57a" stroke="#26224a" stroke-width="3"/>
+ <path d="M158 112 L242 112 L228 214 Q200 238 172 214 Z" fill="#f4a6b8" stroke="#26224a" stroke-width="3" stroke-linejoin="round"/>
+ <rect x="184" y="224" width="32" height="96" rx="12" fill="#e68aa1" stroke="#26224a" stroke-width="3"/>`};
+const FEM_PTS=[{n:'Ovary',x:82,y:100},{n:'Oviduct',x:130,y:90},{n:'Uterus',x:200,y:165},{n:'Birth canal',x:200,y:278}];
+const MAL_SVG={vb:'0 0 400 340',body:`
+ <path d="M150 250 C150 190 192 200 192 150 M250 250 C250 190 208 200 208 150" stroke="#d98c3a" stroke-width="9" fill="none" stroke-linecap="round"/>
+ <rect x="184" y="40" width="32" height="150" rx="16" fill="#f0b79a" stroke="#26224a" stroke-width="3"/>
+ <ellipse cx="150" cy="275" rx="38" ry="30" fill="#f4c27a" stroke="#26224a" stroke-width="3"/><ellipse cx="250" cy="275" rx="38" ry="30" fill="#f4c27a" stroke="#26224a" stroke-width="3"/>`};
+const MAL_PTS=[{n:'Penis',x:200,y:95},{n:'Sperm duct',x:164,y:205},{n:'Testes',x:150,y:278}];
+SV('repro').push(label('Label the FEMALE reproductive system (a simple diagram).',FEM_SVG,FEM_PTS,'Ovary makes eggs; oviduct carries the egg to the uterus; the uterus is where a baby can grow; the birth canal is where a baby leaves the body.','Reproductive System slides'),
+ label('Label the MALE reproductive system (a simple diagram).',MAL_SVG,MAL_PTS,'Testes make sperm and hormones; the sperm duct carries sperm away; the penis lets urine and sperm leave the body (through the urethra).','Reproductive System slides'),
+ mc('What is a period (menstruation)?','Blood and tissue from the lining of the uterus leaving the body through the birth canal',['A baby growing in the uterus','An egg cell leaving the testes','A change in the voice'],'If an egg is not fertilised, the lining of the uterus comes away as a period. It usually begins during puberty.','Revision pack + Reproductive System slides'),
+ mc('Which organs make the female hormone estrogen?','The ovaries',['The testes','The oviducts','The lungs'],'Estrogen is produced by the ovaries; testosterone by the testes.','Puberty slides'),
+ write('Describe two physical changes that take place during puberty and explain why hygiene is important.',['growth|hair|pimple|acne|voice|breast|hips|shoulder|sweat','wash|clean|hygien','sweat|smell|odour|odor'],'Two changes: the growth rate increases and pimples or body hair appear (boys: voice breaks; girls: hips widen). Hygiene matters because the body sweats more and the body smell gets stronger, so we wash regularly and wear clean clothes.','Puberty is a normal part of growing up. Washing and clean clothes help with sweat and body odour.','Revision pack quick questions'));
+
+SV('heart').push(
+ mc('How many chambers does the heart have?','Four: two atria (top) and two ventricles (bottom)',['Two','Three','Six'],'The heart has 4 chambers. Atria receive blood and ventricles pump it out.','Revision pack + Heart slides'),
+ mc('What is circulation?','The continuous movement of blood around the body through the heart and blood vessels',['Breathing air in and out','The liquid part of blood','Blood clotting in a cut'],'The circulatory system is the body\'s transport network of the heart, blood and blood vessels.','Revision pack'),
+ sort('Artery, vein or capillary? (round 2)',['Artery','Vein','Capillary'],[
+   ['Blood at HIGH pressure',0],['Blood at LOW pressure, with valves',1],['Connects arteries and veins',2],
+   ['Blood is usually oxygen-rich',0],['Blood is usually oxygen-poor',1],['Microscopic: swaps substances with body cells',2]],
+   'Artery: high pressure, oxygen-rich, away from the heart. Vein: low pressure, valves, oxygen-poor, to the heart. Capillary: connects them and exchanges substances.','Blood vessels slides + Revision pack'),
+ mc('Some white blood cells make antibodies. What do antibodies do?','Help the body remember and fight future infections',['Carry oxygen','Form a scab','Carry the nutrients'],'White blood cells are the body\'s soldiers: some surround and "eat" invaders, others make antibodies.','Blood slides'),
+ write('Explain how oxygen from the air you breathe reaches the cells in your arms and legs.',['alveoli','blood','heart','capillar'],'Oxygen passes through the thin walls of the alveoli in the lungs into the blood. The blood returns to the heart, and the left ventricle pumps it through the aorta and arteries to the capillaries, where oxygen moves into the cells of the arms and legs.','Lungs → blood → heart → arteries → capillaries → cells.','Revision pack quick questions'));
+
+SV('bugs').push(
+ mc('Where does yellow fever occur?','In warm parts of Africa and South America, where infected mosquitoes live',['Only in cold countries','Only in Europe','Only in the sea'],'Yellow fever occurs in warm parts of Africa and South America.','Insect Bites slides'),
+ mc('Which symptoms can sleeping sickness cause?','Fever, headaches and tiredness, sometimes sore joints and itchy skin',['A broken bone','Only a green tongue','Only a runny nose'],'It also affects the nervous system and sleep patterns if untreated.','Insect Bites slides'),
+ write('Describe three practical actions you can take to protect yourself from insect bites.',['repellent','long sleeve|trouser|cover|socks|clothes','net|screen|window|door|coil|stay away'],'Use insect repellent as directed; cover up with long sleeves, long trousers and socks; sleep under a mosquito net or keep doors and windows screened.','Repellent, covering up, nets and screens, staying away from biting insects.','Revision pack quick questions'));
+
+SV('germs').push(
+ match('Match each pathogen type to its description.',[
+   ['Bacteria','Single-celled living organisms - most are harmless, some make toxins'],
+   ['Viruses','Extremely tiny non-living particles that replicate inside host cells'],
+   ['Fungi','Yeasts, moulds and mushrooms that like damp places'],
+   ['Protists / parasites','Mostly single-celled; some live in or on a host and take its nutrients']],
+   'Bacteria are alive and single-celled; viruses are tiny and non-living; fungi include yeasts and moulds; parasites take nutrients from their host.','Revision pack + Unit 1.4 slides'),
+ mc('What is a communicable disease?','A disease caused by pathogens that are passed between organisms',['A disease you are born with','A broken bone','A disease only plants get'],'Communicable (infectious) diseases spread when pathogens are transmitted between organisms.','Unit 1.4 slides'),
+ order('The life cycle of a pathogen: put the steps in order.',['The pathogen infects a host','It reproduces (viruses replicate) inside the host','It spreads from the host to infect another organism'],'All pathogens infect a host, reproduce, then spread to another organism.','Unit 1.4 slides'),
+ mc('Head lice live on a person and take nutrients from them. What type of pathogen is this?','A parasite',['A virus','A fungus','A bacterium'],'A parasite lives in or on a host and takes nutrients at the host\'s expense (e.g. head lice, tapeworms).','Revision pack'),
+ mc('What does hygiene mean?','Keeping your body, food and living spaces clean to prevent sickness',['Eating only fruit','Taking antibiotics every day','Staying inside'],'Good hygiene stops microbes multiplying and entering the body.','Body Defence slides'),
+ write('Compare how bacteria and viruses cause illness inside the human body.',['toxin','host|cell','replicat|copies|multipl'],'Bacteria multiply quickly and make poisonous toxins that damage the tissues. Viruses invade a living host cell and force it to replicate (make new copies) until the cell bursts.','Bacteria: multiply and make toxins. Viruses: invade host cells and replicate.','Revision pack quick questions'));
+
+TOPICS.push({id:'words', ico:'🔤', name:'Key Words Round', blurb:'Definitions and gap-fills from the Revision Pack', bonus:true, Q:[
+ match('Vocabulary practice: match each key term to its definition.',[
+   ['pathogen','Any microscopic organism that can cause disease'],
+   ['artery','Thick-walled vessel carrying oxygen-rich blood away from the heart'],
+   ['alveoli','Microscopic air sacs where oxygen and carbon dioxide are exchanged'],
+   ['diaphragm','Sheet of muscle beneath the lungs that moves down to pull air in'],
+   ['trachea','The main windpipe from the throat towards the lungs'],
+   ['circulation','The continuous movement of blood around the body'],
+   ['capillary','Tiny vessel with walls one cell thick'],
+   ['virus','Extremely small non-living particle that replicates inside a host cell']],
+   'These are the 8 vocabulary items from the Revision Pack.','Revision pack - Vocabulary Practice'),
+ fill('Red blood cells absorb ___ in the lungs and transport it to cells throughout the body.',['oxygen'],['oxygen','capillaries','trachea','pathogens','puberty','mosquitoes'],'Red blood cells carry oxygen.','Revision pack - Gap fills'),
+ fill('Microscopic blood vessels called ___ allow nutrients and gases to pass directly into tissues.',['capillaries'],['oxygen','capillaries','trachea','pathogens','puberty','mosquitoes'],'Capillaries have walls one cell thick.','Revision pack - Gap fills'),
+ fill('Inhaled air travels from the mouth and nose down the ___ before reaching the bronchi and lungs.',['trachea'],['oxygen','capillaries','trachea','pathogens','puberty','mosquitoes'],'The trachea is the windpipe.','Revision pack - Gap fills'),
+ fill('Microscopic organisms such as bacteria, viruses and fungi that cause disease are known as ___.',['pathogens'],['oxygen','capillaries','trachea','pathogens','puberty','mosquitoes'],'Pathogens = germs that cause disease.','Revision pack - Gap fills'),
+ fill('During ___, a young person\'s body undergoes emotional and physical changes as their reproductive system matures.',['puberty'],['oxygen','capillaries','trachea','pathogens','puberty','mosquitoes'],'Puberty brings emotional and physical changes.','Revision pack - Gap fills'),
+ fill('Using insect repellent and bed nets helps protect people from insect vectors such as ___.',['mosquitoes'],['oxygen','capillaries','trachea','pathogens','puberty','mosquitoes'],'Mosquitoes spread malaria and yellow fever.','Revision pack - Gap fills')
+]});
+SHEETS.words='<h3>Key words</h3><ul><li><b>pathogen</b> - microorganism that causes disease</li><li><b>artery</b> - blood away from the heart, high pressure</li><li><b>alveoli</b> - air sacs, gas exchange</li><li><b>diaphragm</b> - muscle under the lungs</li><li><b>trachea</b> - windpipe</li><li><b>circulation</b> - blood moving around the body</li><li><b>capillary</b> - tiny vessel, one cell thick</li><li><b>virus</b> - tiny non-living particle that replicates inside host cells</li></ul>';
 
 TOPICS.forEach(t=>{t.sheet=SHEETS[t.id]});
 QuizEngine.run({id:'science-unit1',lang:'en',logo:'🔬 Science Quest',title:'Unit 1: Human Body & Health',bossSize:25,topics:TOPICS,vocab:VOCAB});
