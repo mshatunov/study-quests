@@ -1,0 +1,26 @@
+/* comic - cream halftone paper, thick black outlines, hard offset shadows, primary colours */
+:root{
+  --bg:#fff3c4; --card:#ffffff; --ink:#111111; --soft:#444444; --line:#111111;
+  --brand:#e11d2e; --brand2:#2563eb; --on-brand:#fff; --tint:#fff0a8;
+  --good:#16a34a; --goodbg:#c9f5d4; --bad:#e11d2e; --badbg:#ffd0d3; --warn:#f59e0b; --warnbg:#ffe9a8;
+  --radius:6px; --radius-sm:4px; --bw:4px;
+  --shadow-card:7px 7px 0 #111; --btn-shadow:4px 4px 0 #111; --btn-border:3px solid #111;
+  --font:"Comic Neue","Comic Sans MS",system-ui,sans-serif; --font-head:"Bangers","Impact",system-ui,sans-serif; --head-tr:uppercase;
+  --boss-bg:linear-gradient(120deg,#facc15,#fb923c); --on-boss:#111;
+  --pat:radial-gradient(#f4c542 18%,transparent 19%);
+  --fs:20px;
+}
+body{background-size:18px 18px;font-weight:700}
+h1{font-size:46px;letter-spacing:.04em;text-shadow:3px 3px 0 #facc15}
+.logo{font-size:28px;letter-spacing:.05em}
+.qtext{font-size:26px;letter-spacing:.02em;font-weight:400}
+.btn{letter-spacing:.06em;font-weight:400;font-size:20px}
+.btn:active{transform:translate(4px,4px);box-shadow:none}
+.tcard,.qcard,.sheet{border-color:#111}
+.tcard:nth-child(odd){transform:rotate(-.6deg)}.tcard:nth-child(even){transform:rotate(.6deg)}
+.tcard:hover{transform:rotate(0) translateY(-3px);border-color:#111}
+.chip{border:3px solid #111}
+.boss .btn{background:#fff;color:#111}
+.opt,.tile,.mi,.cb,.srow{border-color:#111}
+.opt.ok{border-color:#111}.opt.no{border-color:#111}
+.bar{border:3px solid #111;background:#fff}

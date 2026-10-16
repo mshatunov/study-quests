@@ -1,0 +1,13 @@
+[
+ {
+  "id": "science-unit1",
+  "subject": "science",
+  "title": "Unit 1: Human Body & Health",
+  "blurb": "Heart and blood, lungs, puberty, insect bites, germs - ready for the End-of-Unit test.",
+  "theme": "lab",
+  "date": "2026-10-11",
+  "lang": "en",
+  "questions": 77,
+  "topics": 5
+ }
+]

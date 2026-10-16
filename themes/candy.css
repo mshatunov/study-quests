@@ -1,0 +1,16 @@
+/* candy - pastel pink, mint and lemon, bubble fonts, pill buttons, soft shadows */
+:root{
+  --bg:linear-gradient(160deg,#ffe3f1 0%,#e9f9ef 55%,#fff6c8 100%); --card:#ffffff; --ink:#5a1f48; --soft:#98577f; --line:#f7c5df;
+  --brand:#e8489a; --brand2:#ff8fc4; --on-brand:#fff; --tint:#ffeaf5;
+  --good:#22b07d; --goodbg:#d9f7ea; --bad:#f0506e; --badbg:#ffe0e7; --warn:#f6a609; --warnbg:#fff2c9;
+  --radius:34px; --radius-sm:999px; --bw:3px;
+  --shadow-card:0 10px 24px rgba(232,72,154,.15); --btn-shadow:0 5px 0 #b02870; --btn-border:0;
+  --font:"Nunito","Trebuchet MS",system-ui,sans-serif; --font-head:"Chewy","Nunito",system-ui,sans-serif; --head-tr:none;
+  --boss-bg:linear-gradient(120deg,#ff8fc4,#ffd166,#7ee0b5); --on-boss:#5a1f48;
+  --pat:radial-gradient(circle at 10% 20%,rgba(255,143,196,.2) 0 40px,transparent 41px),radial-gradient(circle at 90% 80%,rgba(126,224,181,.25) 0 60px,transparent 61px);
+}
+body{font-weight:700}
+h1{font-size:42px;color:#e8489a}
+.opt,.mi,.tile,.slot,.srow,.typed{border-radius:26px}
+.cb{border-radius:999px}
+.boss .btn{color:#b02870}

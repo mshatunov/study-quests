@@ -1,0 +1,27 @@
+/* blueprint - blueprint blue with a drawn grid, thin white lines, monospace labels, square corners */
+:root{
+  --bg:#0b3a7a; --card:#0e468f; --ink:#eaf3ff; --soft:#a9c6ee; --line:#5c8fd6;
+  --brand:#ffffff; --brand2:#7dd3fc; --on-brand:#0b3a7a; --tint:#134f9e;
+  --good:#86efac; --goodbg:#0f5a49; --bad:#fca5a5; --badbg:#6d2a4d; --warn:#fde68a; --warnbg:#6b5a20;
+  --radius:2px; --radius-sm:2px; --bw:1.5px;
+  --shadow-card:none; --btn-shadow:none; --btn-border:2px solid #fff;
+  --font:"IBM Plex Mono","Courier New",monospace; --font-head:"Barlow Condensed","IBM Plex Mono",sans-serif; --head-tr:uppercase;
+  --boss-bg:transparent; --on-boss:#fff;
+  --pat:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  --fs:17px;
+}
+body{background-size:120px 120px,120px 120px,24px 24px,24px 24px}
+h1{font-size:46px;letter-spacing:.06em;font-weight:600}
+.logo{font-size:26px;letter-spacing:.1em}
+h3{font-size:26px;letter-spacing:.06em}
+.qtext{font-size:22px;font-weight:600}
+.btn{letter-spacing:.12em}
+.btn.ghost{background:transparent;color:#fff;border-color:#fff}
+.btn.gray{background:#3a6bb0;color:#fff}
+.boss{border:var(--bw) dashed #fff}
+.boss .btn{background:#fff;color:#0b3a7a}
+.chip{border-radius:0;border-width:1.5px;background:transparent}
+.bar{border-radius:0;background:#134f9e}.bar>i{border-radius:0;background:#fff}
+.tcard{border-style:solid}
+.tcard:hover{border-color:#fff}
+.opt:hover:not(:disabled){border-color:#fff}

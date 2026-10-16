@@ -1,0 +1,24 @@
+/* notebook - ruled paper with a red margin, blue ink, handwriting, marker highlights */
+:root{
+  --bg:#fdfcf3; --card:#fffef8; --ink:#1f3a8a; --soft:#5f6b99; --line:#b9c6f0;
+  --brand:#1d4ed8; --brand2:#ef4444; --on-brand:#fff; --tint:#fff7b0;
+  --good:#15803d; --goodbg:#dcf5df; --bad:#dc2626; --badbg:#fde2e2; --warn:#d97706; --warnbg:#fff0c2;
+  --radius:10px; --radius-sm:8px; --bw:2px;
+  --shadow-card:2px 3px 0 rgba(31,58,138,.25); --btn-shadow:2px 3px 0 #0f2a78; --btn-border:0;
+  --font:"Patrick Hand","Comic Sans MS",system-ui,sans-serif; --font-head:"Caveat","Patrick Hand",cursive; --head-tr:none;
+  --boss-bg:linear-gradient(120deg,#fde047,#fb923c); --on-boss:#1f3a8a;
+  --pat:linear-gradient(90deg,transparent 58px,#f2a0a0 58px 60px,transparent 60px),repeating-linear-gradient(transparent 0 31px,#cfdcf7 31px 32px);
+  --fs:21px;
+}
+.wrap{padding-left:72px}
+@media(max-width:600px){.wrap{padding-left:34px}}
+h1{font-size:50px;line-height:1.05;background:linear-gradient(transparent 60%,#fff176 60%);display:inline-block}
+.logo{font-size:32px}
+.qtext{font-size:30px;font-weight:700;line-height:1.15}
+.btn{font-size:22px;font-weight:700}
+h3{font-size:30px;font-weight:700}
+.tcard{background:#fffef8}
+.tcard:nth-child(odd){transform:rotate(-.4deg)}.tcard:nth-child(even){transform:rotate(.5deg)}
+.tcard:hover{transform:rotate(0) translateY(-2px)}
+.sheet h3{font-size:30px;color:#ef4444}
+.boss .btn{background:#1d4ed8;color:#fff}

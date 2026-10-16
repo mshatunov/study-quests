@@ -1,0 +1,16 @@
+/* jungle - deep green, lime and orange, chunky bubbly shapes */
+:root{
+  --bg:#0f3d2a; --card:#fffbea; --ink:#23311f; --soft:#5d6b52; --line:#c9d8a8;
+  --brand:#e8710a; --brand2:#f59e0b; --on-brand:#fff; --tint:#ecf6cf;
+  --good:#2e9e4a; --goodbg:#dff4d2; --bad:#d6452d; --badbg:#fde1d8; --warn:#e8a200; --warnbg:#fdf0c4;
+  --radius:30px; --radius-sm:20px; --bw:4px;
+  --shadow-card:0 8px 0 rgba(0,0,0,.25); --btn-shadow:0 5px 0 #9a4a05; --btn-border:0;
+  --font:"Fredoka","Trebuchet MS",system-ui,sans-serif; --font-head:"Fredoka","Trebuchet MS",system-ui,sans-serif; --head-tr:none;
+  --boss-bg:linear-gradient(120deg,#a3e635,#16a34a); --on-boss:#10331f;
+  --pat:radial-gradient(circle at 12% 18%,rgba(163,230,53,.18) 0 60px,transparent 61px),radial-gradient(circle at 88% 70%,rgba(34,197,94,.2) 0 90px,transparent 91px),radial-gradient(circle at 40% 92%,rgba(250,204,21,.12) 0 70px,transparent 71px);
+}
+h1,.logo{color:#fffbea}
+.top .chip{background:#fffbea}
+.sub{color:#cfe8c4}
+.boss .btn{color:#166534}
+.qtext{font-weight:600}

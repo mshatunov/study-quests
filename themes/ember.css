@@ -1,0 +1,19 @@
+/* ember - charcoal with molten orange and red, condensed headlines, sharp angles */
+:root{
+  --bg:#17110f; --card:#241b17; --ink:#ffeede; --soft:#c9a98d; --line:#4a3128;
+  --brand:#ff6a1a; --brand2:#ffb020; --on-brand:#1a0d05; --tint:#33241c;
+  --good:#7ddc6b; --goodbg:#1e3a1b; --bad:#ff5a4d; --badbg:#4a1a16; --warn:#ffcc33; --warnbg:#4a3a10;
+  --radius:4px; --radius-sm:3px; --bw:2px;
+  --shadow-card:0 0 0 1px #000,0 12px 30px rgba(255,106,26,.12); --btn-shadow:0 4px 0 #a13a00; --btn-border:0;
+  --font:"Rubik","Trebuchet MS",system-ui,sans-serif; --font-head:"Bebas Neue","Impact",system-ui,sans-serif; --head-tr:uppercase;
+  --boss-bg:linear-gradient(110deg,#ff3d00,#ff9100); --on-boss:#1a0d05;
+  --pat:radial-gradient(circle at 80% 110%,rgba(255,106,26,.28),transparent 55%),radial-gradient(circle at 10% -10%,rgba(255,176,32,.12),transparent 50%);
+}
+h1{font-size:54px;letter-spacing:.04em;line-height:1}
+.logo{font-size:30px;letter-spacing:.06em}
+h3{font-size:28px;letter-spacing:.04em;font-weight:400}
+.qtext{font-size:30px;font-weight:400;letter-spacing:.02em}
+.btn{font-size:20px;font-weight:400;letter-spacing:.06em}
+.boss .btn{background:#17110f;color:#ffb020}
+.btn.ghost{background:transparent}
+.tcard:hover{border-color:#ff6a1a;box-shadow:0 0 28px rgba(255,106,26,.35)}

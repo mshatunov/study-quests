@@ -1,0 +1,15 @@
+/* ocean - aqua to deep blue gradient, translucent cards, soft waves */
+:root{
+  --bg:linear-gradient(180deg,#bff3ff 0%,#6fd3f0 45%,#1d8fc9 100%); --card:rgba(255,255,255,.88); --ink:#0b3552; --soft:#2f6486; --line:#9fdcf0;
+  --brand:#0e7490; --brand2:#22b8cf; --on-brand:#fff; --tint:#dff6fc;
+  --good:#0f9d73; --goodbg:#d7f7ec; --bad:#e0524d; --badbg:#ffe3e1; --warn:#f0a010; --warnbg:#fff1cf;
+  --radius:28px; --radius-sm:18px; --bw:3px;
+  --shadow-card:0 10px 30px rgba(8,80,120,.18); --btn-shadow:0 5px 0 #0a4f63; --btn-border:0;
+  --font:"Quicksand","Trebuchet MS",system-ui,sans-serif; --font-head:"Baloo 2","Quicksand",system-ui,sans-serif; --head-tr:none;
+  --boss-bg:linear-gradient(120deg,#0e7490,#0c4a6e); --on-boss:#fff;
+  --pat:radial-gradient(circle at 15% 85%,rgba(255,255,255,.35) 0 6px,transparent 7px),radial-gradient(circle at 78% 62%,rgba(255,255,255,.3) 0 10px,transparent 11px),radial-gradient(circle at 55% 20%,rgba(255,255,255,.25) 0 5px,transparent 6px);
+}
+body{font-weight:600}
+h1{color:#073a5a}
+.logo{color:#073a5a}
+.boss .btn{color:#0e7490}

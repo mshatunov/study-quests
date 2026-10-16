@@ -1,0 +1,12 @@
+[
+ {"id":"lab","name":"Lab","mascot":"🔬","vibe":"bright violet, rounded, friendly","preview":["#6c4cf1","#8f78ff","#f4f1ff"],"fonts":""},
+ {"id":"space","name":"Space","mascot":"🚀","vibe":"deep navy, neon cyan and magenta, glow, star field","preview":["#070b24","#22d3ee","#a78bfa"],"fonts":"https://fonts.googleapis.com/css2?family=Exo+2:wght@500;700&family=Orbitron:wght@600;800&display=swap"},
+ {"id":"jungle","name":"Jungle","mascot":"🦜","vibe":"deep green, lime and orange, chunky bubbly shapes","preview":["#0f3d2a","#a3e635","#e8710a"],"fonts":"https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"},
+ {"id":"comic","name":"Comic","mascot":"💥","vibe":"cream halftone paper, thick black outlines, hard shadows, primary colours","preview":["#fff3c4","#e11d2e","#2563eb"],"fonts":"https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap"},
+ {"id":"ocean","name":"Ocean","mascot":"🐠","vibe":"aqua to deep blue gradient, translucent cards, soft bubbles","preview":["#bff3ff","#1d8fc9","#0e7490"],"fonts":"https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Quicksand:wght@500;700&display=swap"},
+ {"id":"arcade","name":"Arcade","mascot":"👾","vibe":"black screen, neon pink and green, pixel borders, scanlines","preview":["#0a0a14","#ff2d95","#39ff14"],"fonts":"https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@400;600&display=swap"},
+ {"id":"notebook","name":"Notebook","mascot":"✏️","vibe":"ruled paper with red margin, blue ink, handwriting, marker highlights","preview":["#fdfcf3","#1d4ed8","#ef4444"],"fonts":"https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap"},
+ {"id":"candy","name":"Candy","mascot":"🍭","vibe":"pastel pink, mint and lemon, bubble font, pill buttons","preview":["#ffe3f1","#e8489a","#7ee0b5"],"fonts":"https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@600;800&display=swap"},
+ {"id":"blueprint","name":"Blueprint","mascot":"📐","vibe":"blueprint blue with grid lines, thin white strokes, monospace","preview":["#0b3a7a","#ffffff","#7dd3fc"],"fonts":"https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;600&display=swap"},
+ {"id":"ember","name":"Ember","mascot":"🌋","vibe":"charcoal with molten orange and red, condensed headlines, sharp angles","preview":["#17110f","#ff6a1a","#ffb020"],"fonts":"https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rubik:wght@400;600&display=swap"}
+]

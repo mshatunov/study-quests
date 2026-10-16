@@ -1,0 +1,28 @@
+/* arcade - black screen, neon pink/green/yellow, pixel borders, press-start headings */
+:root{
+  --bg:#0a0a14; --card:#14142a; --ink:#f5f5ff; --soft:#a4a4d0; --line:#3a3a6e;
+  --brand:#ff2d95; --brand2:#39ff14; --on-brand:#0a0a14; --tint:#1e1e42;
+  --good:#39ff14; --goodbg:#0e3a12; --bad:#ff4d4d; --badbg:#401018; --warn:#ffe600; --warnbg:#3d3a05;
+  --radius:0; --radius-sm:0; --bw:4px;
+  --shadow-card:6px 6px 0 #000; --btn-shadow:4px 4px 0 #7a0f48; --btn-border:0;
+  --font:"Rubik","Trebuchet MS",system-ui,sans-serif; --font-head:"Press Start 2P","Courier New",monospace; --head-tr:uppercase;
+  --boss-bg:repeating-linear-gradient(45deg,#ff2d95 0 14px,#c2185b 14px 28px); --on-boss:#fff;
+  --pat:linear-gradient(rgba(255,255,255,.03) 50%,transparent 50%);
+  --fs:18px;
+}
+body{background-size:100% 4px}
+h1{font-size:22px;line-height:1.5;color:#ffe600}
+h3{font-size:14px;line-height:1.5}
+.logo{font-size:14px;color:#39ff14}
+.qtext{font-size:17px;line-height:1.6}
+.btn{font-size:12px;line-height:1.6;padding:12px 16px}
+.btn:active{transform:translate(4px,4px)}
+.btn.ghost{background:transparent;color:#39ff14;border-color:#39ff14}
+.boss .btn{background:#ffe600;color:#0a0a14}
+.chip{border-radius:0;border-width:3px}
+.bar{border-radius:0}.bar>i{border-radius:0}
+.stars,.scorebig{font-family:var(--font-head)}
+.scorebig{font-size:30px;color:#ffe600}
+.tcard:hover{border-color:#39ff14}
+.opt:hover:not(:disabled){border-color:#39ff14}
+.fb b.h{font-family:var(--font-head);font-size:13px;line-height:1.6}
