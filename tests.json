@@ -9,5 +9,16 @@
   "lang": "en",
   "questions": 104,
   "topics": 6
+ },
+ {
+  "id": "science-unit2-mini",
+  "subject": "science",
+  "title": "Unit 2 Mini Quiz: States, Phase Changes & Dissolving",
+  "blurb": "Melting, boiling, evaporation, sublimation and dissolving - ready for the Science mini quiz.",
+  "theme": "arcade",
+  "date": "2026-10-30",
+  "lang": "en",
+  "questions": 56,
+  "topics": 6
  }
 ]
