@@ -7,7 +7,7 @@
   sq.py build                       regenerate index.html (homepage) and every tests/<id>/index.html
   sq.py publish <id> -m "message"   check + build + git commit + push + wait for GitHub Pages
 """
-import argparse, datetime, html, json, os, re, subprocess, sys, time
+import argparse, datetime, hashlib, html, json, os, re, subprocess, sys, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -60,8 +60,10 @@ def cmd_themes(_):
 
 DATA_TEMPLATE = '''/* {title} - source materials: FILL IN (file names, date). */
 (function(){{
-/* Builders: mc, tf, multi, order, match, sort, fill, typed, label. Read the skill's references/question-types.md.
-   HTML allowed in text: <sub> <sup> <b> <i> <br>. Every question needs an explanation (e) and ideally a source (s). */
+/* Builders: mc, tf, multi, order, match, sort, fill, typed, write, label, odd, spot, scramble, slider, hotspot.
+   Read the skill's references/question-types.md. HTML allowed in text: <sub> <sup> <b> <i> <br>.
+   Every question needs an explanation (e) and ideally a source (s). Wording = plain general knowledge, never "in the slides".
+   Fast check: node tools/lint.js <id> (aim for gloss=N/N: every question shows a Russian term line). */
 const TOPICS=[
 {{id:'topic1', ico:'📘', name:'Topic one', blurb:'what is inside', Q:[
  mc('Example question?','Right answer',['Wrong 1','Wrong 2','Wrong 3'],'Why it is right (one or two sentences).','Slides.pdf'),
@@ -69,8 +71,10 @@ const TOPICS=[
 ]}}
 ];
 const VOCAB=[['term','перевод','short note']];
+/* en -> ru for every term a child may not know; forms after '|' (s/es/d/ed/ing are added automatically). VOCAB is merged in. */
+const GLOSSARY=[['particle|particles','частица']];
 TOPICS.forEach(t=>{{t.sheet='<h3>Key facts</h3><ul><li>...</li></ul>'}});
-QuizEngine.run({{id:'{id}',lang:'{lang}',logo:'{emoji} {logo}',title:'{title}',bossSize:25,topics:TOPICS,vocab:VOCAB}});
+QuizEngine.run({{id:'{id}',lang:'{lang}',logo:'{emoji} {logo}',title:'{title}',bossSize:25,topics:TOPICS,vocab:VOCAB,glossary:GLOSSARY}});
 }})();
 '''
 
@@ -99,14 +103,14 @@ PAGE = '''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-{fonts}<link rel="stylesheet" href="../../assets/engine.css">
-<link rel="stylesheet" href="../../themes/{theme}.css">
+{fonts}<link rel="stylesheet" href="../../assets/engine.css?v={v}">
+<link rel="stylesheet" href="../../themes/{theme}.css?v={v}">
 </head>
 <body>
 <canvas id="confetti"></canvas>
 <div class="wrap" id="app"></div>
-<script src="../../assets/engine.js"></script>
-<script src="data.js"></script>
+<script src="../../assets/engine.js?v={v}"></script>
+<script src="data.js?v={v}"></script>
 </body>
 </html>
 '''
@@ -120,6 +124,15 @@ def fonts_tag(theme_id):
     return ""
 
 
+def version(*paths):
+    """short content hash: a new version of the engine or data gets a new URL, so no browser mixes old and new files"""
+    h = hashlib.sha1()
+    for p in paths:
+        with open(os.path.join(ROOT, p), "rb") as f:
+            h.update(f.read())
+    return h.hexdigest()[:8]
+
+
 def build_pages():
     tests = load("tests.json", [])
     for t in tests:
@@ -127,7 +140,8 @@ def build_pages():
         if not os.path.exists(os.path.join(d, "data.js")):
             sys.exit(f"missing tests/{t['id']}/data.js")
         with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
-            f.write(PAGE.format(lang=t.get("lang", "en"), title=html.escape(t["title"]), fonts=fonts_tag(t["theme"]), theme=t["theme"]))
+            v = version("assets/engine.js", "assets/engine.css", f"themes/{t['theme']}.css", f"tests/{t['id']}/data.js")
+            f.write(PAGE.format(lang=t.get("lang", "en"), title=html.escape(t["title"]), fonts=fonts_tag(t["theme"]), theme=t["theme"], v=v))
     build_home(tests)
     print(f"built homepage + {len(tests)} test page(s)")
 
@@ -167,6 +181,7 @@ a.card:focus-visible{{outline:3px solid var(--accent)}}
 .meta{{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px;font-size:14px;font-weight:800;color:var(--soft)}}
 .pill{{border:2px solid var(--line);border-radius:999px;padding:1px 9px;background:#faf9f6}}
 .stars{{color:#e8a400;letter-spacing:2px}}
+.pill.mist{{border-color:#f59e0b;background:#fff6e0;color:#8a5a00}}
 footer{{margin-top:36px;color:var(--soft);font-size:15px}}
 @media(prefers-reduced-motion:reduce){{a.card{{transition:none}}}}
 </style>
@@ -174,20 +189,25 @@ footer{{margin-top:36px;color:var(--soft);font-size:15px}}
 <body>
 <div class="wrap">
 <header><h1>Study Quests</h1><span class="xp" id="xp">⭐ 0 XP</span></header>
-<p class="lead">Pick a quest to get ready for the next test. Every quest looks different - and every question comes from your class materials.</p>
+<p class="lead">Pick a quest to get ready for the next test. Every quest looks different. Wrong answers are saved in "My mistakes" inside each quest - train them before the test.</p>
 <div class="filters" id="filters"></div>
 <main id="main"></main>
-<footer>Progress is saved in this browser.</footer>
+<footer>XP, records and mistakes are saved in this browser on this device.</footer>
 </div>
 <script>
 const TESTS={tests};
 const SUBJECTS={subjects};
 function esc(s){{return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}
-function progress(id){{try{{const d=JSON.parse(localStorage.getItem('sq:'+id)||'{{}}');return {{xp:d.xp||0,boss:(d.best||{{}}).boss||0}}}}catch(e){{return {{xp:0,boss:0}}}}}}
+function progress(id){{try{{const d=JSON.parse(localStorage.getItem('sq:'+id)||'{{}}');return {{xp:d.xp||0,boss:(d.best||{{}}).boss||0,mist:Object.keys(d.mist||{{}}).length}}}}catch(e){{return {{xp:0,boss:0,mist:0}}}}}}
+const LEVELS=['Rookie','Explorer','Apprentice','Investigator','Scholar','Expert','Master','Genius','Professor','Legend'];
+function lvlFrom(L){{return 25*(L-1)*(L+2)}}
+function level(xp){{let L=1;while(xp>=lvlFrom(L+1))L++;return {{L,name:LEVELS[Math.min(L,LEVELS.length)-1]}}}}
+function streak(){{try{{const p=JSON.parse(localStorage.getItem('sq:profile')||'{{}}');const d=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');const n=new Date(),y=new Date();y.setDate(n.getDate()-1);return (p.day===d(n)||p.day===d(y))?(p.streak||0):0}}catch(e){{return 0}}}}
 let filter='all';
 function render(){{
   let totalXp=0;TESTS.forEach(t=>totalXp+=progress(t.id).xp);
-  document.getElementById('xp').textContent='⭐ '+totalXp+' XP';
+  const lv=level(totalXp),st=streak();
+  document.getElementById('xp').textContent='Lv '+lv.L+' '+lv.name+' · ⭐ '+totalXp+' XP'+(st?' · 🔥 '+st:'');
   const subs=[...new Set(TESTS.map(t=>t.subject))];
   document.getElementById('filters').innerHTML=['all'].concat(subs).map(s=>`<button class="f ${{filter===s?'on':''}}" data-f="${{s}}">${{s==='all'?'All':(SUBJECTS[s]||'📚')+' '+s.charAt(0).toUpperCase()+s.slice(1)}}</button>`).join('');
   document.querySelectorAll('.f').forEach(b=>b.onclick=()=>{{filter=b.dataset.f;render()}});
@@ -196,7 +216,7 @@ function render(){{
   document.getElementById('main').innerHTML=Object.keys(bySub).map(s=>`<h2>${{SUBJECTS[s]||'📚'}} ${{s.charAt(0).toUpperCase()+s.slice(1)}}</h2><div class="grid">${{bySub[s].sort((a,b)=>b.date.localeCompare(a.date)).map(t=>{{
     const p=progress(t.id),isNew=(now-new Date(t.date).getTime())<8*864e5,st=p.boss>=90?3:p.boss>=70?2:p.boss>=40?1:0;
     return `<a class="card" href="tests/${{t.id}}/"><div class="banner" style="background:linear-gradient(135deg,${{t.preview[0]}},${{t.preview[1]}} 60%,${{t.preview[2]}})">${{t.mascot}}${{isNew?'<span class="new">NEW</span>':''}}</div>
-    <div class="body"><h3>${{esc(t.title)}}</h3><p>${{esc(t.blurb)}}</p><div class="meta"><span class="pill">${{t.questions}} questions</span><span class="pill">${{esc(t.themeName)}} look</span>${{p.boss?`<span class="stars">${{'★'.repeat(st)}}${{'☆'.repeat(3-st)}}</span> <span>${{p.boss}}%</span>`:''}}</div></div></a>`}}).join('')}}</div>`).join('')||'<p class="lead">No quests yet.</p>';
+    <div class="body"><h3>${{esc(t.title)}}</h3><p>${{esc(t.blurb)}}</p><div class="meta"><span class="pill">${{t.questions}} questions</span><span class="pill">${{esc(t.themeName)}} look</span>${{p.mist?`<span class="pill mist">🎯 ${{p.mist}} to fix</span>`:''}}${{p.boss?`<span class="stars">${{'★'.repeat(st)}}${{'☆'.repeat(3-st)}}</span> <span>${{p.boss}}%</span>`:''}}</div></div></a>`}}).join('')}}</div>`).join('')||'<p class="lead">No quests yet.</p>';
 }}
 render();
 </script>

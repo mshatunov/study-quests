@@ -33,6 +33,7 @@ a.card:focus-visible{outline:3px solid var(--accent)}
 .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px;font-size:14px;font-weight:800;color:var(--soft)}
 .pill{border:2px solid var(--line);border-radius:999px;padding:1px 9px;background:#faf9f6}
 .stars{color:#e8a400;letter-spacing:2px}
+.pill.mist{border-color:#f59e0b;background:#fff6e0;color:#8a5a00}
 footer{margin-top:36px;color:var(--soft);font-size:15px}
 @media(prefers-reduced-motion:reduce){a.card{transition:none}}
 </style>
@@ -40,20 +41,25 @@ footer{margin-top:36px;color:var(--soft);font-size:15px}
 <body>
 <div class="wrap">
 <header><h1>Study Quests</h1><span class="xp" id="xp">⭐ 0 XP</span></header>
-<p class="lead">Pick a quest to get ready for the next test. Every quest looks different - and every question comes from your class materials.</p>
+<p class="lead">Pick a quest to get ready for the next test. Every quest looks different. Wrong answers are saved in "My mistakes" inside each quest - train them before the test.</p>
 <div class="filters" id="filters"></div>
 <main id="main"></main>
-<footer>Progress is saved in this browser.</footer>
+<footer>XP, records and mistakes are saved in this browser on this device.</footer>
 </div>
 <script>
-const TESTS=[{"id": "science-unit1", "subject": "science", "title": "Unit 1: Human Body & Health", "blurb": "Heart and blood, lungs, puberty, insect bites, germs - ready for the End-of-Unit test.", "date": "2026-10-11", "questions": 104, "mascot": "🔬", "preview": ["#6c4cf1", "#8f78ff", "#f4f1ff"], "themeName": "Lab"}, {"id": "science-unit2-mini", "subject": "science", "title": "Unit 2 Mini Quiz: States, Phase Changes & Dissolving", "blurb": "Melting, boiling, evaporation, sublimation and dissolving - ready for the Science mini quiz.", "date": "2026-10-30", "questions": 56, "mascot": "👾", "preview": ["#0a0a14", "#ff2d95", "#39ff14"], "themeName": "Arcade"}];
+const TESTS=[{"id": "science-unit1", "subject": "science", "title": "Unit 1: Human Body & Health", "blurb": "Heart and blood, lungs, puberty, insect bites, germs - ready for the End-of-Unit test.", "date": "2026-10-11", "questions": 116, "mascot": "🔬", "preview": ["#6c4cf1", "#8f78ff", "#f4f1ff"], "themeName": "Lab"}, {"id": "science-unit2-mini", "subject": "science", "title": "Unit 2 Mini Quiz: States, Phase Changes & Dissolving", "blurb": "Melting, boiling, evaporation, sublimation and dissolving - ready for the Science mini quiz.", "date": "2026-10-30", "questions": 73, "mascot": "👾", "preview": ["#0a0a14", "#ff2d95", "#39ff14"], "themeName": "Arcade"}];
 const SUBJECTS={"science": "🔬"};
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function progress(id){try{const d=JSON.parse(localStorage.getItem('sq:'+id)||'{}');return {xp:d.xp||0,boss:(d.best||{}).boss||0}}catch(e){return {xp:0,boss:0}}}
+function progress(id){try{const d=JSON.parse(localStorage.getItem('sq:'+id)||'{}');return {xp:d.xp||0,boss:(d.best||{}).boss||0,mist:Object.keys(d.mist||{}).length}}catch(e){return {xp:0,boss:0,mist:0}}}
+const LEVELS=['Rookie','Explorer','Apprentice','Investigator','Scholar','Expert','Master','Genius','Professor','Legend'];
+function lvlFrom(L){return 25*(L-1)*(L+2)}
+function level(xp){let L=1;while(xp>=lvlFrom(L+1))L++;return {L,name:LEVELS[Math.min(L,LEVELS.length)-1]}}
+function streak(){try{const p=JSON.parse(localStorage.getItem('sq:profile')||'{}');const d=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');const n=new Date(),y=new Date();y.setDate(n.getDate()-1);return (p.day===d(n)||p.day===d(y))?(p.streak||0):0}catch(e){return 0}}
 let filter='all';
 function render(){
   let totalXp=0;TESTS.forEach(t=>totalXp+=progress(t.id).xp);
-  document.getElementById('xp').textContent='⭐ '+totalXp+' XP';
+  const lv=level(totalXp),st=streak();
+  document.getElementById('xp').textContent='Lv '+lv.L+' '+lv.name+' · ⭐ '+totalXp+' XP'+(st?' · 🔥 '+st:'');
   const subs=[...new Set(TESTS.map(t=>t.subject))];
   document.getElementById('filters').innerHTML=['all'].concat(subs).map(s=>`<button class="f ${filter===s?'on':''}" data-f="${s}">${s==='all'?'All':(SUBJECTS[s]||'📚')+' '+s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('');
   document.querySelectorAll('.f').forEach(b=>b.onclick=()=>{filter=b.dataset.f;render()});
@@ -62,7 +68,7 @@ function render(){
   document.getElementById('main').innerHTML=Object.keys(bySub).map(s=>`<h2>${SUBJECTS[s]||'📚'} ${s.charAt(0).toUpperCase()+s.slice(1)}</h2><div class="grid">${bySub[s].sort((a,b)=>b.date.localeCompare(a.date)).map(t=>{
     const p=progress(t.id),isNew=(now-new Date(t.date).getTime())<8*864e5,st=p.boss>=90?3:p.boss>=70?2:p.boss>=40?1:0;
     return `<a class="card" href="tests/${t.id}/"><div class="banner" style="background:linear-gradient(135deg,${t.preview[0]},${t.preview[1]} 60%,${t.preview[2]})">${t.mascot}${isNew?'<span class="new">NEW</span>':''}</div>
-    <div class="body"><h3>${esc(t.title)}</h3><p>${esc(t.blurb)}</p><div class="meta"><span class="pill">${t.questions} questions</span><span class="pill">${esc(t.themeName)} look</span>${p.boss?`<span class="stars">${'★'.repeat(st)}${'☆'.repeat(3-st)}</span> <span>${p.boss}%</span>`:''}</div></div></a>`}).join('')}</div>`).join('')||'<p class="lead">No quests yet.</p>';
+    <div class="body"><h3>${esc(t.title)}</h3><p>${esc(t.blurb)}</p><div class="meta"><span class="pill">${t.questions} questions</span><span class="pill">${esc(t.themeName)} look</span>${p.mist?`<span class="pill mist">🎯 ${p.mist} to fix</span>`:''}${p.boss?`<span class="stars">${'★'.repeat(st)}${'☆'.repeat(3-st)}</span> <span>${p.boss}%</span>`:''}</div></div></a>`}).join('')}</div>`).join('')||'<p class="lead">No quests yet.</p>';
 }
 render();
 </script>

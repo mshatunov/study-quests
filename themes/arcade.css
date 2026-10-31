@@ -26,3 +26,10 @@ h3{font-size:14px;line-height:1.5}
 .tcard:hover{border-color:#39ff14}
 .opt:hover:not(:disabled){border-color:#39ff14}
 .fb b.h{font-family:var(--font-head);font-size:13px;line-height:1.6}
+.h2{font-size:15px;line-height:1.6;color:#ffe600}
+.panel h3{font-size:13px;line-height:1.6}
+.player .lv{font-size:10px;padding:4px 10px}
+.bignum{font-size:36px;color:#ffe600}
+.sval{font-size:22px}
+.ls,.lt{font-size:16px}
+.badge{border-radius:0}

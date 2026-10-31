@@ -27,7 +27,8 @@ const PHASE_SVG={vb:'0 0 560 330',body:`
   <path d="M80 250 V274 H456 V222" stroke="#e0533d" marker-end="url(#mR)"/>
   <path d="M456 108 V50 H80 V104" stroke="#3b82f6" marker-end="url(#mB)"/>
  </g>`};
-const PHASE_PTS=[{n:'Melting',x:180,y:188},{n:'Freezing',x:180,y:142},{n:'Evaporation',x:383,y:188},{n:'Condensation',x:383,y:142},{n:'Sublimation',x:285,y:274},{n:'Deposition',x:285,y:50}];
+/* paired arrows: points staggered towards each arrow's tail so hotspot buttons (36px) do not overlap on a phone and the arrowheads stay visible */
+const PHASE_PTS=[{n:'Melting',x:150,y:188},{n:'Freezing',x:210,y:142},{n:'Evaporation',x:352,y:188},{n:'Condensation',x:414,y:142},{n:'Sublimation',x:285,y:274},{n:'Deposition',x:285,y:50}];
 
 /* ---------- picture 2: sugar / salt dissolving in water (Dissolving slide 7) ---------- */
 const beaker=`<path d="M42 70 H198 V262 Q198 272 188 272 H52 Q42 272 42 262 Z" fill="#cfe9ff"/><path d="M40 38 V262 Q40 274 52 274 H188 Q200 274 200 262 V38" fill="none" stroke="#26224a" stroke-width="4"/>`;
@@ -62,7 +63,8 @@ const TOPICS=[
  sort('Heated or cooled? Which phase changes happen through heating and which through cooling?',['Through heating','Through cooling'],[
    ['Melting',0],['Boiling',0],['Evaporation',0],['Sublimation',0],
    ['Freezing',1],['Condensation',1],['Deposition',1]],
-   'Slide titles: melting, boiling, evaporation and sublimation are phase changes through HEATING. Freezing, condensation and deposition are through COOLING.',SC+', slides 7 and 12'),
+   'Melting, boiling, evaporation and sublimation are phase changes through HEATING. Freezing, condensation and deposition are phase changes through COOLING.',SC+', slides 7 and 12'),
+ odd('Odd one out! Three cards are pairs of OPPOSITE phase changes. Tap the card that does not belong.','Melting and evaporation',['Melting and freezing','Evaporation and condensation','Sublimation and deposition'],'The other three cards are pairs of OPPOSITE phase changes: one happens through heating, the other through cooling, and their arrows on the phase-change map go opposite ways. Melting and evaporation both happen when heat is added, so they are not opposites.',SC+', slides 3, 7 and 12'),
  order('Heat an ice cube until it becomes a gas. Put the steps in order.',[
    'The ice cube is a solid',
    'Heat is added and the ice melts',
@@ -70,14 +72,16 @@ const TOPICS=[
    'More heat is added and the water changes into a gas',
    'The water is now a gas'],
    'Solid ice melts into liquid water. When the liquid water is heated more, it changes into a gas.',SC+', slides 2 and 4'),
+ scramble('A gas changes into a solid without first passing through the liquid state.','deposition','Deposition: a gas changes straight into a solid, with no liquid stage. Frost and snowflakes can form this way.',SC+', slide 15'),
  match('Match each everyday example to its phase change.',[
    ['A popsicle turns into a liquid','Melting'],
    ['Water turns into ice cubes','Freezing'],
    ['Dry ice turns straight into a gas, with no liquid stage','Sublimation'],
    ['Frost and snowflakes form from a gas','Deposition'],
    ['Water exposed to the air turns into a gas','Evaporation']],
-   'Slide examples: melting popsicles, freezing ice cubes, sublimation of dry ice, snowflakes from deposition, evaporation of water.',SC+', slides 8-15'),
+   'Examples: melting popsicles, freezing ice cubes, sublimation of dry ice, snowflakes from deposition, evaporation of water.',SC+', slides 8-15'),
  tf('Sublimation can happen when heat is added, when the pressure is reduced, or both.',true,'Yes! A solid can go straight to a gas through the addition of heat, the reduction of pressure, or both.',SC+', slide 11'),
+ hotspot('Tap the arrow that shows sublimation.',PHASE_SVG,PHASE_PTS,'Sublimation','Sublimation is the red arrow along the bottom: SOLID straight to GAS, with no liquid stage. Red means heat is added.',SC+', slides 3 and 11'),
  tf('In deposition, a gas first turns into a liquid and then freezes into a solid.',false,'No - in deposition a gas changes into a solid WITHOUT passing through the liquid state (frost, snowflakes).',SC+', slide 15'),
  multi('Tick ALL the phase changes that skip the liquid state completely.',['Sublimation','Deposition'],['Melting','Freezing','Evaporation','Condensation'],'Sublimation (solid to gas) and deposition (gas to solid) go straight between solid and gas.',SC+', slides 11 and 15'),
  mc('Frost and snowflakes can form when a gas turns directly into ice. Which phase change is this?','Deposition',['Condensation','Freezing','Sublimation'],'Deposition: a gas changes into a solid without passing through the liquid state. This can form frost, snowflakes and other ice crystals.',SC+', slide 15'),
@@ -87,8 +91,9 @@ const TOPICS=[
 
 {id:'heat', ico:'🔥', name:'Heat & Particles', blurb:'What heat does to molecules when matter melts, boils and freezes', col:'#ff8a1a', Q:[
  mc('What happens to the molecules of a solid when it is heated?','They gain kinetic energy and move more rapidly',['They stop moving and lose energy','They get smaller and smaller','They disappear completely'],'Heating a solid increases the kinetic energy of its molecules, so they vibrate and move more rapidly.',SC+', slide 8'),
- mc('In the slides, the bonds between the molecules of ice are compared to...','Tiny invisible strings that hold the molecules together',['Little magnets that push the molecules apart','A thin layer of ice around every molecule','Glue that melts at room temperature'],'You can think of the bonds as tiny invisible strings holding the ice molecules together.',SC+', slide 5'),
+ mc('You can think of the bonds between the molecules of ice as...','Tiny invisible strings holding them together',['Little magnets that push the molecules far apart','A thin layer of ice wrapped around every molecule','Glue that melts at room temperature'],'You can think of the bonds as tiny invisible strings that hold the molecules of the ice together.',SC+', slide 5'),
  mc('When ice is being heated and melts, what is the heat energy used for?','Breaking the bonds between the molecules',['Making the ice colder','Making new molecules','Making the ice heavier'],'The heat energy is used to break the bonds between the molecules of the ice.',SC+', slide 5'),
+ odd('Odd one out! Three cards describe what happens when ice is heated. Tap the card that does not belong.','The molecules form new bonds',['The molecules move more rapidly','The bonds between the molecules break','The molecules become less tightly packed'],'When ice is heated, the molecules move more rapidly, the bonds between them break and they become less tightly packed. New bonds form the other way round - when water is cooled and turns into ice.',SC+', slides 5, 6 and 8'),
  tf('While ice is melting, its temperature stays the same until all of the ice has melted.',true,'Right! The heat goes into breaking bonds, so the temperature does not change until all of the ice is water.',SC+', slide 5'),
  order('Heating ice: put what happens in order.',[
    'Heat is added and the ice absorbs it',
@@ -103,6 +108,7 @@ const TOPICS=[
    'The molecules become more tightly packed and form new intermolecular bonds',
    'A rigid structure forms: ice'],
    'Cooling is the opposite of heating: the energy is released, the molecules slow down, new bonds form and the water becomes ice.',SC+', slide 6'),
+ spot('Find the mistake and tap it.','When water is cooled down, its molecules slow down and become [[less|more]] tightly packed.','Cooling is the opposite of heating: the molecules slow down, become MORE tightly packed and form new bonds - a rigid structure (ice).',SC+', slide 6'),
  match('What are the molecules doing? Match the phase change to the molecules.',[
    ['Melting','Bonds break and the molecules become less tightly packed'],
    ['Boiling','Added energy makes the molecules move faster and collide more often'],
@@ -117,15 +123,18 @@ const TOPICS=[
    ['Condensation','A gas is cooled below its dew point'],
    ['Deposition','A gas is cooled below its sublimation point']],
    'Freezing point (liquid to solid), dew point (gas to liquid), sublimation point (gas straight to solid).',SC+', slides 13-15'),
+ scramble('A gas is cooled below its dew point, and its molecules come closer together to form a liquid.','condensation','Condensation: a gas changes into a liquid when it is cooled below its dew point.',SC+', slide 14'),
  tf('During boiling, the molecules move more slowly and collide less often.',false,'No - the added energy makes the molecules move around MORE rapidly and collide MORE frequently.',SC+', slide 9')
 ]},
 
 {id:'boilevap', ico:'💨', name:'Boiling vs Evaporation', blurb:'Two ways a liquid becomes a gas: what is the same and what is different', col:'#17c1e8', Q:[
  mc('Boiling and evaporation are both phase changes from...','A liquid to a gas',['A gas to a liquid','A solid to a liquid','A solid straight to a gas'],'In both boiling and evaporation, a liquid changes into a gas.',SC+', slides 9 and 10'),
+ hotspot('Tap the arrow that shows evaporation.',PHASE_SVG,PHASE_PTS,'Evaporation','Evaporation is the red arrow from LIQUID to GAS: energy is added and the liquid changes into a gas.',SC+', slides 3 and 10'),
  mc('Which statement about evaporation is correct?','It happens at a temperature below the liquid\'s boiling point',['It only happens when the liquid is boiling hot','It changes a gas into a liquid','It changes a solid straight into a gas with no liquid stage'],'Evaporation is a liquid changing into a gas at a temperature below its boiling point.',SC+', slide 10'),
  mc('Which molecules escape from a liquid during evaporation?','The more energetic molecules near the surface',['Only the slowest molecules at the bottom','Molecules from the air above the liquid','All of the molecules at exactly the same moment'],'The more energetic molecules near the surface of the liquid escape into the air as gas molecules.',SC+', slide 10'),
- mc('According to the slides, in which phase change does a liquid become a gas because of an increase in temperature and pressure?','Boiling',['Evaporation','Condensation','Melting'],'Boiling: a liquid changes into a gas due to an increase in temperature and pressure. The added energy makes the molecules move more rapidly and collide more often.',SC+', slide 9'),
- sort('Evaporation, boiling or both? Sort the descriptions (as on the slides).',['Evaporation','Boiling','Both'],[
+ mc('In which phase change does a liquid become a gas because of an increase in temperature and pressure?','Boiling',['Evaporation','Condensation','Melting'],'Boiling: a liquid changes into a gas due to an increase in temperature and pressure. The added energy makes the molecules move more rapidly and collide more often.',SC+', slide 9'),
+ odd('Odd one out! Three cards describe the same phase change. Tap the card that does not belong.','Temperature and pressure increase',['Happens below the boiling point','Surface molecules escape into the air','The liquid is exposed to air'],'Three cards describe EVAPORATION: it happens below the boiling point, when a liquid is exposed to air and the more energetic molecules near the surface escape. An increase in temperature and pressure describes BOILING.',SC+', slides 9 and 10'),
+ sort('Evaporation, boiling or both? Sort the descriptions.',['Evaporation','Boiling','Both'],[
    ['Happens at a temperature below the boiling point',0],
    ['Energetic molecules near the surface escape into the air',0],
    ['Caused by an increase in temperature and pressure',1],
@@ -139,6 +148,7 @@ const TOPICS=[
    'The more energetic molecules near the surface escape into the air as gas molecules',
    'The process continues until all of the liquid has become a gas'],
    'Surface molecules with extra energy escape into the air, and this goes on until the liquid has all become a gas.',SC+', slide 10'),
+ spot('Find the mistake and tap it.','In evaporation, the [[slowest|more energetic]] molecules near the surface escape into the air.','The MORE ENERGETIC molecules near the surface of the liquid escape into the air as gas molecules.',SC+', slide 10'),
  tf('Evaporation can only happen when a liquid has reached its boiling point.',false,'No! Evaporation happens at a temperature BELOW the boiling point.',SC+', slide 10'),
  typed('Type the name of the phase change in which a liquid changes into a gas at a temperature below its boiling point.',['evaporation'],'Evaporation (spelling: e-v-a-p-o-r-a-t-i-o-n): surface molecules gain energy and escape into the air.',SC+', slide 10'),
  write('Explain one way boiling and evaporation are the same and one way they are different.',['liquid|gas','energy|heat|temperature','below|surface|escape|pressure|collide'],'Both boiling and evaporation change a liquid into a gas and need energy (heat). Evaporation happens below the boiling point, when the more energetic molecules near the surface escape into the air.','Both are liquid to gas and need energy. Difference: evaporation is below the boiling point and happens as surface molecules escape.',SC+', slides 9 and 10')
@@ -154,15 +164,18 @@ const TOPICS=[
    ['Insoluble','Cannot dissolve in that liquid'],
    ['Dissolving rate','How fast something dissolves']],
    'Solute (solid) + solvent (liquid) = solution. Soluble things dissolve, insoluble things do not.',DS+', slides 4 and 5'),
+ scramble('The liquid that the solute spreads through in a solution - for example, water.','solvent','Solvent: the liquid that does the dissolving (e.g. water). The solute dissolves in it.',DS+', slide 5'),
  sort('Soluble or insoluble? Sort the cards.',['Soluble','Insoluble'],[
    ['Table salt',0],['Sugar',0],['A clear mixture forms',0],
    ['Sand',1],['Chalk',1],['Visible bits are left however long you stir',1]],
    'Table salt and sugar are soluble solids. Sand and chalk are insoluble: they sink or float and leave visible bits.',DS+', slide 4'),
  fill('When salt dissolves in water, the salt is the ___, the water is the ___ and the salty mixture is the ___.',['solute','solvent','solution'],['solute','solvent','solution','soluble','insoluble'],'Solute = what dissolves, solvent = the liquid that dissolves it, solution = the mixture.',DS+', slide 5'),
  mc('A student stirs sand into water, but visible bits stay however long they stir. What can we say about sand?','It is insoluble in water',['It is soluble in water','It is the solvent','It is a solution'],'Sand does not dissolve, so it is insoluble.',DS+', slide 4'),
+ spot('Find the mistake and tap it.','A substance is soluble if it can dissolve in a liquid to form a [[cloudy|clear]] mixture.','A soluble substance dissolves in a liquid to form a CLEAR mixture. Table salt and sugar are common soluble solids.',DS+', slide 4'),
  tf('Dissolving is a chemical reaction that makes brand new substances.',false,'No! Dissolving is a PHYSICAL change. No brand new substances are created.',DS+', slide 6'),
  multi('Tick ALL the solids that are soluble in water.',['Table salt','Sugar'],['Sand','Chalk'],'Salt and sugar dissolve in water. Sand and chalk are insoluble.',DS+', slide 4'),
  typed('10 g of salt dissolves in 100 g of water. What is the mass of the solution in grams? Type the number.',['110','110 g','110g','110 grams'],'Total mass is conserved: 10 g + 100 g = 110 g of solution.',DS+', slide 6','g'),
+ slider('You dissolve 25 g of sugar in 100 g of water. What is the mass of the solution?',{min:100,max:150,step:5,unit:'g'},125,0,'Total mass is conserved, nothing disappears: 25 g + 100 g = 125 g of solution. In the same way, 10 g of salt in 100 g of water makes 110 g of solution.',DS+', slide 6'),
  mc('What does it mean to stir?','To mix, which speeds up dissolving',['To heat the liquid so it dissolves','To take the solid out of the liquid','To freeze the mixture'],'To stir means mixing to speed up the dissolving rate.',DS+', slide 5'),
  mc('What happens to the solute particles when a solid dissolves?','They break apart and spread out among the solvent particles',['They are destroyed','They turn into brand new particles','They sink to the bottom as a solid'],'No new substance is made: the solute particles simply break apart and spread out among the solvent particles.',DS+', slide 6'),
  mc('A solid is dissolved in water. Compared with the solid and the water before mixing, the mass of the solution is...','The same - total mass is conserved',['Smaller, because the solid vanished','Bigger, because the particles take up more room','Smaller, because some mass turns into bubbles'],'Total mass is conserved. For example 10 g of salt in 100 g of water makes exactly 110 g of solution.',DS+', slide 6')
@@ -171,6 +184,7 @@ const TOPICS=[
 {id:'faster', ico:'⚡', name:'Dissolving Faster: Particles', blurb:'The particle model, temperature and stirring', col:'#a78bfa', Q:[
  label('Label the particle picture! Choose the correct name for each number.',DISS_SVG,DISS_PTS,'In the crystal the solute particles are packed together. The water particles pull them away and the solute particles spread out between the water particles.',DS+', slide 7'),
  mc('In a solid crystal, how are the solute particles arranged?','Tightly packed together in orderly rows',['Far apart and spread out','Moving about quickly in the liquid','Hidden inside the water particles'],'In a solid crystal the solute particles are tightly packed in orderly rows.',DS+', slide 7'),
+ odd('Odd one out! Three cards describe the same kind of particle. Tap the card that does not belong.','They are packed in orderly rows',['They are constantly moving','They bump against the crystal','They pull individual solute particles away'],'Three cards describe the WATER particles: they are constantly moving, bump against the crystal and pull solute particles away. The solute particles in a solid crystal are the ones tightly packed in orderly rows.',DS+', slide 7'),
  order('Particle model: put the dissolving process in order.',[
    'At the start, the solute particles are tightly packed in orderly rows in the crystal',
    'Water particles are constantly moving and bumping against the crystal',
@@ -178,6 +192,7 @@ const TOPICS=[
    'The solute particles fit into the gaps between the water particles'],
    'Moving water particles bump the crystal, pull solute particles away and the solute particles fit into the gaps.',DS+', slide 7'),
  mc('Why does sugar dissolve much faster in hot water than in cold water?','Hot water particles move faster and collide with the sugar more frequently',['Heating removes all the gaps between the water particles','Cold water destroys the sugar particles before they can separate','Hot water melts the sugar into a liquid through a chemical reaction'],'Heat gives the water particles more energy, so they move faster and hit the sugar more often.',DS+', slides 10-11'),
+ spot('Find the mistake and tap it.','In hot water, the water particles move faster and collide with the solute [[less|more]] often.','Heating gives the water particles more thermal energy, so they move faster and collide with the solute MORE often and harder.',DS+', slide 8'),
  order('Temperature and dissolving rate: put the chain in order.',[
    'Heating the solvent transfers more thermal energy to the liquid particles',
    'The particles move faster and collide with the solute more often and harder',
@@ -185,13 +200,16 @@ const TOPICS=[
    'The dissolving rate increases'],
    'More thermal energy, faster collisions, rapid dissolving.',DS+', slide 8'),
  mc('Why does stirring help a solid dissolve faster?','It sweeps the dissolved particles away and brings fresh solvent to the solid',['It heats the water up so the solid melts','It makes the crystal grow bigger so it dissolves','It takes the water particles out of the beaker'],'In still water the dissolved particles stay next to the crystal and block fresh water. Stirring sweeps them away.',DS+', slide 9'),
+ hotspot('Tap the solute particles that have already dissolved.',DISS_SVG,DISS_PTS,'Dissolved solute particles','In the right beaker the solute particles have been pulled away from the crystal. They are spread out in the gaps between the water particles.',DS+', slide 7'),
  multi('Tick ALL the things that make a solid dissolve faster.',['Heating the solvent','Stirring'],['Using colder water','Leaving it completely still'],'Heat and stirring both increase the dissolving rate.',DS+', slides 8-11'),
+ scramble('Two words: how fast a solute breaks apart and spreads into a solvent. Heating and stirring increase it.','dissolving rate','Dissolving rate = how fast something dissolves. Heating the solvent and stirring both speed it up.',DS+', slides 5, 8 and 9'),
  write('Use the particle model to explain why sugar dissolves faster in hot, stirred tea than in cold, still water.',['thermal|energy|heat|hot','fast|quick|rapid|speed','collid|collision|bump|hit|crash','stir|sweep|fresh|mix'],'Heating gives the water particles more thermal energy, so they move faster and collide with the sugar more often and harder. Stirring sweeps the dissolved particles away and brings fresh water particles to the sugar.','Heat = more energy, faster particles, more collisions. Stirring = sweeps dissolved particles away, fresh solvent arrives.',DS+', slides 8 and 9')
 ]},
 
 {id:'reversible', ico:'↩️', name:'Reversible Changes (bonus)', blurb:'Physical changes you can undo', bonus:true, col:'#ffd23f', Q:[
  mc('Dissolving is a physical change. What does that mean?','No brand new substances are created',['A new substance is made','The solute turns into a gas','Only gases are involved'],'In a physical change no new substance is made: the solute particles just break apart and spread out among the solvent particles.',DS+', slide 6'),
  mc('How can you get the solid back from a salt solution?','Evaporate the water - the solid crystals remain behind',['Add more water to the solution','Stir the solution much faster','Add more salt to the solution'],'Because dissolving is a physical change it can be reversed: if you evaporate the water, the solid crystals remain.',DS+', slide 6'),
+ spot('Find the mistake and tap it.','Dissolving is a [[chemical|physical]] change, so it can be reversed by evaporating the water.','Dissolving is a PHYSICAL change: no brand new substances are created. That is why it can be reversed - evaporate the water and the solid crystals remain.',DS+', slide 6'),
  order('Get the sugar back from a sugar solution: put the steps in order.',[
    'Sugar dissolves in the water to make a solution',
    'The water is evaporated',
@@ -210,11 +228,43 @@ const VOCAB=[
  ['Phase change','фазовый переход','Matter changes from one state to another'],['Solid / liquid / gas','твердое тело / жидкость / газ','The three common phases'],
  ['Melting','плавление','Solid to liquid'],['Freezing','замерзание','Liquid to solid'],['Evaporation','испарение','Liquid to gas below the boiling point'],['Boiling','кипение','Liquid to gas by heating'],
  ['Condensation','конденсация','Gas to liquid'],['Sublimation','сублимация','Solid straight to gas'],['Deposition','осаждение из газа (десублимация)','Gas straight to solid'],
- ['Molecule','молекула','Called a particle in the Dissolving slides'],['Bond (intermolecular)','связь между молекулами','Tiny invisible string holding molecules together'],['Kinetic energy','кинетическая энергия','More heat = more kinetic energy = molecules move more rapidly'],
+ ['Molecule','молекула','Also called a particle'],['Bond (intermolecular)','связь между молекулами','Tiny invisible string holding molecules together'],['Kinetic energy','кинетическая энергия','More heat = more kinetic energy = molecules move more rapidly'],
  ['Freezing point','температура замерзания',''],['Dew point','точка росы','Gas cools below it and condenses'],['Boiling point','температура кипения',''],['Impurities','примеси',''],
  ['Solute','растворяемое вещество','The solid that dissolves'],['Solvent','растворитель','The liquid that does the dissolving'],['Solution','раствор','Solute evenly spread through the solvent'],
  ['Soluble / insoluble','растворимый / нерастворимый',''],['Dissolve','растворяться',''],['Dissolving rate','скорость растворения','How fast it dissolves'],['Stir','перемешивать',''],
  ['Thermal energy','тепловая энергия',''],['Physical change','физическое изменение','No new substance is made'],['Reversible','обратимый','Can be undone']
+];
+
+/* ---------- glossary: English term|other forms -> Russian (shown under each question; VOCAB terms are added automatically) ---------- */
+const GLOSSARY=[
+ /* states and phase changes */
+ ['phase','фаза (состояние вещества)'],['physical state','агрегатное состояние'],['state','состояние (вещества)'],
+ ['matter','вещество, материя'],['substance','вещество'],
+ ['melting|melt','плавление (плавиться, таять)'],['freezing|freeze|froze|frozen','замерзание (замерзать)'],
+ ['evaporation|evaporate','испарение (испаряться)'],['boiling|boil','кипение (кипеть)'],['boiling hot','очень горячий, кипящий'],
+ ['condensation|condense','конденсация (конденсироваться)'],['sublimation','сублимация (возгонка)'],['sublimation point','температура сублимации'],
+ ['heated|heating','нагревать (нагревание)'],['cooled|cooling','охлаждать (охлаждение)'],
+ ['heat energy','тепловая энергия'],['energy','энергия'],['energetic','с большой энергией'],
+ ['temperature','температура'],['room temperature','комнатная температура'],['pressure','давление'],
+ ['increase','увеличение (увеличиваться)'],['reduce|reduction','уменьшать (уменьшение)'],['directly','напрямую, сразу'],['stage','стадия, этап'],
+ ['pass through|passing through','проходить через'],['skip','пропускать'],['completely','полностью'],['continue','продолжаться'],
+ ['depend on|depends on','зависеть от'],['opposite','противоположный'],['arrow','стрелка'],['statement','утверждение'],['odd one out','найди лишнее'],['tick','отметить галочкой'],
+ ['dry ice','сухой лед'],['frost','иней'],['snowflake','снежинка'],['ice cube','кубик льда'],['popsicle','фруктовый лед (эскимо)'],
+ /* molecules and particles */
+ ['bond','связь (между частицами)'],['intermolecular bond','межмолекулярная связь'],['particle','частица'],['particle model','модель частиц'],
+ ['rapidly|rapid','быстро (быстрый)'],['frequently','часто'],['freely','свободно'],['collide|collision','сталкиваться (столкновение)'],['gain','получать, набирать'],
+ ['tightly packed','плотно упакованы'],['rigid','жесткий'],['structure','структура, строение'],['fixed position','неподвижное положение'],['relative to each other','относительно друг друга'],
+ ['absorb','поглощать'],['release','выделять, отдавать'],['involved','участвует (задействован)'],['exposed','открыт воздуху'],['escape','вылетать, вырываться'],['surface','поверхность'],
+ ['invisible','невидимый'],['tiny','крошечный'],['string','нить, ниточка'],['magnet','магнит'],['glue','клей'],['layer','слой'],['wrapped','обернутый'],['heavier','тяжелее'],['powder','порошок'],['container','сосуд, емкость'],
+ /* dissolving */
+ ['mixture','смесь'],['clear mixture','прозрачная смесь'],['table salt','поваренная соль'],['chalk','мел'],['sink','тонуть'],['visible','видимый'],['bit','кусочек'],['however long','как бы долго (сколько бы ни)'],
+ ['vanish','исчезать'],['disappear','исчезать'],['into thin air','бесследно (в никуда)'],['destroy','разрушать, уничтожать'],['spread out|spread','распределяться'],['evenly','равномерно'],['among','среди'],
+ ['conserved|conserve','сохраняться (не меняться)'],['mass','масса'],['compared with','по сравнению с'],['take up more room','занимать больше места'],['bubble','пузырек'],
+ ['crystal','кристалл'],['orderly rows|orderly','ровными рядами'],['arrange','располагать'],['hidden','спрятанный'],['gap','промежуток'],['fit into','помещаться (входить в)'],
+ ['bump','ударяться, толкаться'],['individual','отдельный'],['constantly','постоянно'],['separate','отделяться'],['remove','убирать'],['broken away','оторваны (отделены)'],
+ ['transfer','передавать'],['harder','сильнее'],['stir|stirring|stirred','перемешивать'],['sweep','сметать, уносить'],['fresh','свежий, новый'],['speed up|speeds up','ускорять'],
+ ['chemical reaction','химическая реакция'],['chemical','химический'],['brand new','совершенно новый'],['reverse','обратить (вернуть назад)'],['remain','оставаться'],
+ ['beaker','химический стакан'],['spoonful','полная ложка']
 ];
 
 /* ---------- cheat sheets ---------- */
@@ -248,5 +298,5 @@ reversible:`<ul><li>Dissolving is a <b>physical change</b> and can be reversed: 
 <li>Phase changes come in opposite pairs: melting / freezing, evaporation / condensation, sublimation / deposition.</li><li>Cooling is the opposite of heating: absorbed heat energy is released.</li></ul>`
 };
 TOPICS.forEach(t=>{t.sheet=SHEETS[t.id]});
-QuizEngine.run({id:'science-unit2-mini',lang:'en',logo:'🔬 Science Quest',title:'Unit 2 Mini Quiz: States, Phase Changes & Dissolving',bossSize:20,topics:TOPICS,vocab:VOCAB});
+QuizEngine.run({id:'science-unit2-mini',lang:'en',logo:'🔬 Science Quest',title:'Unit 2 Mini Quiz: States, Phase Changes & Dissolving',bossSize:20,topics:TOPICS,vocab:VOCAB,glossary:GLOSSARY,games:[{href:'game/',ico:'🧪',name:'Phase Shifter',desc:'Particle lab arcade: melt, boil, freeze, sublimate and dissolve - you control the heat!'}]});
 })();

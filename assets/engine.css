@@ -123,4 +123,81 @@ h1{font-size:34px;margin:6px 0 4px;line-height:1.15}
 .combo{color:var(--warn)}
 .deco{position:fixed;inset:0;pointer-events:none;z-index:0}
 .wrap{position:relative;z-index:1}
+/* ---------- player bar, panels, modes, badges ---------- */
+.player{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:var(--bw) solid var(--line);border-radius:var(--radius);padding:10px 14px;margin:0 0 14px;box-shadow:var(--shadow-card)}
+.player .lv{background:var(--brand);color:var(--on-brand);border-radius:999px;padding:2px 12px;font-weight:800;font-size:15px;font-family:var(--font-head);text-transform:var(--head-tr)}
+.player .bar{flex:1;min-width:120px}
+.soft{color:var(--soft);font-size:15px}
+.panel{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:var(--bw) solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:0 0 14px;box-shadow:var(--shadow-card);color:var(--ink)}
+.panel h3{margin:0 0 4px;font-size:21px}
+.panel.cont{border-color:var(--brand2)}
+.panel.mist{border-color:var(--warn);background:var(--warnbg)}
+.h2{font-family:var(--font-head);text-transform:var(--head-tr);font-size:24px;margin:24px 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;flex-direction:column;border:2px dashed var(--line);border-radius:var(--radius-sm);padding:6px 12px;font-size:15px;font-weight:800;color:var(--soft);background:var(--card);opacity:.6}
+.badge small{font-weight:600;font-size:12px}
+.badge.on{border-style:solid;border-color:var(--brand);color:var(--ink);opacity:1;background:var(--tint)}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 18px;border-radius:999px;font-weight:800;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.3);transition:opacity .5s,transform .5s;max-width:92vw;text-align:center}
+.toast.out{opacity:0;transform:translate(-50%,-16px)}
+.mnote{margin-top:6px;font-weight:700}
+.bignum{font-family:var(--font-head);font-size:56px;font-weight:800;color:var(--brand);line-height:1.1}
+/* ---------- glossary under each question ---------- */
+.gloss{margin-top:16px;border-top:2px dashed var(--line);padding-top:10px;font-size:16px;color:var(--ink)}
+.gloss summary{cursor:pointer;font-weight:800;color:var(--soft);padding:4px 0}
+.gloss[open] summary{color:var(--brand)}
+.glist{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:8px}
+.gi{background:var(--tint);border:1px solid var(--line);border-radius:10px;padding:3px 10px}
+/* ---------- new question types ---------- */
+.oddg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.oddc{min-height:76px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px}
+.spot{line-height:2.4;font-size:21px}
+.wd{background:transparent;border:0;border-bottom:3px dotted var(--soft);border-radius:6px;padding:2px 4px;margin:0 1px;color:var(--ink);font-weight:600;font-size:inherit;line-height:1.5}
+.wd:hover:not(:disabled){background:var(--tint);border-bottom-color:var(--brand2)}
+.wd:disabled{cursor:default;color:var(--ink)}
+.wd.no{background:var(--badbg);border-bottom:3px solid var(--bad)}
+.wd.ok,.wd.fixme{background:var(--goodbg);border-bottom:3px solid var(--good)}
+.wd s{color:var(--bad)}
+.scr{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.ls{width:44px;height:52px;border:var(--bw) dashed var(--line);border-radius:var(--radius-sm);background:var(--tint);font-weight:800;font-size:24px;color:var(--ink);padding:0;font-family:var(--font-head)}
+.ls.full{border-style:solid;border-color:var(--brand2);background:var(--card)}
+.ls.ok{border-color:var(--good);background:var(--goodbg)}
+.ls.no{border-color:var(--bad);background:var(--badbg)}
+.gap{width:18px;display:inline-grid;place-items:center;font-weight:800;font-size:24px}
+.lt{min-width:48px;font-size:22px;font-weight:800;text-align:center;font-family:var(--font-head)}
+.sld{max-width:560px}
+.sval{font-family:var(--font-head);font-size:34px;font-weight:800;color:var(--brand);text-align:center;border:var(--bw) solid var(--line);border-radius:var(--radius-sm);padding:4px 16px;margin:0 auto 12px;width:max-content;min-width:130px;background:var(--tint)}
+.sval small{font-size:.55em;color:var(--soft)}
+.sval.ok{border-color:var(--good);background:var(--goodbg)}
+.sval.no{border-color:var(--bad);background:var(--badbg)}
+.srow2{display:flex;align-items:center;gap:10px}
+.srow2 input{flex:1;accent-color:var(--brand);height:36px;min-width:0}
+.btn.sb{padding:4px 18px;font-size:24px;line-height:1.2}
+.sends{display:flex;justify-content:space-between;color:var(--soft);font-size:15px;margin:2px 64px 0}
+.hsbox{position:relative;max-width:560px}
+.hsbox svg{display:block;width:100%;height:auto}
+.hs{position:absolute;transform:translate(-50%,-50%);width:clamp(26px,7vw,36px);height:clamp(26px,7vw,36px);border-radius:50%;border:3px solid var(--ink);background:var(--card);padding:0;color:var(--ink);font-weight:800;font-size:18px;line-height:1;box-shadow:0 0 0 4px rgba(255,255,255,.6);animation:hsp 1.8s infinite}
+.hs:hover:not(:disabled){background:var(--brand2)}
+.hs:disabled{animation:none;cursor:default}
+.hs.ok{background:var(--good);border-color:var(--good);color:#fff}
+.hs.no{background:var(--bad);border-color:var(--bad);color:#fff}
+.hsn{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:5px;white-space:nowrap;background:var(--ink);color:var(--card);font-size:13px;padding:1px 8px;border-radius:8px;pointer-events:none;font-family:var(--font)}
+@keyframes hsp{0%,100%{box-shadow:0 0 0 4px rgba(255,255,255,.6)}50%{box-shadow:0 0 0 10px rgba(255,255,255,.12)}}
+/* ---------- modes: boss HP, lightning timer, survival hearts, shake ---------- */
+.bossline{display:flex;align-items:center;gap:10px;margin:-4px 0 12px}
+.bossico{font-size:42px;display:inline-block}
+.bossico.hit{animation:hit .5s}
+@keyframes hit{0%{transform:scale(1)}30%{transform:scale(.7) rotate(-14deg);filter:brightness(1.8)}100%{transform:scale(1)}}
+.bar.hp{flex:1;height:16px}
+.bar.hp>i{background:linear-gradient(90deg,var(--bad),var(--warn));transition:width .4s}
+.bar.timer>i{background:linear-gradient(90deg,var(--good),var(--warn));transition:width .2s linear}
+.hearts{letter-spacing:2px}
+.qcard.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+/* ---------- memory game ---------- */
+.memg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.mem{min-height:90px;border:var(--bw) solid var(--line);border-radius:var(--radius-sm);background:var(--brand);color:var(--on-brand);font-weight:800;font-size:17px;padding:8px;box-shadow:var(--btn-shadow)}
+.mem.up{background:var(--card);color:var(--ink);box-shadow:none}
+.mem.up.ru{font-style:italic}
+.mem.done{background:var(--goodbg);border-color:var(--good)}
+@media(max-width:520px){.oddg{grid-template-columns:1fr}.sends{margin:2px 0 0}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
