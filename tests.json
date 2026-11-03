@@ -20,5 +20,16 @@
   "lang": "en",
   "questions": 73,
   "topics": 6
+ },
+ {
+  "id": "history-grade5-early-states",
+  "subject": "history",
+  "title": "History: Early Azerbaijan - sources, first states, Babak, Sajids, Eldiguzids",
+  "blurb": "Azikh and Gobustan, Manna and Atropatena, Babak, Yusuf Sajid, Shams al-Din Eldiguz",
+  "theme": "notebook",
+  "date": "2026-11-04",
+  "lang": "en",
+  "questions": 104,
+  "topics": 6
  }
 ]
