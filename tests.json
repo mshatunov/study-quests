@@ -31,5 +31,16 @@
   "lang": "en",
   "questions": 104,
   "topics": 6
+ },
+ {
+  "id": "science-unit2-end",
+  "subject": "science",
+  "title": "Unit 2 End-of-Unit Check: Vocabulary & Content",
+  "blurb": "All of Unit 2 - properties, conductors, reversible changes, dissolving and chemical reactions - plus the whole vocabulary list.",
+  "theme": "blueprint",
+  "date": "2026-11-21",
+  "lang": "en",
+  "questions": 130,
+  "topics": 9
  }
 ]
