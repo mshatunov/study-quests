@@ -14,7 +14,7 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 REPO = "mshatunov/study-quests"
 SITE = "https://mshatunov.github.io/study-quests/"
 SUBJECT_EMOJI = {"science": "🔬", "maths": "➗", "math": "➗", "english": "📖", "russian": "✍️", "history": "🏛️",
-                 "geography": "🌍", "azerbaijani": "🇦🇿", "computing": "💻", "art": "🎨", "music": "🎵"}
+                 "geography": "🌍", "azerbaijani": "🇦🇿", "computing": "💻", "art": "🎨", "music": "🎵", "mock": "📝"}
 
 
 def load(path, default=None):

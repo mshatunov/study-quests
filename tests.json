@@ -42,5 +42,16 @@
   "lang": "en",
   "questions": 130,
   "topics": 9
+ },
+ {
+  "id": "mock1-checkpoint-dec",
+  "subject": "mock",
+  "title": "Mock Exams 1: Science and Maths",
+  "blurb": "Heart and lungs, health, states of matter, dissolving, decimals, factors, mean and mode, angles - a revision mix for the 1-4 December mock exams.",
+  "theme": "jungle",
+  "date": "2026-11-21",
+  "lang": "en",
+  "questions": 128,
+  "topics": 8
  }
 ]
