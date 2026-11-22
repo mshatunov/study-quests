@@ -78,69 +78,62 @@ const BASE_GLOSSARY=[
 /* ---- part-vocab.js ---- */
 const PART_VOCAB = {
   topics: [
-    { id:'vocab', ico:'📖', name:'Unit 2 Vocabulary', blurb:'All 18 Unit 2 words: boiling point, solvent, reversible, reactants and more', col:'#2f6fed', sheet:`<h3>Unit 2 words by lesson</h3>
+    { id:'vocab', ico:'📖', name:'Unit 2 Vocabulary', blurb:'All 18 Unit 2 words: boiling point, solvent, reversible, reactants and more', col:'#2f6fed', sheet:`<h3>Unit 2 words</h3>
 <table>
-<tr><th>Lesson</th><th>Word</th><th>Meaning</th></tr>
-<tr><td>2.1</td><td><b>boiling point</b></td><td>the temperature at which particles throughout a liquid become a gas</td></tr>
-<tr><td>2.1</td><td><b>melting point</b></td><td>the temperature at which a solid becomes a liquid</td></tr>
-<tr><td>2.1</td><td><b>property</b></td><td>something about a substance that allows us to tell it apart from other substances</td></tr>
-<tr><td>2.2</td><td><b>conduction</b></td><td>the transfer of heat or electrical energy from one object to another</td></tr>
-<tr><td>2.2</td><td><b>electrical conductors</b></td><td>materials and substances that conduct electricity well</td></tr>
-<tr><td>2.2</td><td><b>thermal conductors</b></td><td>materials and substances that conduct heat well</td></tr>
-<tr><td>2.2</td><td><b>substance</b></td><td>Definition: "materials with special physical matters" (odd wording; in other definitions it simply means a kind of material, e.g. a property helps us tell one substance from another)</td></tr>
-<tr><td>2.3</td><td><b>reversible</b></td><td>can be changed back to the way it was before</td></tr>
-<tr><td>2.3</td><td><b>irreversible</b></td><td>cannot be changed back to the way it was before</td></tr>
-<tr><td>2.3</td><td><b>physical change</b></td><td>any change that does not change a substance into a different substance</td></tr>
-<tr><td>2.3</td><td><b>solute</b></td><td>the substance in a solution that is dissolved, e.g. salt</td></tr>
-<tr><td>2.3</td><td><b>solvent</b></td><td>the substance in a solution in which the solute dissolves, e.g. water</td></tr>
-<tr><td>2.3</td><td><b>rate</b></td><td>how fast something happens</td></tr>
-<tr><td>2.3</td><td><b>uniform</b></td><td>the same throughout</td></tr>
-<tr><td>2.4</td><td><b>evidence</b></td><td>the things we know that show us that something has happened or changed</td></tr>
-<tr><td>2.4</td><td><b>react</b></td><td>to interact and change to make a new substance; also to respond to something</td></tr>
-<tr><td>2.4</td><td><b>reactants</b></td><td>the substances that react together in a chemical reaction</td></tr>
-<tr><td>2.4</td><td><b>products</b></td><td>the new substances that form in chemical reactions</td></tr>
+<tr><th>Word</th><th>Meaning</th></tr>
+<tr><td><b>boiling point</b></td><td>the temperature at which particles throughout a liquid become a gas</td></tr>
+<tr><td><b>melting point</b></td><td>the temperature at which a solid becomes a liquid</td></tr>
+<tr><td><b>property</b></td><td>something about a substance that allows us to tell it apart from other substances</td></tr>
+<tr><td><b>conduction</b></td><td>the transfer of heat or electrical energy from one object to another</td></tr>
+<tr><td><b>electrical conductors</b></td><td>materials and substances that conduct electricity well</td></tr>
+<tr><td><b>thermal conductors</b></td><td>materials and substances that conduct heat well</td></tr>
+<tr><td><b>substance</b></td><td>Definition: "materials with special physical matters" (odd wording; in other definitions it simply means a kind of material, e.g. a property helps us tell one substance from another)</td></tr>
+<tr><td><b>reversible</b></td><td>can be changed back to the way it was before</td></tr>
+<tr><td><b>irreversible</b></td><td>cannot be changed back to the way it was before</td></tr>
+<tr><td><b>physical change</b></td><td>any change that does not change a substance into a different substance</td></tr>
+<tr><td><b>solute</b></td><td>the substance in a solution that is dissolved, e.g. salt</td></tr>
+<tr><td><b>solvent</b></td><td>the substance in a solution in which the solute dissolves, e.g. water</td></tr>
+<tr><td><b>rate</b></td><td>how fast something happens</td></tr>
+<tr><td><b>uniform</b></td><td>the same throughout</td></tr>
+<tr><td><b>evidence</b></td><td>the things we know that show us that something has happened or changed</td></tr>
+<tr><td><b>react</b></td><td>to interact and change to make a new substance; also to respond to something</td></tr>
+<tr><td><b>reactants</b></td><td>the substances that react together in a chemical reaction</td></tr>
+<tr><td><b>products</b></td><td>the new substances that form in chemical reactions</td></tr>
 </table>
 <h3>Easy to mix up</h3>
 <ul><li><b>reversible</b> = can be changed back; <b>irreversible</b> = cannot.</li>
 <li><b>solute</b> dissolves (salt); <b>solvent</b> does the dissolving (water).</li>
 <li><b>reactants</b> go in and react; <b>products</b> are the new substances that form.</li>
 <li><b>melting point</b>: solid to liquid; <b>boiling point</b>: liquid to gas.</li></ul>`, Q:[
-      Object.assign(match('Lesson 2.1 words: match each word to its meaning.',[
+      Object.assign(match('Properties and temperatures: match each word to its meaning.',[
         ['Boiling point','The temperature at which particles throughout a liquid become a gas'],
         ['Melting point','The temperature at which a solid becomes a liquid'],
         ['Property','Something about a substance that allows us to tell it apart from other substances']],
         'Boiling point: liquid to gas. Melting point: solid to liquid. A property is something that helps us tell one substance from another.',UV),{ng:['boiling point','melting point','property']}),
-      Object.assign(match('Lesson 2.3 words (part 1): match each word to its meaning.',[
+      Object.assign(match('Changes of a substance: match each word to its meaning.',[
         ['Reversible','Can be changed back to the way it was before'],
         ['Irreversible','Cannot be changed back to the way it was before'],
         ['Physical change','Any change that does not change a substance into a different substance']],
         'Reversible and irreversible are opposites. In a physical change no different substance is made.',UV),{ng:['reversible','irreversible','physical change']}),
-      Object.assign(match('Lesson 2.3 words (part 2): match each word to its meaning.',[
+      Object.assign(match('Dissolving: match each word to its meaning.',[
         ['Solute','The substance in a solution that is dissolved, e.g. salt'],
         ['Solvent','The substance in a solution in which the solute dissolves, e.g. water'],
         ['Rate','How fast something happens'],
         ['Uniform','The same throughout']],
         'Solute = what dissolves (salt). Solvent = what it dissolves in (water). Rate = how fast. Uniform = the same all the way through.',UV),{ng:['solute','solvent','rate','uniform']}),
-      Object.assign(match('Lesson 2.4 words: match each word to its meaning.',[
+      Object.assign(match('Chemical reactions: match each word to its meaning.',[
         ['Evidence','The things we know that show us that something has happened or changed'],
         ['React','To interact and change to make a new substance'],
         ['Products','The new substances that form in chemical reactions'],
         ['Reactants','The substances that react together in a chemical reaction']],
         'Reactants react together and the products are the new substances. Evidence shows us a change has happened. (React can also mean to respond to something.)',UV),{ng:['evidence','react','products','reactants']}),
-      sort('Which lesson does each word belong to?',['Lesson 2.1','Lesson 2.2','Lesson 2.3','Lesson 2.4'],[
-        ['Melting point',0],['Property',0],
-        ['Conduction',1],['Electrical conductors',1],['Thermal conductors',1],
-        ['Solvent',2],['Reversible',2],
-        ['Evidence',3],['Products',3],['Reactants',3]],
-        '2.1: melting point, property. 2.2: conduction and conductors. 2.3: solvent, reversible. 2.4: evidence, products, reactants.',UV),
       scramble('Cannot be changed back to the way it was before.','irreversible','Irreversible: it cannot be changed back to the way it was before.',UV),
       scramble('The things we know that show us that something has happened or changed.','evidence','Evidence shows us that something has happened or changed.',UV),
       typed('Type the word: the new substances that form in chemical reactions.',['products','product'],'Products are the new substances that form in chemical reactions.',UV),
       Object.assign(typed('Type the term (two words): any change that does not change a substance into a different substance.',['physical change','a physical change'],'A physical change is any change that does not change a substance into a different substance.',UV),{ng:['physical change']}),
       Object.assign(mc('Which word is defined as "materials with special physical matters"?','Substance',['Conduction','Reactants','Evidence'],'Substance: materials with special physical matters.',UV),{ng:['substance']}),
       Object.assign(fill('Salt dissolves in water. Dissolving is a ___ change, because it does not change a substance into a different substance. The salt is the ___ and the water is the ___.',['physical','solute','solvent'],['physical','solute','solvent','products'],'Dissolving is a physical change. The salt is the solute and the water is the solvent.',UV+'; '+DS+', slide 6'),{ng:['solute','solvent']}),
-      odd('Odd one out! Three words are from lesson 2.4 (chemical reactions). Tap the word from a different lesson.','Solvent',['Reactants','Products','Evidence'],'Reactants, products and evidence are chemical reaction words (lesson 2.4). Solvent is a lesson 2.3 word about dissolving.',UV),
-      Object.assign(spot('Find the mistake and tap it.','A reversible change [[cannot|can]] be changed back to the way it was before.','Reversible means it CAN be changed back to the way it was before. Irreversible means it cannot.',UV),{ng:['reversible']}),
+      odd('Odd one out! Three words are about chemical reactions. Tap the word that does not belong.','Solvent',['Reactants','Products','Evidence'],'Reactants, products and evidence are chemical reaction words. Solvent is a word about dissolving.',UV),
       spot('Find the mistake and tap it.','The melting point is the temperature at which a [[gas|solid]] becomes a liquid.','At the melting point a SOLID becomes a liquid.',UV),
       mc('Which word means "something about a substance that allows us to tell it apart from other substances"?','Property',['Evidence','Reactants','Solute'],'A property is something about a substance that helps us tell it apart from other substances.',UV),
       Object.assign(multi('Tick ALL the correct meanings of the word react.',['To interact and change to make a new substance','To respond to something'],['To change back to the way it was before','To dissolve in a solvent'],'React has two meanings: to interact and change to make a new substance, and to respond to something.',UV),{ng:['react','respond']}),
@@ -148,7 +141,7 @@ const PART_VOCAB = {
       tf('The boiling point is the temperature at which a solid becomes a liquid.',false,'No - that is the melting point. At the boiling point particles throughout a liquid become a gas.',UV),
       Object.assign(tf('Reactants are the new substances that form in a chemical reaction.',false,'No - those are the products. Reactants are the substances that react together.',UV),{ng:['reactants']})
     ]},
-    { id:'conduct', ico:'🔌', name:'Conduction: Heat & Electricity (2.2)', blurb:'Conduction, electrical conductors and thermal conductors', col:'#f5a524', sheet:`<h3>Lesson 2.2 in four lines</h3>
+    { id:'conduct', ico:'🔌', name:'Conduction: Heat & Electricity', blurb:'Conduction, electrical conductors and thermal conductors', col:'#f5a524', sheet:`<h3>Conduction in four lines</h3>
 <ul><li><b>Conduction</b> - the transfer of heat or electrical energy from one object to another.</li>
 <li><b>Electrical conductors</b> - materials and substances that conduct electricity well.</li>
 <li><b>Thermal conductors</b> - materials and substances that conduct heat well.</li>
@@ -163,7 +156,7 @@ const PART_VOCAB = {
       Object.assign(tf('Electrical conductors are materials and substances that conduct heat well.',false,'No - electrical conductors conduct ELECTRICITY well. Thermal conductors conduct heat well.',UV),{ng:['electrical conductors','electrical']}),
       Object.assign(mc('Which word names materials and substances that conduct electricity well?','Electrical conductors',['Thermal conductors','Reactants and products','Solvents'],'Electrical conductors conduct electricity well. Thermal conductors conduct heat.',UV),{ng:['electrical conductors','thermal conductors']}),
       scramble('The transfer of heat or electrical energy from one object to another.','conduction','Conduction is the transfer of heat or electrical energy from one object to another.',UV),
-      odd('Odd one out! Three words are about conducting heat or electricity (lesson 2.2). Tap the word that does not belong.','Solvent',['Conduction','Electrical conductors','Thermal conductors'],'Conduction, electrical conductors and thermal conductors are lesson 2.2 words. Solvent is about dissolving (lesson 2.3).',UV),
+      odd('Odd one out! Three words are about conducting heat or electricity. Tap the word that does not belong.','Solvent',['Conduction','Electrical conductors','Thermal conductors'],'Conduction, electrical conductors and thermal conductors are lesson 2.2 words. Solvent is about dissolving (lesson 2.3).',UV),
       Object.assign(spot('Find the mistake and tap it.','Thermal conductors are materials and substances that conduct [[electricity|heat]] well.','THERMAL conductors conduct HEAT well. Electrical conductors conduct electricity well.',UV),{ng:['thermal conductors','thermal']}),
       Object.assign(fill('Conduction is the ___ of heat or electrical energy from one object to another. Electrical conductors conduct ___ well. Thermal conductors conduct ___ well.',['transfer','electricity','heat'],['transfer','electricity','heat','rate'],'Conduction = transfer of heat or electrical energy. Electrical conductors: electricity. Thermal conductors: heat.',UV),{ng:['electrical conductors','thermal conductors','electrical','thermal']}),
       multi('Tick ALL the things that conduction can transfer from one object to another.',['Heat','Electrical energy'],['The new substances of a reaction','A dissolved solute'],'Conduction is the transfer of heat or electrical energy from one object to another.',UV)
@@ -331,7 +324,7 @@ const PART_DISSOLVE = {
   topics: [
 
     { id:'solutions', ico:'🧂', name:'Dissolving: Solute, Solvent & Solution', blurb:'Soluble or insoluble, solute + solvent = solution, and why dissolving is a reversible physical change', col:'#39ff14',
-      sheet:`<h3>Dissolving: the key facts (Lesson 2.3)</h3>
+      sheet:`<h3>Dissolving: the key facts</h3>
 <ul>
 <li><b>Soluble</b> = can dissolve in a liquid to form a clear mixture. <b>Table salt</b> and <b>sugar</b> are soluble solids.</li>
 <li><b>Insoluble</b> = cannot dissolve in that liquid. <b>Sand</b> and <b>chalk</b> sink or float and leave visible bits, however long you stir.</li>
@@ -377,7 +370,7 @@ const PART_DISSOLVE = {
  ]},
 
     { id:'dissrate', ico:'⚡', name:'Dissolving Faster: Particles', blurb:'How water particles pull a crystal apart, and why heat and stirring speed it up', col:'#a78bfa',
-      sheet:`<h3>The particle model of dissolving (Lesson 2.3)</h3>
+      sheet:`<h3>The particle model of dissolving</h3>
 <ul>
 <li><b>Rate</b> = how fast something happens. <b>Dissolving rate</b> = how fast something dissolves.</li>
 <li>In a solid <b>crystal</b> the solute particles are <b>tightly packed in orderly rows</b>.</li>
@@ -456,7 +449,7 @@ return {
 topics: [
 
 /* ===================== 2.3 Reversible & Irreversible Changes ===================== */
-{id:'changes', ico:'↩️', name:'Reversible & Irreversible Changes (2.3)', blurb:'Physical change, reversible, irreversible - which changes can be undone?', col:'#ffd23f',
+{id:'changes', ico:'↩️', name:'Reversible & Irreversible Changes', blurb:'Physical change, reversible, irreversible - which changes can be undone?', col:'#ffd23f',
 sheet:`<h3>Physical change</h3>
 <ul>
 <li><b>Physical change</b> = any change that does <b>not</b> change a substance into a different substance.</li>
@@ -513,7 +506,7 @@ sheet:`<h3>Physical change</h3>
 ]},
 
 /* ===================== 2.4 Chemical Reactions ===================== */
-{id:'reactions', ico:'🧪', name:'Chemical Reactions (2.4)', blurb:'Evidence, react, reactants, products - and the vinegar and baking soda experiment', col:'#ff5a36',
+{id:'reactions', ico:'🧪', name:'Chemical Reactions', blurb:'Evidence, react, reactants, products - and the vinegar and baking soda experiment', col:'#ff5a36',
 sheet:`<h3>Key words</h3>
 <table>
 <tr><td><b>react</b></td><td>to interact and change to make a new substance (also: to respond to something)</td></tr>
