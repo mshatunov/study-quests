@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mango Climb - no-calculator maths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#0f3d2a;--card:#fffbea;--ink:#23311f;--soft:#5d6b52;--line:#c9d8a8;--brand:#e8710a;--brand2:#f59e0b;--tint:#ecf6cf;
+--good:#2e9e4a;--goodbg:#dff4d2;--bad:#d6452d;--badbg:#fde1d8;--warn:#e8a200;--warnbg:#fdf0c4;
+--font:"Fredoka","Trebuchet MS",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 18%,rgba(163,230,53,.18) 0 60px,transparent 61px),radial-gradient(circle at 88% 70%,rgba(34,197,94,.2) 0 90px,transparent 91px),radial-gradient(circle at 40% 92%,rgba(250,204,21,.12) 0 70px,transparent 71px);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+button{font:inherit;cursor:pointer;color:inherit;touch-action:manipulation}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:14px 14px 40px}
+.btn{font-weight:700;background:var(--brand);color:#fff;border:0;border-radius:20px;box-shadow:0 5px 0 #9a4a05;min-height:52px;min-width:52px;padding:10px 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;user-select:none;-webkit-user-select:none}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #9a4a05}
+.btn.alt{background:var(--card);color:var(--ink);box-shadow:0 5px 0 rgba(0,0,0,.28)}
+.btn:disabled{opacity:.45;cursor:default}
+.top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--card);border-radius:30px;padding:6px 12px;font-weight:600;font-size:16px;white-space:nowrap}
+h1{color:#fffbea;font-size:34px;margin:18px 0 4px;line-height:1.15}
+.sub{color:#cfe8c4;margin:0 0 14px}
+.card{background:var(--card);border:4px solid var(--line);border-radius:28px;box-shadow:0 8px 0 rgba(0,0,0,.25);padding:14px 16px}
+details.ru{margin-top:6px;font-size:16px}
+details.ru summary{cursor:pointer;font-weight:600;color:#9a4a05;list-style:none;padding:6px 0;min-height:36px}
+details.ru summary::-webkit-details-marker{display:none}
+details.ru summary::before{content:"▸ "}
+details.ru[open] summary::before{content:"▾ "}
+.gl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.gl span{background:var(--tint);border-radius:12px;padding:3px 9px;font-size:15px}
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:16px}
+.lv{position:relative;text-align:left;background:var(--card);border:4px solid var(--line);border-radius:26px;box-shadow:0 7px 0 rgba(0,0,0,.25);padding:12px;min-height:146px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.lv:active{transform:translateY(3px)}
+.lv .ico{font-size:34px;line-height:1.1}
+.lv .nm{font-weight:700;line-height:1.2}
+.lv .ds{font-size:14px;color:var(--soft);line-height:1.25}
+.lv .st{margin-top:auto;color:var(--brand2);font-size:22px;letter-spacing:2px}
+.lv .st i{font-style:normal;color:#d9dec6}
+.lv .res{position:absolute;top:10px;right:10px;font-size:12px;font-weight:700;background:var(--warnbg);border-radius:10px;padding:2px 7px}
+.lv.boss{background:linear-gradient(120deg,#d9f99d,#86efac);grid-column:span 2}
+/* play */
+.ptop{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.ptop .btn{min-height:48px;padding:6px 14px;font-size:16px}
+.ptitle{flex:1;min-width:0;color:#fffbea;font-weight:700;line-height:1.15;font-size:17px}
+.ptitle small{display:block;color:#cfe8c4;font-weight:600;font-size:13px}
+.vine{position:relative;height:44px;margin:0 0 10px;background:rgba(255,251,234,.12);border-radius:22px;padding:0 6px}
+.vine .rail{position:absolute;left:24px;right:54px;top:19px;height:6px;border-radius:4px;background:#2f6b45}
+.vine .fill{position:absolute;left:0;top:0;bottom:0;background:#a3e635;border-radius:4px;transition:width .5s}
+.vine .dot{position:absolute;top:-3px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#fffbea}
+.vine .dot.on{background:#a3e635}
+.vine .monkey{position:absolute;top:-18px;margin-left:-17px;font-size:30px;line-height:1.3;transition:left .5s}
+.vine .goal{position:absolute;right:7px;top:3px;font-size:28px;line-height:38px}
+.vine.slip .monkey{animation:slip .5s}
+@keyframes slip{25%{transform:translateY(8px) rotate(-18deg)}60%{transform:translateY(-3px) rotate(12deg)}}
+.pgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.qcard{text-align:center;min-width:0}
+.qcard .tag{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--soft)}
+.qcard .tag b{color:var(--brand2);letter-spacing:2px;font-size:16px}
+.qcard .instr{font-weight:600;font-size:20px;margin:6px 0 2px;line-height:1.3}
+.qcard .story{font-size:20px;font-weight:600;margin:6px 0;line-height:1.35}
+.math{font-weight:700;font-size:40px;margin:8px 0 4px;line-height:1.5;overflow-wrap:anywhere}
+.math.long{font-size:32px}
+.qcard details.ru{text-align:left}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.08;margin:0 .1em;font-size:.82em}
+.fr i{font-style:normal;padding:0 .18em;min-width:.9em;text-align:center}
+.fr i+i{border-top:.1em solid currentColor}
+.mx{white-space:nowrap}
+.box{display:inline-block;width:1.1em;height:1.1em;border:4px dashed var(--brand);border-radius:10px;vertical-align:-.18em}
+.answer{min-width:0}
+.disp{background:#fff;border:4px solid var(--brand);border-radius:20px;min-height:68px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:34px;font-weight:700;margin-bottom:10px;padding:2px 10px}
+.disp .ph{color:#b9c3a4;font-size:20px;font-weight:600}
+.disp .unit{color:var(--soft);font-size:24px}
+.pad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.key{min-height:56px;border:0;border-radius:18px;background:var(--card);font-size:26px;font-weight:700;box-shadow:0 5px 0 rgba(0,0,0,.28);user-select:none;-webkit-user-select:none}
+.key:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.key:disabled{opacity:.25;cursor:default;transform:none}
+.key.fn{background:var(--tint);font-size:22px}
+.key.ok{background:var(--brand);color:#fff;box-shadow:0 5px 0 #9a4a05}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opts.one{grid-template-columns:minmax(0,1fr)}
+.opts.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.opt{min-height:68px;border:4px solid var(--line);border-radius:20px;background:var(--card);font-size:26px;font-weight:700;box-shadow:0 5px 0 rgba(0,0,0,.25);padding:6px;min-width:0;line-height:1.35;position:relative}
+.opt.sel{background:#ffe8b0;border-color:var(--brand)}
+.opt .n{position:absolute;top:-8px;left:-6px;background:var(--brand);color:#fff;border-radius:50%;width:28px;height:28px;font-size:16px;line-height:28px}
+.opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.wide{width:100%;margin-top:12px;font-size:21px;min-height:60px}
+.chart{background:var(--card);border-radius:22px;border:4px solid var(--line);padding:8px}
+.cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 16px repeat(3,minmax(0,1fr));gap:3px;text-align:center}
+.cols .hd{font-size:13px;font-weight:700;background:var(--tint);border-radius:8px;padding:4px 0;line-height:1.1}
+.cols .dg{font-size:32px;font-weight:700;min-height:56px;display:flex;align-items:center;justify-content:center;border:2px solid var(--line);border-radius:10px;background:#fff}
+.cols .dg.zero{color:#a8b392}
+.cols .pt{font-size:36px;font-weight:700;display:flex;align-items:flex-end;justify-content:center;line-height:1.2}
+.arrows{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.arrows .btn{min-height:62px}
+.fb{border:4px solid var(--good);background:var(--goodbg);border-radius:26px;padding:12px 16px;text-align:left}
+.fb.bad{border-color:var(--bad);background:var(--badbg)}
+.fb h2{margin:0 0 4px;font-size:22px}
+.fb .cmpans{font-weight:600;margin:2px 0}
+.fb .trap{background:var(--warnbg);border-radius:14px;padding:8px 10px;margin:8px 0;font-weight:600}
+.fb ol{margin:6px 0;padding-left:24px}
+.fb li{margin:5px 0}
+.fb .act{position:sticky;bottom:8px;margin-top:10px}
+.fb .act .btn{width:100%;font-size:20px}
+.done{text-align:center;max-width:560px;margin:24px auto}
+.done .big{font-size:60px;color:var(--brand2);letter-spacing:6px}
+.done .big i{font-style:normal;color:#d9dec6}
+.done .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+@media (max-width:380px){.cols .dg{font-size:26px}.math{font-size:34px}}
+@media (max-width:600px){.fb{font-size:17px}.map{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.chip{font-size:14px;padding:5px 9px}.top .btn{padding:6px 14px}}
+@media (min-width:700px) and (max-width:899px){.math{font-size:52px}.key{min-height:72px;font-size:30px}.qcard{padding:22px}}
+@media (min-width:900px){.pgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}.math{font-size:48px}.math.long{font-size:36px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+/* =====================================================================
+   Mango Climb - non-calculator maths practice. Everything is generated.
+   Storage (every access guarded):
+     'sq:mock1-checkpoint-dec'  quiz record; the game only adds to "xp"
+     'sq:profile'               shared daily streak {day, streak}
+     'sq:game:mango-climb'      game progress (no "xp" field)
+   QA: ?level=1..11 [&tier=1..3] [&kind=id] [&seed=n] [&show=wrong|right|done]
+       ?selftest
+   ===================================================================== */
+'use strict';
+const QS=new URLSearchParams(location.search), SELFTEST=QS.has('selftest');
+const GKEY='sq:game:mango-climb', QKEY='sq:mock1-checkpoint-dec', PKEY='sq:profile';
+
+/* ---------- random ---------- */
+let seed=QS.has('seed')?(+QS.get('seed')>>>0):(SELFTEST?20261126:((Date.now()^(Math.random()*1e9))>>>0));
+function rnd(){seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}
+const ri=(a,b)=>a+Math.floor(rnd()*(b-a+1));
+const one=a=>a[Math.floor(rnd()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const pickN=(a,n)=>shuffle(a).slice(0,n);
+
+/* ---------- number helpers (integer arithmetic only) ---------- */
+function dec(n,p){ /* n / 10^p as a tidy string */
+  const neg=n<0;n=Math.abs(n);if(p<0){n*=Math.pow(10,-p);p=0}
+  let s=String(n);if(p>0){while(s.length<=p)s='0'+s;s=s.slice(0,-p)+'.'+s.slice(-p);s=s.replace(/0+$/,'').replace(/\.$/,'')}
+  return (neg&&s!=='0'?'−':'')+s;
+}
+function padp(s,p){if(!p)return s;let [a,b='']=s.split('.');while(b.length<p)b+='0';return a+'.'+b}
+const P10=p=>Math.pow(10,p);
+function nz(a,b){let n;do{n=ri(a,b)}while(n%10===0);return n}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a}
+const lcm=(a,b)=>a*b/gcd(a,b);
+function fstr(n,d){const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d}
+function mixed(n,d){const g=gcd(n,d);n/=g;d/=g;if(d===1)return String(n);return n>d?Math.floor(n/d)+' '+(n%d)+'/'+d:n+'/'+d}
+const E=s=>'{'+s+'}';
+const signed=n=>n<0?'−'+(-n):String(n);
+
+/* ---------- exact value of a typed answer (game side) ---------- */
+function typedVal(s){
+  s=String(s).trim().replace(/−/g,'-');let m;
+  if((m=/^(-?)(\d+)(?:\.(\d*))?$/.exec(s))){const f=m[3]||'';return {n:(m[1]?-1:1)*Number(m[2]+f),d:P10(f.length),plain:true}}
+  if((m=/^(?:(\d+) )?(\d+)\/(\d+)$/.exec(s))){const w=+(m[1]||0),a=+m[2],b=+m[3];if(!b)return null;if(m[1]!==undefined&&a>=b)return {n:w*b+a,d:b,frac:true,badMixed:true};return {n:w*b+a,d:b,frac:true,a:a,b:b}}
+  return null;
+}
+const same=(x,y)=>!!x&&!!y&&x.n*y.d===y.n*x.d;
+
+/* =====================================================================
+   GENERATORS. Each returns an item:
+   {type, q, story?, math?, unit?, ans, opts?, how:[...], rule, traps?, v}
+   ===================================================================== */
+const K={};
+function kind(id,tiers,ru,gl,rule,fn){K[id]={id,tiers,ru,gl,rule,fn}}
+
+/* ---- 1 place value ---- */
+function pvNumbers(t){
+  for(;;){
+    const sig=t===1?ri(2,99):t===2?nz(11,999):nz(101,9999);
+    const p=t===1?ri(0,1):t===2?ri(0,2):ri(0,3);
+    const e=t===1?ri(1,2):ri(1,3);
+    const mul=rnd()<.5, np=mul?p-e:p+e;
+    if(np>3||sig*P10(-Math.min(np,0))>=10000||sig/P10(p)>=10000)continue;
+    return {sig,p,e,mul,np,a:dec(sig,p),r:dec(sig,np),f:P10(e),op:mul?'×':'÷'};
+  }
+}
+function pvHow(x){
+  const h=[(x.mul?'× makes the number bigger: every digit moves to the LEFT.':'÷ makes the number smaller: every digit moves to the RIGHT.')+' '+x.f+' has '+x.e+' zero'+(x.e>1?'s':'')+', so move '+x.e+' place'+(x.e>1?'s':'')+'.'];
+  if(x.e>1){let cur=x.a;for(let i=1;i<=x.e;i++){const nxt=dec(x.sig,x.p+(x.mul?-i:i));h.push('Place '+i+': '+E(cur+' '+x.op+' 10 = '+nxt));cur=nxt}}
+  h.push('Answer: '+E(x.a+' '+x.op+' '+x.f+' = '+x.r));
+  return h;
+}
+function pvTraps(x){
+  const t=[];
+  for(const k of [1,2,3,4]){if(k!==x.e)t.push({v:dec(x.sig,x.p+(x.mul?-k:k)),m:'You moved the digits '+k+' place'+(k>1?'s':'')+'. For '+x.op+' '+x.f+' you need exactly '+x.e+'.'});t.push({v:dec(x.sig,x.p+(x.mul?k:-k)),m:'Wrong direction. '+(x.mul?'Multiplying by '+x.f+' must give a BIGGER number.':'Dividing by '+x.f+' must give a SMALLER number.')})}
+  return t;
+}
+const PVRULE='× 10, 100, 1000: цифры сдвигаются влево на 1, 2, 3 разряда. ÷ - вправо. Пустые разряды заполняем нулями.';
+kind('pv-shift',[1,2,3],'Передвинь цифры в таблице разрядов так, чтобы получился ответ. Потом нажми Check.',[['digit','цифра'],['place','разряд'],['tenths','десятые'],['hundredths','сотые'],['thousandths','тысячные']],PVRULE,t=>{
+  const x=pvNumbers(t);
+  return {type:'shift',q:'Move the digits to show the answer.',math:x.a+' '+x.op+' '+x.f,ans:x.mul?x.e:-x.e,answerText:x.r,orig:x.a,sig:x.sig,p:x.p,how:pvHow(x),v:{t:'shift',orig:x.a}};
+});
+kind('pv-type',[1,2,3],'Вычисли и набери ответ.',[['work out','вычисли']],PVRULE,t=>{
+  const x=pvNumbers(t);
+  return {type:'num',q:'Work out.',math:x.a+' '+x.op+' '+x.f,ans:x.r,how:pvHow(x),traps:pvTraps(x),v:{t:'eval'}};
+});
+kind('pv-missing',[2,3],'Какое число должно стоять в рамке?',[['goes in the box','стоит в рамке']],PVRULE,t=>{
+  const x=pvNumbers(t);
+  return {type:'pick',cols:'three',q:'Which number goes in the box?',math:x.a+' '+x.op+' □ = '+x.r,opts:['10','100','1000'],ans:x.e-1,
+    how:['Compare where the first digit was and where it is now: it moved '+x.e+' place'+(x.e>1?'s':'')+'.',x.e+' place'+(x.e>1?'s':'')+' means '+x.f+'. Check: '+E(x.a+' '+x.op+' '+x.f+' = '+x.r)],v:{t:'missing'}};
+});
+const PLACES=[[3,'thousands'],[2,'hundreds'],[1,'tens'],[0,'ones'],[-1,'tenths'],[-2,'hundredths'],[-3,'thousandths']];
+kind('pv-digit',[1,2,3],'Чему равна эта цифра (ее значение по разряду)?',[['value','значение'],['digit','цифра'],['tens','десятки'],['tenths','десятые'],['hundredths','сотые'],['thousandths','тысячные']],'Значение цифры зависит от места: после точки идут десятые, сотые, тысячные.',t=>{
+  const p=t===1?1:t===2?2:3, w=t===1?2:t===2?2:ri(2,3);
+  const ds=pickN([1,2,3,4,5,6,7,8,9],p+w);
+  const s=ds.slice(0,w).join('')+'.'+ds.slice(w).join('');
+  const i=ri(0,p+w-1), e=w-1-i, d=ds[i];
+  const val=x=>x>=0?String(d*P10(x)):dec(d,-x);
+  const es=shuffle([e].concat(pickN(PLACES.map(a=>a[0]).filter(x=>x!==e&&x>=-3&&x<=2),3)));
+  const nm=PLACES.find(a=>a[0]===e)[1];
+  return {type:'pick',q:'What is the value of the digit '+d+' in this number?',math:s,opts:es.map(val),ans:es.indexOf(e),
+    how:['Read the places from the decimal point. To the left: ones, tens, hundreds. To the right: tenths, hundredths, thousandths.','The digit '+d+' is in the '+nm+' place, so it is worth '+val(e)+'.'],v:{t:'digit',d:d}};
+});
+kind('pv-chain',[3],'Два действия по очереди, слева направо.',[['work out','вычисли']],PVRULE,t=>{
+  for(;;){
+    const sig=nz(11,999),p=ri(0,2),e1=ri(1,3),e2=ri(1,3),m1=rnd()<.5,m2=!m1;
+    const p1=p+(m1?-e1:e1),p2=p1+(m2?-e2:e2);
+    if(e1===e2||p1>3||p2>3||sig*P10(Math.max(0,-p1))>99999||sig*P10(Math.max(0,-p2))>99999)continue;
+    const a=dec(sig,p),b=dec(sig,p1),c=dec(sig,p2),o1=m1?'×':'÷',o2=m2?'×':'÷';
+    return {type:'num',q:'Work out, from left to right.',math:a+' '+o1+' '+P10(e1)+' '+o2+' '+P10(e2),ans:c,
+      how:['First step: '+E(a+' '+o1+' '+P10(e1)+' = '+b),'Second step: '+E(b+' '+o2+' '+P10(e2)+' = '+c)],v:{t:'eval'}};
+  }
+});
+
+/* ---- 2 decimals add / subtract ---- */
+const ADDRULE='Выровняй десятичные точки одну под другой и допиши нули: 4.5 = 4.50. Потом складывай или вычитай по разрядам.';
+function addItem(a,pa,b,pb,op){
+  const p=Math.max(pa,pb),A=a*P10(p-pa),B=b*P10(p-pb),R=op==='+'?A+B:A-B;
+  const as=dec(a,pa),bs=dec(b,pb),rs=dec(R,p);
+  const how=['Line up the decimal points. Write both numbers with '+p+' decimal place'+(p>1?'s':'')+': '+padp(as,p)+' and '+padp(bs,p)+'.'];
+  if(op==='+'){
+    const wa=Math.floor(A/P10(p)),wb=Math.floor(B/P10(p)),fa=A%P10(p),fb=B%P10(p);
+    how.push('Whole numbers: '+E(wa+' + '+wb+' = '+(wa+wb)));
+    how.push('Decimal parts: '+E(dec(fa,p)+' + '+dec(fb,p)+' = '+dec(fa+fb,p)));
+    how.push('Put them together: '+E((wa+wb)+' + '+dec(fa+fb,p)+' = '+rs));
+  }else{
+    const wb=Math.floor(B/P10(p)),fb=B%P10(p);
+    if(wb&&fb){how.push('Take away the whole part first: '+E(as+' − '+wb+' = '+dec(A-wb*P10(p),p)));how.push('Then take away the rest: '+E(dec(A-wb*P10(p),p)+' − '+dec(fb,p)+' = '+rs))}
+    else how.push('Subtract: '+E(as+' − '+bs+' = '+rs));
+    how.push('Check by adding back: '+E(rs+' + '+bs+' = '+as));
+  }
+  const traps=[];if(pa!==pb){const w=op==='+'?a+b:a-b;if(w>0)traps.push({v:dec(w,p),m:'You lined up the last digits. Line up the decimal points instead.'})}
+  return {type:'num',q:'Work out.',math:as+' '+op+' '+bs,ans:rs,how,traps,v:{t:'eval'}};
+}
+kind('as-1dp',[1],'Вычисли.',[['work out','вычисли']],ADDRULE,()=>{
+  if(rnd()<.5)return addItem(nz(12,99),1,nz(12,99),1,'+');
+  let a=nz(31,99),b=nz(11,a-3);return addItem(a,1,b,1,'−');
+});
+kind('as-mixed',[2,3],'Вычисли. У чисел разное количество знаков после точки.',[['work out','вычисли']],ADDRULE,t=>{
+  const pb=t===2?2:ri(2,3);
+  for(;;){
+    const a=nz(12,t===2?199:499),b=nz(P10(pb)+1,P10(pb)*(t===2?9:15));
+    const op=rnd()<.5?'+':'−';
+    if(op==='−'&&a*P10(pb-1)<=b+5)continue;
+    return rnd()<.5&&op==='+'?addItem(b,pb,a,1,op):addItem(a,1,b,pb,op);
+  }
+});
+kind('as-whole',[3],'Вычти десятичную дробь из целого числа.',[['work out','вычисли']],ADDRULE,()=>{
+  const pb=ri(2,3),w=ri(6,30),b=nz(P10(pb)+1,P10(pb)*5);
+  return addItem(w,0,b,pb,'−');
+});
+kind('as-three',[3],'Три числа: считай слева направо.',[['work out','вычисли']],ADDRULE,()=>{
+  const a=nz(51,99),b=nz(101,499),c=nz(11,49);const ab=a*10+b,r=ab-c*10;
+  const as=dec(a,1),bs=dec(b,2),cs=dec(c,1);
+  return {type:'num',q:'Work out.',math:as+' + '+bs+' − '+cs,ans:dec(r,2),how:['Line up the decimal points.','First add: '+E(as+' + '+bs+' = '+dec(ab,2)),'Then subtract: '+E(dec(ab,2)+' − '+cs+' = '+dec(r,2))],v:{t:'eval'}};
+});
+const THINGS=['a notebook','a torch','a kite','a puzzle','a paint set','a ball','a map','a water bottle','a model boat','a pencil case','a sandwich','a smoothie'];
+kind('as-money',[2,3],'Задача про деньги: сколько сдачи?',[['pay','платить'],['change','сдача'],['note','купюра'],['buy','покупать'],['costs','стоит']],'Сначала сложи цены, потом вычти сумму из того, что заплатили.',()=>{
+  const [x,y]=pickN(THINGS,2),a=nz(105,790)*1,b=nz(105,790),A=a-(a%5),B=b-(b%5),sum=A+B,pay=sum>=1000?2000:1000,ch=pay-sum;
+  const m=n=>padp(dec(n,2),2);
+  return {type:'num',q:'How much change do you get?',story:'You buy '+x+' for $'+m(A)+' and '+y+' for $'+m(B)+'. You pay with $'+(pay/100)+'.',unit:'$',ans:dec(ch,2),
+    how:['Add the two prices: '+E(m(A)+' + '+m(B)+' = '+m(sum)),'Take the total away from the money you paid: '+E((pay/100)+' − '+m(sum)+' = '+m(ch))],
+    traps:sum===ch?[]:[{v:dec(sum,2),m:'That is the total cost. The question asks for the change.'}],v:{t:'story',expr:(pay/100)+' − '+m(A)+' − '+m(B),nums:[m(A),m(B),String(pay/100)]}};
+});
+
+/* ---- 3 multiply / divide ---- */
+const MULRULE='Умножь как целые числа, потом верни столько же знаков после точки, сколько было в вопросе.';
+function mulItem(a,p,k){
+  const prod=a*k,as=dec(a,p),rs=dec(prod,p),how=[];
+  how.push('Ignore the decimal point for a moment and multiply '+a+' by '+k+'.');
+  if(a>10){const t=Math.floor(a/10)*10,o=a%10;how.push('Split it: '+E(t+' × '+k+' = '+t*k)+' and '+E(o+' × '+k+' = '+o*k)+', then '+E(t*k+' + '+o*k+' = '+prod))}
+  else how.push(E(a+' × '+k+' = '+prod));
+  how.push('The question has '+p+' decimal place'+(p>1?'s':'')+', so divide by '+P10(p)+': '+E(prod+' ÷ '+P10(p)+' = '+rs));
+  return {type:'num',q:'Work out.',math:as+' × '+k,ans:rs,how,traps:[{v:dec(prod,p-1),m:'The digits are right but the size is not. Estimate first to see where the point goes.'},{v:dec(prod,p+1),m:'The digits are right but the point is in the wrong place. Count the decimal places.'}],v:{t:'eval'}};
+}
+function divItem(q,p,k){
+  const a=q*k,as=dec(a,p),rs=dec(q,p);
+  const how=[];const unit=p===1?'tenths':'hundredths';
+  how.push('Think of '+as+' as '+a+' '+unit+'.');
+  how.push('Divide: '+E(a+' ÷ '+k+' = '+q)+', so you have '+q+' '+unit+'.');
+  how.push(E(q+' ÷ '+P10(p)+' = '+rs));
+  how.push('Check by multiplying back: '+E(rs+' × '+k+' = '+as));
+  return {type:'num',q:'Work out.',math:as+' ÷ '+k,ans:rs,how,traps:[{v:dec(q,p-1),m:'Check the size: your answer × '+k+' is ten times too big.'},{v:dec(q,p+1),m:'Check the size: your answer × '+k+' is ten times too small.'}],v:{t:'eval'}};
+}
+kind('md-easy',[1],'Умножь или раздели.',[['work out','вычисли']],MULRULE,()=>rnd()<.5?mulItem(ri(2,9),1,ri(2,9)):divItem(ri(2,9),1,ri(2,9)));
+kind('md-mul',[2,3],'Умножь десятичную дробь на целое число.',[['work out','вычисли']],MULRULE,t=>mulItem(t===2?nz(13,99):nz(113,949),t===2?1:2,ri(3,9)));
+kind('md-div',[2,3],'Раздели десятичную дробь на целое число.',[['work out','вычисли']],'Раздели как целые (в десятых или сотых), потом верни точку. Проверь умножением.',t=>divItem(t===2?nz(12,49):nz(105,399),t===2?1:2,ri(3,9)));
+kind('md-longmul',[3],'Умножение в столбик: два двузначных числа.',[['work out','вычисли']],'Разбей второй множитель на десятки и единицы, посчитай две части и сложи.',()=>{
+  const a=nz(13,89),b=nz(13,49),t=Math.floor(b/10)*10,o=b%10;
+  return {type:'num',q:'Work out.',math:a+' × '+b,ans:String(a*b),how:['Split '+b+' into '+t+' and '+o+'.',E(a+' × '+t+' = '+a*t),E(a+' × '+o+' = '+a*o),'Add the parts: '+E(a*t+' + '+a*o+' = '+a*b)],traps:[{v:String(a*t),m:'That is only the tens part. Add the ones part too.'}],v:{t:'eval'}};
+});
+kind('md-longdiv',[3],'Деление на двузначное число.',[['work out','вычисли']],'Бери большими кусками: сначала десятки делителя, потом единицы. Проверь умножением.',()=>{
+  const d=ri(11,25),q=nz(12,39),a=d*q,t=Math.floor(q/10)*10,o=q%10;
+  return {type:'num',q:'Work out.',math:a+' ÷ '+d,ans:String(q),how:['How many '+d+'s? Start with a big chunk: '+E(d+' × '+t+' = '+d*t),'What is left? '+E(a+' − '+d*t+' = '+(a-d*t)),'Then '+E(d+' × '+o+' = '+d*o),'Total number of '+d+'s: '+E(t+' + '+o+' = '+q)],v:{t:'eval'}};
+});
+kind('md-story',[2,3],'Задача: куски одинаковой длины.',[['cut','разрезать'],['equal pieces','равные куски'],['ribbon','лента'],['rope','веревка'],['plank','доска'],['each','каждый'],['long','длиной']],'Длина одного куска = вся длина ÷ количество кусков.',t=>{
+  const th=one(['ribbon','rope','plank','paper strip']),k=ri(4,8),p=t===2?1:2,q=t===2?nz(3,19):nz(26,195),a=q*k;
+  const x=divItem(q,p,k);
+  x.q='How long is each piece?';delete x.math;x.unit='m';x.story='A '+th+' is '+dec(a,p)+' m long. It is cut into '+k+' equal pieces.';x.v={t:'story',expr:dec(a,p)+' ÷ '+k,nums:[dec(a,p),String(k)]};return x;
+});
+
+/* ---- 4 fractions ---- */
+const FRULE='Складывать и вычитать можно только дроби с одинаковым знаменателем. Нижние числа НЕ складываем. В конце сократи.';
+function simpStep(n,d,how){const g=gcd(n,d);if(g>1)how.push('Simplify (divide top and bottom by '+g+'): '+E(n+'/'+d+' = '+fstr(n,d)));if(n>d&&n%d)how.push('As a mixed number: '+E(fstr(n,d)+' = '+mixed(n,d)))}
+function addFrac(n1,d1,n2,d2,op){
+  const L=lcm(d1,d2),m1=n1*L/d1,m2=n2*L/d2,r=op==='+'?m1+m2:m1-m2;const how=[];
+  if(d1!==d2){how.push('The bottom numbers are different. A number both fit into: '+L+'.');
+    const c=[];if(d1!==L)c.push(E(n1+'/'+d1+' = '+m1+'/'+L));if(d2!==L)c.push(E(n2+'/'+d2+' = '+m2+'/'+L));how.push('Give them the bottom number '+L+' (multiply top AND bottom): '+c.join(' and '))}
+  else how.push('The bottom numbers are the same, so keep '+L+' and work with the top numbers.');
+  how.push(E(m1+'/'+L+' '+op+' '+m2+'/'+L+' = '+r+'/'+L));simpStep(r,L,how);
+  const traps=[];const wn=op==='+'?n1+n2:n1-n2,wd=op==='+'?d1+d2:Math.abs(d1-d2);if(wd>0&&wn>0)traps.push({v:wn+'/'+wd,m:'Do not '+(op==='+'?'add':'subtract')+' the bottom numbers. Make them the same first.'});
+  return {type:'frac',q:'Work out. Give the answer in its simplest form.',math:n1+'/'+d1+' '+op+' '+n2+'/'+d2,ans:fstr(r,L),how,traps,v:{t:'eval'}};
+}
+function properN(d){let n;do{n=ri(1,d-1)}while(gcd(n,d)!==1);return n}
+kind('fr-same',[1],'Сложи или вычти дроби. Ответ сократи.',[['simplest form','несократимый вид'],['numerator (top)','числитель'],['denominator (bottom)','знаменатель']],FRULE,()=>{
+  const d=one([5,7,8,9,10,12]);
+  for(;;){const a=ri(1,d-1),b=ri(1,d-1),op=rnd()<.5?'+':'−';if(op==='+'&&a+b<d)return addFrac(a,d,b,d,op);if(op==='−'&&a>b)return addFrac(a,d,b,d,op)}
+});
+kind('fr-of',[1,2],'Найди часть от числа.',[['of','от (часть от числа)']],'Дробь от числа: раздели на знаменатель, умножь на числитель.',t=>{
+  const d=t===1?one([2,3,4,5,10]):one([6,7,8,9,12]),n=d===2?1:ri(2,d-1),u=t===1?ri(2,9):ri(4,12),a=d*u;
+  return {type:'num',q:'Work out.',math:n+'/'+d+' of '+a,ans:String(n*u),how:['Divide by the bottom number to find one part: '+E(a+' ÷ '+d+' = '+u),'Multiply by the top number: '+E(u+' × '+n+' = '+n*u)],traps:n>1?[{v:String(u),m:'That is only ONE part. You need '+n+' parts.'}]:[],v:{t:'eval'}};
+});
+kind('fr-simplify',[1,2],'Сократи дробь до несократимой.',[['simplest form','несократимый вид']],'Раздели числитель и знаменатель на одно и то же число, пока это возможно.',t=>{
+  const d=one(t===1?[3,4,5,6]:[5,7,8,9,12]),n=properN(d),g=t===1?ri(2,4):ri(3,9);
+  return {type:'frac',q:'Write this fraction in its simplest form.',math:(n*g)+'/'+(d*g),ans:n+'/'+d,how:['Find the biggest number that divides both '+n*g+' and '+d*g+'. It is '+g+'.',E(n*g+' ÷ '+g+' = '+n)+' and '+E(d*g+' ÷ '+g+' = '+d),E(n*g+'/'+d*g+' = '+n+'/'+d)],v:{t:'eval'}};
+});
+kind('fr-related',[2,3],'Знаменатели разные: приведи к общему.',[['simplest form','несократимый вид'],['common denominator','общий знаменатель']],FRULE,()=>{
+  for(;;){const d1=one([2,3,4,5,6]),d2=d1*ri(2,3),a=properN(d1),b=properN(d2),op=rnd()<.5?'+':'−';
+    const v=a*d2+(op==='+'?1:-1)*b*d1;if(v<=0||v>=2*d1*d2||v===d1*d2)continue;
+    return rnd()<.5||op==='−'?addFrac(a,d1,b,d2,op):addFrac(b,d2,a,d1,op)}
+});
+kind('fr-unlike',[3],'Знаменатели разные: найди общий.',[['simplest form','несократимый вид'],['common denominator','общий знаменатель']],FRULE,()=>{
+  for(;;){const [d1,d2]=pickN([2,3,4,5,6,7,8,9],2);if(d1%d2===0||d2%d1===0)continue;const a=properN(d1),b=properN(d2),op=rnd()<.5?'+':'−';
+    const v=a*d2+(op==='+'?1:-1)*b*d1;if(v<=0||v===d1*d2)continue;return addFrac(a,d1,b,d2,op)}
+});
+kind('fr-times',[2,3],'Умножь дробь на целое число. Можно ответить смешанным числом.',[['mixed number','смешанное число'],['simplest form','несократимый вид']],'Дробь × число: умножается только числитель. Потом сократи.',()=>{
+  const d=one([3,4,5,6,8]),n=properN(d),k=ri(2,9),how=['Multiply only the top number: '+E(n+'/'+d+' × '+k+' = '+n*k+'/'+d)];simpStep(n*k,d,how);
+  return {type:'frac',q:'Work out. Give the answer in its simplest form.',math:n+'/'+d+' × '+k,ans:fstr(n*k,d),how,traps:[{v:(n*k)+'/'+(d*k),m:'Multiply only the top number. If you multiply top and bottom, the value does not change.'}],v:{t:'eval'}};
+});
+kind('fr-divide',[3],'Раздели дробь на целое число.',[['simplest form','несократимый вид']],'Дробь ÷ число: каждая часть делится еще на столько же, поэтому знаменатель умножается.',()=>{
+  const d=one([2,3,4,5,6,7]),n=properN(d),k=ri(2,6),how=['Sharing by '+k+' makes each piece '+k+' times smaller, so multiply the bottom number by '+k+': '+E(n+'/'+d+' ÷ '+k+' = '+n+'/'+d*k)];simpStep(n,d*k,how);
+  return {type:'frac',q:'Work out. Give the answer in its simplest form.',math:n+'/'+d+' ÷ '+k,ans:fstr(n,d*k),how,traps:[{v:fstr(n*k,d),m:'That is × '+k+'. Dividing must give a smaller amount.'}],v:{t:'eval'}};
+});
+kind('fr-mixed',[3],'Смешанное число умножить на целое.',[['mixed number','смешанное число']],'Умножь отдельно целую часть и дробную часть, потом сложи.',()=>{
+  const d=one([2,3,4,5]),n=properN(d),w=ri(1,4),k=d*ri(1,3)+(rnd()<.5?0:ri(1,d-1));
+  const fp=n*k,res=w*k*d+fp,how=['Whole part: '+E(w+' × '+k+' = '+w*k),'Fraction part: '+E(n+'/'+d+' × '+k+' = '+fp+'/'+d)];
+  if(fp>=d||gcd(fp,d)>1)how.push('Tidy it: '+E(fp+'/'+d+' = '+mixed(fp,d)));
+  how.push('Add the two parts: '+E(w*k+' + '+mixed(fp,d)+' = '+mixed(res,d)));
+  return {type:'frac',q:'Work out. A mixed number or a whole number is fine.',math:w+' '+n+'/'+d+' × '+k,ans:mixed(res,d),how,traps:[{v:mixed(w*k*d+n,d),m:'You multiplied only the whole part. Multiply the fraction by '+k+' too.'}],v:{t:'eval'}};
+});
+
+/* ---- 5 fraction, decimal, percent ---- */
+const FDPRULE='Сделай знаменатель 100 (или 10, 1000): 3/20 = 15/100 = 0.15 = 15%. Сравнивать удобнее все в десятичных.';
+function friendly(t){const d=one(t===1?[2,4,5,10]:t===2?[4,5,10,20,25,50]:[8,20,25,40,50]);let n=properN(d);const base=d===8?1000:d===40?1000:100;return {n,d,base,top:n*base/d,dc:dec(n*1000/d,3),pc:dec(n*1000/d,1)}}
+const toBase=f=>'Make the bottom number '+f.base+': '+E(f.n+'/'+f.d+' = '+f.top+'/'+f.base);
+kind('fdp-f2d',[1,2,3],'Запиши дробь в виде десятичной.',[['decimal','десятичная дробь'],['fraction','обыкновенная дробь']],FDPRULE,t=>{
+  const f=friendly(t);return {type:'num',q:'Write this fraction as a decimal.',math:f.n+'/'+f.d,ans:f.dc,how:[toBase(f),E(f.top+'/'+f.base+' = '+f.dc)],traps:[{v:f.n+'.'+f.d,m:'The two numbers of a fraction are not the digits of the decimal.'}],v:{t:'eval'}};
+});
+kind('fdp-f2p',[1,2,3],'Запиши дробь в процентах.',[['percentage','процент']],FDPRULE,t=>{
+  const f=friendly(t);const h=[toBase(f)];h.push(f.base===100?E(f.top+'/100 = '+f.pc+'%'):'Per hundred: '+E(f.top+'/1000 = '+f.pc+'%'));
+  return {type:'num',q:'Write this fraction as a percentage.',math:f.n+'/'+f.d,unit:'%',ans:f.pc,how:h,v:{t:'pct'}};
+});
+kind('fdp-d2f',[1,2,3],'Запиши десятичную дробь в виде обыкновенной и сократи.',[['simplest form','несократимый вид']],FDPRULE,t=>{
+  const p=t===3?3:t===2?2:1;let x=t===1?ri(1,9):one([125,375,625,875,25,75,225,5,45]);
+  if(t===2)do{x=nz(2,98)}while(gcd(x,100)===1);
+  const how=['Read the last place: '+(p===1?'tenths':p===2?'hundredths':'thousandths')+'. '+E(dec(x,p)+' = '+x+'/'+P10(p))];simpStep(x,P10(p),how);
+  return {type:'frac',q:'Write this decimal as a fraction in its simplest form.',math:dec(x,p),ans:fstr(x,P10(p)),how,v:{t:'eval'}};
+});
+kind('fdp-p2f',[1,2,3],'Запиши процент в виде обыкновенной дроби и сократи.',[['percent','процент'],['simplest form','несократимый вид']],'Процент - это сотые: p% = p/100. Потом сократи.',t=>{
+  const x=t===1?one([10,20,25,30,50,70,75,90]):t===2?ri(1,19)*5:nz(2,98)&~1;
+  const how=['Percent means out of 100: '+E(x+'% = '+x+'/100')];simpStep(x,100,how);
+  return {type:'frac',q:'Write this percentage as a fraction in its simplest form.',math:x+'%',ans:fstr(x,100),how,v:{t:'eval'}};
+});
+function repr(num,form){ /* num in thousandths */
+  if(form==='d')return dec(num,3);if(form==='p')return dec(num,1)+'%';return fstr(num,1000);
+}
+kind('fdp-cmp',[1,2,3],'Поставь знак: меньше, равно или больше.',[['less than','меньше чем'],['equal to','равно'],['greater than','больше чем']],FDPRULE,t=>{
+  const pool=t===1?[2,4,5,10]:[4,5,10,20,25,50,8];
+  const d=one(pool),n=properN(d),a=n*1000/d;
+  let b;const r=rnd();
+  if(r<.25)b=a;else{const gap=t===1?one([100,150,200,250]):t===2?one([20,30,50,70]):one([5,10,15,25]);b=a+(rnd()<.5?gap:-gap);if(b<=0||b>=1000)b=a+(b<=0?gap:-gap)}
+  const form=t===1?one(['d','p']):one(['d','p','d']);
+  let l={s:n+'/'+d,v:a},rt={s:repr(b,form),v:b};if(rnd()<.5){const s=l;l=rt;rt=s}
+  const sym=l.v<rt.v?'<':l.v>rt.v?'>':'=';
+  const how=['Write both as decimals so they are easy to compare.'];
+  for(const s of [l,rt]){const dd=dec(s.v,3);if(s.s!==dd)how.push(E(s.s+' = '+dd))}
+  how.push('Compare place by place, starting with tenths: '+E(dec(l.v,3)+' '+sym+' '+dec(rt.v,3)));
+  return {type:'cmp',q:'Which sign goes between them?',math:l.s+' □ '+rt.s,l:l.s,r:rt.s,ans:sym,how,v:{t:'cmp'}};
+});
+kind('fdp-order',[2,3],'Нажимай на числа по порядку: от самого маленького к самому большому.',[['smallest','самое маленькое'],['largest','самое большое'],['order','порядок']],FDPRULE,t=>{
+  for(;;){
+    const forms=shuffle(['f','d','p',one(['f','d','p']),t===3?'d':null].filter(Boolean));
+    const vals=[],opts=[],conv=[];
+    for(const f of forms){let v;if(f==='f'){const d=one([4,5,10,20,25,8]);v=properN(d)*1000/d}else if(f==='p')v=ri(2,19)*50+(t===3?one([0,10,-10,20]):0);else v=t===3?one([nz(11,99)*10,nz(101,899),ri(1,9)*100]):nz(11,95)*10;vals.push(v);opts.push(repr(v,f))}
+    if(new Set(vals).size!==vals.length||vals.some(v=>v<=0||v>=1000))continue;
+    const ans=vals.map((v,i)=>i).sort((a,b)=>vals[a]-vals[b]);
+    opts.forEach(o=>{const i=opts.indexOf(o),d=dec(vals[i],3);if(o!==d)conv.push(E(o+' = '+d))});
+    return {type:'order',q:'Tap from the smallest to the largest.',opts,ans,how:['Change everything to decimals: '+conv.join(', ')+'.','Now order them: '+E(ans.map(i=>dec(vals[i],3)).join(' < '))],v:{t:'order'}};
+  }
+});
+
+/* ---- 6 percentages ---- */
+const PRULE='10% - раздели на 10. 5% - половина от 10%. 1% - раздели на 100. Собирай нужный процент из этих кусочков.';
+function pctSteps(p,a){ /* a = amount; returns {h, val in hundredths} */
+  const h=[],v=p*a;
+  if(p===50){h.push('50% is one half: '+E('50% of '+a+' = '+a+' ÷ 2 = '+dec(v,2)))}
+  else if(p===25){h.push('25% is one quarter: '+E('25% of '+a+' = '+a+' ÷ 4 = '+dec(v,2)))}
+  else if(p===75){h.push('25% is one quarter: '+E(a+' ÷ 4 = '+dec(a*25,2)));h.push('75% is three quarters: '+E(dec(a*25,2)+' × 3 = '+dec(v,2)))}
+  else{
+    const t=Math.floor(p/10),rest=p%10,f=rest>=5?1:0,u=rest%5,parts=[];
+    if(t){h.push(E('10% of '+a+' = '+dec(a*10,2)));if(t>1)h.push(E(t*10+'% of '+a+' = '+dec(a*10,2)+' × '+t+' = '+dec(a*t*10,2)));parts.push(a*t*10)}
+    if(f){h.push('5% is half of 10%: '+E('5% of '+a+' = '+dec(a*10,2)+' ÷ 2 = '+dec(a*5,2)));parts.push(a*5)}
+    if(u){h.push(E('1% of '+a+' = '+dec(a,2)));if(u>1)h.push(E(u+'% of '+a+' = '+dec(a,2)+' × '+u+' = '+dec(a*u,2)));parts.push(a*u)}
+    if(parts.length>1)h.push('Add the parts: '+E(parts.map(x=>dec(x,2)).join(' + ')+' = '+dec(v,2)));
+  }
+  return {h,v};
+}
+kind('pc-of',[1,2,3],'Найди процент от числа.',[['percent','процент'],['of','от']],PRULE,t=>{
+  const p=t===1?one([10,50,25,20]):t===2?one([5,15,30,35,40,60,75,45]):one([1,2,3,12,17,21,65,85,95,11]);
+  const a=t===1?ri(2,20)*20:t===2?ri(2,25)*20:one([ri(2,9)*100,ri(3,19)*20,ri(1,9)*50]);
+  const s=pctSteps(p,a);
+  return {type:'num',q:'Work out.',math:p+'% of '+a,ans:dec(s.v,2),how:s.h,traps:[{v:dec(a*100/p*1,2),m:'Percent means out of 100. Do not just divide by '+p+'.'}].filter(x=>p!==10&&p>3&&Number.isInteger(a*100/p)),v:{t:'eval'}};
+});
+const GOODS=['jacket','bike helmet','backpack','tent','pair of boots','scooter','skateboard','telescope','drum','guitar case'];
+kind('pc-change',[2,3],'Увеличь или уменьши цену на указанный процент.',[['sale','распродажа'],['price','цена'],['goes down by','снижается на'],['goes up by','повышается на'],['reduced','уценен'],['increase','увеличить'],['decrease','уменьшить'],['new price','новая цена']],'Сначала найди процент от старой цены, потом прибавь (подорожало) или вычти (подешевело).',t=>{
+  const up=rnd()<.5,p=t===2?one([10,20,25,50,15]):one([5,15,35,30,40,12]),a=t===2?ri(2,12)*20:ri(3,25)*20,s=pctSteps(p,a),th=one(GOODS);
+  const res=a*100+(up?s.v:-s.v);
+  const h=s.h.slice();h.push((up?'It goes up, so add: ':'It goes down, so subtract: ')+E(a+' '+(up?'+':'−')+' '+dec(s.v,2)+' = '+dec(res,2)));
+  const story=rnd()<.5?'A '+th+' costs $'+a+'. The price goes '+(up?'up':'down')+' by '+p+'%.':(up?'Increase ':'Decrease ')+a+' by '+p+'%.';
+  return {type:'num',q:story.startsWith('A ')?'What is the new price?':'What is the new number?',story,unit:story.startsWith('A ')?'$':'',ans:dec(res,2),how:h,
+    traps:[{v:dec(s.v,2),m:'That is only the '+p+'%. Now '+(up?'add it to ':'take it away from ')+a+'.'},{v:dec(a*100+(up?p*100:-p*100),2),m:p+'% is not the same as '+p+'. Find '+p+'% of '+a+' first.'},{v:dec(a*100+(up?-s.v:s.v),2),m:'Read again: it must go '+(up?'UP':'DOWN')+'.'}],
+    v:{t:'story',expr:a+' '+(up?'+':'−')+' '+p+'% of '+a,nums:[String(a),p+'%']}};
+});
+kind('pc-what',[3],'Сколько процентов составляет одно число от другого?',[['what percentage','сколько процентов'],['out of','из'],['scored','набрал'],['marks','баллы']],'Запиши дробь "часть / всего" и сделай знаменатель 100.',()=>{
+  const d=one([20,25,50,10,5]),n=properN(d),k=d===50?1:ri(1,d<=10?4:d===25?3:4),tot=d*k,part=n*k,m=100/d;
+  const h=[k>1?'Write it as a fraction and simplify: '+E(part+'/'+tot+' = '+n+'/'+d):'Write it as a fraction: '+n+'/'+d+'.','Make the bottom 100 (multiply by '+m+'): '+E(n+'/'+d+' = '+n*m+'/100'),E(n*m+'/100 = '+n*m+'%')];
+  return {type:'num',q:'What percentage of the marks is that?',story:'Sam scored '+part+' mark'+(part===1?'':'s')+' out of '+tot+'.',unit:'%',ans:String(n*m),how:h,traps:[{v:String(part),m:'That is the number of marks, not the percentage. The total is '+tot+', not 100.'}],v:{t:'storypct',expr:part+'/'+tot,nums:[String(part),String(tot)]}};
+});
+
+/* ---- 7 order of operations ---- */
+const ORULE='Порядок: сначала скобки, потом × и ÷ (слева направо), потом + и − (слева направо).';
+const ltr=(a,o1,b,o2,c)=>{const f=(x,o,y)=>o==='+'?x+y:o==='−'?x-y:o==='×'?x*y:x/y;const r=f(f(a,o1,b),o2,c);return Number.isInteger(r)&&r>=0?String(r):null};
+kind('oo-two',[1],'Вычисли. Помни порядок действий.',[['work out','вычисли']],ORULE,()=>{
+  const f=ri(0,2);
+  if(f===0){const a=ri(2,20),b=ri(2,9),c=ri(2,9),r=a+b*c;return {type:'num',q:'Work out.',math:a+' + '+b+' × '+c,ans:String(r),how:['Multiply before you add.',E(b+' × '+c+' = '+b*c),E(a+' + '+b*c+' = '+r)],traps:[{v:String((a+b)*c),m:'You added first. × comes before +.'}],v:{t:'eval'}}}
+  if(f===1){const b=ri(3,9),c=ri(3,9),a=b*c+ri(2,20),r=a-b*c;return {type:'num',q:'Work out.',math:a+' − '+b+' × '+c,ans:String(r),how:['Multiply before you subtract.',E(b+' × '+c+' = '+b*c),E(a+' − '+b*c+' = '+r)],traps:[{v:String((a-b)*c),m:'You subtracted first. × comes before −.'}],v:{t:'eval'}}}
+  const c=ri(2,9),q=ri(2,9),b=c*q,a=b+ri(2,20),r=a-q;return {type:'num',q:'Work out.',math:a+' − '+b+' ÷ '+c,ans:String(r),how:['Divide before you subtract.',E(b+' ÷ '+c+' = '+q),E(a+' − '+q+' = '+r)],traps:ltr(a,'−',b,'÷',c)?[{v:ltr(a,'−',b,'÷',c),m:'You subtracted first. ÷ comes before −.'}]:[],v:{t:'eval'}};
+});
+kind('oo-brackets',[2,3],'Вычисли. Сначала скобки.',[['brackets','скобки']],ORULE,t=>{
+  const f=ri(0,2);
+  if(f===0){const a=ri(2,9),b=ri(2,9),c=ri(3,9),d=ri(2,(a+b)*c-1),s=a+b,r=s*c-d;return {type:'num',q:'Work out.',math:'('+a+' + '+b+') × '+c+' − '+d,ans:String(r),how:['Brackets first: '+E(a+' + '+b+' = '+s),'Then multiply: '+E(s+' × '+c+' = '+s*c),'Last, subtract: '+E(s*c+' − '+d+' = '+r)],traps:[{v:String(a+b*c-d),m:'Do the brackets first.'}],v:{t:'eval'}}}
+  if(f===1){const a=ri(5,40),b=ri(3,9),d=ri(2,8),c=d+ri(2,9),s=c-d,r=a+b*s;return {type:'num',q:'Work out.',math:a+' + '+b+' × ('+c+' − '+d+')',ans:String(r),how:['Brackets first: '+E(c+' − '+d+' = '+s),'Then multiply: '+E(b+' × '+s+' = '+b*s),'Last, add: '+E(a+' + '+b*s+' = '+r)],traps:[{v:String((a+b)*s),m:'× comes before +. Do not add '+a+' and '+b+' first.'}],v:{t:'eval'}}}
+  const x=ri(2,4+t*2),y=ri(2,9),z=ri(2,9),w=ri(2,9),p=x*y,r=x+z*w;return {type:'num',q:'Work out.',math:p+' ÷ '+y+' + '+z+' × '+w,ans:String(r),how:['Do ÷ and × first.',E(p+' ÷ '+y+' = '+x)+' and '+E(z+' × '+w+' = '+z*w),'Then add: '+E(x+' + '+z*w+' = '+r)],traps:[{v:String((x+z)*w),m:'You worked from left to right. Do ÷ and × before +.'}],v:{t:'eval'}};
+});
+kind('oo-sign',[1,2,3],'Какой знак должен стоять в рамке?',[['sign','знак'],['goes in the box','стоит в рамке']],'Подставь каждый знак по очереди и посчитай по порядку действий.',t=>{
+  const sg=['+','−','×','÷'];
+  for(;;){
+    const a=ri(2,t===1?12:40),b=ri(2,9),c=ri(2,9),o2=t===1?one(['+','−']):one(['+','−','×']),pos=rnd()<.5&&t>1;
+    const ev=o=>{const ops=pos?[o2,o]:[o,o2];const [p,q]=ops;const f=(x,s,y)=>s==='+'?x+y:s==='−'?x-y:s==='×'?x*y:x/y;const hi=s=>s==='×'||s==='÷';return hi(q)&&!hi(p)?f(a,p,f(b,q,c)):f(f(a,p,b),q,c)};
+    const want=ri(0,3),R=ev(sg[want]);
+    if(!Number.isInteger(R)||R<0)continue;
+    if(sg.filter(s=>Math.abs(ev(s)-R)<1e-9).length!==1)continue;
+    const m=pos?a+' '+o2+' '+b+' □ '+c+' = '+R:a+' □ '+b+' '+o2+' '+c+' = '+R;
+    const o=sg[want],full=m.replace('□',o);
+    const ops=pos?[o2,o]:[o,o2],first=(/[×÷]/.test(ops[1])&&!/[×÷]/.test(ops[0]))?1:0;
+    const x=first===0?a:b,y=first===0?b:c,s=ops[first],val=s==='+'?x+y:s==='−'?x-y:s==='×'?x*y:x/y;
+    if(!Number.isInteger(val)||val<0||(s==='÷'&&x%y))continue;
+    const next=first===0?val+' '+ops[1]+' '+c:a+' '+ops[0]+' '+val;
+    return {type:'pick',cols:'four',q:'Which sign goes in the box?',math:m,opts:sg,ans:want,how:['Try the sign '+o+' and follow the order of operations.',E(x+' '+s+' '+y+' = '+val),E(next+' = '+R)+' - it matches.',E(full)],v:{t:'missing'}};
+  }
+});
+kind('oo-place',[2,3],'Где нужны скобки, чтобы равенство стало верным?',[['brackets','скобки'],['correct','верный']],'Посчитай каждый вариант: сначала скобки.',()=>{
+  const f=(x,s,y)=>s==='+'?x+y:s==='−'?x-y:x*y;
+  for(;;){
+    const n=[ri(2,12),ri(2,9),ri(2,9),ri(2,9)],o=[one(['+','−']),'×',one(['+','−'])];
+    if(rnd()<.5){o[1]=one(['+','−']);o[2]='×'}
+    const prec=(vals,ops)=>{vals=vals.slice();ops=ops.slice();for(let i=0;i<ops.length;)if(ops[i]==='×'){vals.splice(i,2,vals[i]*vals[i+1]);ops.splice(i,1)}else i++;return ops.reduce((r,s,i)=>f(r,s,vals[i+1]),vals[0])};
+    const variants=[[0,1],[1,2],[2,3],[0,2],[1,3]].map(([i,j])=>{
+      const inner=prec(n.slice(i,j+1),o.slice(i,j));
+      const vals=n.slice(0,i).concat([inner],n.slice(j+1)),ops=o.slice(0,i).concat(o.slice(j));
+      const str=ar=>ar.map((v,k)=>(k?' '+o[k-1]+' ':'')+(k===i?'(':'')+v+(k===j?')':'')).join('');
+      const after=vals.map((v,k)=>(k?ops[k-1]+' ':'')+v).join(' ');
+      return {s:str(n),inner,val:prec(vals,ops),innerStr:n.slice(i,j+1).map((v,k)=>(k?o[i+k-1]+' ':'')+v).join(' '),after};
+    });
+    const ok=variants.filter(v=>v.val>=0&&v.inner>=0&&variants.filter(w=>w.val===v.val).length===1&&v.val!==prec(n,o));
+    if(!ok.length)continue;
+    const right=one(ok),others=pickN(variants.filter(v=>v!==right),3),all=shuffle([right].concat(others));
+    return {type:'pick',cols:'one',q:'Which calculation gives '+signed(right.val)+'?',opts:all.map(v=>v.s),ans:all.indexOf(right),target:signed(right.val),
+      how:['Work out the brackets first: '+E(right.innerStr+' = '+right.inner),'Then finish, with × before + and −: '+E(right.after+' = '+signed(right.val)),E(right.s+' = '+signed(right.val))],v:{t:'target'}};
+  }
+});
+
+/* ---- 8 factors, multiples, primes, squares, cubes ---- */
+const isPrime=n=>{if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true};
+function multiItem(q,opts,pred,why,how,spec){
+  return {type:'multi',q,opts:opts.map(String),ans:opts.map((v,i)=>pred(v)?i:-1).filter(i=>i>=0),why:opts.map(why),how,v:Object.assign({t:'multi'},spec)};
+}
+function mixOpts(yes,no,ny,total){const a=pickN(yes,Math.min(ny,yes.length));return pickN(no,total-a.length).concat(a).sort((x,y)=>x-y)}
+const range=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const FACRULE='Делитель (factor) делит число нацело. Кратное (multiple) - это число из таблицы умножения этого числа.';
+kind('fa-factors',[1,2],'Нажми на ВСЕ делители числа. Потом Check.',[['factor','делитель'],['all','все']],FACRULE,t=>{
+  const n=one(t===1?[12,16,18,20,24,28,30]:[36,40,42,48,54,56,60,72]);
+  const fs=range(1,n).filter(i=>n%i===0),no=range(2,Math.min(n,t===1?15:25)).filter(i=>n%i);
+  const opts=mixOpts(fs,no,ri(3,5),8),pairs=fs.filter(i=>i*i<=n).map(i=>E(i+' × '+n/i+' = '+n));
+  return multiItem('Tap ALL the factors of '+n+'.',opts,v=>n%v===0,v=>n%v===0?v+' × '+n/v+' = '+n+', so it is a factor.':n+' ÷ '+v+' leaves a remainder of '+n%v+'.',['Find factor pairs so you miss none: '+pairs.join(', ')+'.'],{pred:'factor',a:n});
+});
+kind('fa-multiples',[1,2],'Нажми на ВСЕ кратные числа. Потом Check.',[['multiple','кратное'],['all','все']],FACRULE,t=>{
+  const n=t===1?ri(3,9):ri(11,16),yes=range(2,12).map(i=>i*n),no=range(n+1,n*12).filter(v=>v%n);
+  const opts=mixOpts(yes,no,ri(3,5),8);
+  return multiItem('Tap ALL the multiples of '+n+'.',opts,v=>v%n===0,v=>v%n===0?v+' = '+n+' × '+v/n:v+' ÷ '+n+' leaves a remainder of '+v%n+'.',['Count in steps of '+n+': '+range(1,6).map(i=>i*n).join(', ')+' and so on.'],{pred:'multiple',a:n});
+});
+kind('fa-common',[2,3],'Нажми на все ОБЩИЕ делители двух чисел.',[['common factor','общий делитель']],'Общий делитель делит ОБА числа нацело.',t=>{
+  for(;;){const g=one(t===2?[4,6,8,9,10]:[12,14,15,16,18]),[x,y]=pickN([2,3,4,5,7],2);if(gcd(x,y)!==1)continue;const a=g*x,b=g*y;
+    const yes=range(1,g).filter(i=>g%i===0),no=range(2,Math.max(a,b)).filter(i=>(a%i||b%i)&&(i<=24)),tr=no.filter(i=>a%i===0||b%i===0);
+    const ny=Math.min(yes.length,ri(2,4)),ys=pickN(yes,ny),t1=pickN(tr,Math.min(3,tr.length)),rest=pickN(no.filter(i=>!t1.includes(i)),8-ny-t1.length);
+    const opts=ys.concat(t1,rest).sort((p,q)=>p-q);if(opts.length!==8)continue;
+    return multiItem('Tap ALL the common factors of '+a+' and '+b+'.',opts,v=>a%v===0&&b%v===0,v=>a%v===0&&b%v===0?v+' divides both numbers.':v+' does not divide '+(a%v?a:b)+'.',['List the factors of '+a+': '+range(1,a).filter(i=>a%i===0).join(', ')+'.','Keep only the ones that also divide '+b+': '+yes.join(', ')+'.'],{pred:'common',a,b});
+  }
+});
+kind('fa-commonmult',[3],'Нажми на все ОБЩИЕ кратные двух чисел.',[['common multiple','общее кратное']],'Общее кратное делится на ОБА числа нацело.',()=>{
+  const [a,b]=one([[3,4],[4,5],[3,5],[4,6],[6,8],[6,9],[5,6],[2,7],[8,12]]),L=lcm(a,b),yes=range(1,6).map(i=>i*L),no=range(a*2,L*5).filter(v=>v%L&&(v%a===0||v%b===0));
+  const opts=mixOpts(yes,no,ri(2,4),8);
+  return multiItem('Tap ALL the common multiples of '+a+' and '+b+'.',opts,v=>v%a===0&&v%b===0,v=>v%a===0&&v%b===0?v+' is in both lists.':v+' is not a multiple of '+(v%a?a:b)+'.',['The smallest common multiple of '+a+' and '+b+' is '+L+'.','Every common multiple is a multiple of '+L+': '+yes.slice(0,4).join(', ')+' and so on.'],{pred:'commonmult',a,b});
+});
+kind('fa-prime',[2,3],'Нажми на все простые числа.',[['prime number','простое число']],'Простое число имеет ровно два делителя: 1 и само себя. 1 - не простое.',t=>{
+  const P=range(2,t===2?47:97).filter(isPrime),C=t===2?[1,9,15,21,25,27,33,35,39,45,4,12]:[1,49,51,57,63,69,77,81,85,87,91,93,99];
+  const opts=mixOpts(P,C,ri(3,5),8);
+  const sm=v=>range(2,v-1).find(i=>v%i===0);
+  return multiItem('Tap ALL the prime numbers.',opts,isPrime,v=>v===1?'1 has only one factor, so it is not prime.':isPrime(v)?v+' has exactly two factors: 1 and '+v+'.':v+' = '+sm(v)+' × '+v/sm(v)+', so it is not prime.',['A prime number has exactly two factors.','Test with 2, 3, 5 and 7. Odd does not mean prime.'],{pred:'prime'});
+});
+const dsum=v=>String(v).split('').reduce((s,c)=>s+ +c,0);
+kind('fa-div',[2,3],'Нажми на все числа, которые делятся нацело на указанное.',[['divisible by','делится нацело на'],['digit sum','сумма цифр']],'Признаки: на 3 - сумма цифр делится на 3; на 9 - сумма цифр делится на 9; на 6 - четное и делится на 3.',t=>{
+  const k=one(t===2?[3,9]:[6,9,3]),lo=t===2?102:1002,hi=t===2?999:4998;
+  const yes=[],no=[];while(yes.length<6){const v=ri(Math.ceil(lo/k),Math.floor(hi/k))*k;if(!yes.includes(v))yes.push(v)}
+  /* traps first: they look right but fail the rule */
+  const trap=v=>k===6?(no.length<3?v%3===0&&v%2===1:v%2===0&&v%3!==0):k===9?v%3===0&&v%9!==0:(v%10)%3===0&&v%3!==0;
+  while(no.length<8){const v=ri(lo,hi);if(v%k&&(no.length>=5||trap(v))&&!no.includes(v))no.push(v)}
+  const opts=mixOpts(yes,no,ri(3,5),8);
+  const why=v=>{const s=dsum(v);if(k===6)return v%2?v+' is odd, so it cannot be divided by 6.':'Digit sum '+s+(s%3?' is not':' is')+' a multiple of 3, and '+v+' is even.';return v+': digit sum '+s+(s%k?' is not':' is')+' a multiple of '+k+'.'};
+  return multiItem('Tap ALL the numbers that are divisible by '+k+'.',opts,v=>v%k===0,why,[k===6?'A number is divisible by 6 when it is even AND its digit sum is a multiple of 3.':'Add the digits. The number is divisible by '+k+' when the digit sum is a multiple of '+k+'.'],{pred:'multiple',a:k});
+});
+kind('fa-squares',[1,2],'Нажми на все квадратные числа.',[['square number','квадратное число']],'Квадратное число = n × n: 1, 4, 9, 16...',t=>{
+  const yes=range(1,t===1?7:12).map(i=>i*i),no=range(2,t===1?50:150).filter(v=>!Number.isInteger(Math.sqrt(v)));
+  const opts=mixOpts(yes,no,ri(3,4),8);
+  return multiItem('Tap ALL the square numbers.',opts,v=>Number.isInteger(Math.sqrt(v)),v=>{const r=Math.sqrt(v);return Number.isInteger(r)?r+' × '+r+' = '+v:v+' lies between '+Math.floor(r)**2+' and '+(Math.floor(r)+1)**2+', so it is not a square.'},['Square numbers are n × n: '+yes.slice(0,7).join(', ')+' and so on.'],{pred:'square'});
+});
+kind('fa-cubes',[3],'Нажми на все кубические числа.',[['cube number','кубическое число']],'Куб = n × n × n: 1, 8, 27, 64, 125.',()=>{
+  const yes=[1,8,27,64,125],no=[4,9,16,25,36,49,81,100,18,24,32,45,75,121,6,12];
+  const opts=mixOpts(yes,no,ri(3,4),8);
+  return multiItem('Tap ALL the cube numbers.',opts,v=>yes.includes(v),v=>{const r=Math.round(Math.cbrt(v));return r*r*r===v?r+' × '+r+' × '+r+' = '+v:v+' is not n × n × n.'},['Cube numbers up to 125: 1, 8, 27, 64, 125.'],{pred:'cube'});
+});
+kind('fa-power',[1,2,3],'Вычисли квадрат или куб числа.',[['squared','в квадрате'],['cubed','в кубе']],'n² = n × n. n³ = n × n × n. Это НЕ умножение на 2 или 3.',t=>{
+  const cube=t>1&&rnd()<.5,n=cube?ri(2,5):ri(t===1?3:7,t===1?9:15),extra=t===3?ri(3,20):0,v=(cube?n*n*n:n*n)+extra,s=cube?'³':'²';
+  const how=cube?['Cubed means three of them multiplied: '+E(n+' × '+n+' = '+n*n)+', then '+E(n*n+' × '+n+' = '+n*n*n)]:['Squared means the number times itself: '+E(n+' × '+n+' = '+n*n)];
+  if(extra)how.push('Then add: '+E(n*n*(cube?n:1)+' + '+extra+' = '+v));
+  return {type:'num',q:'Work out.',math:n+s+(extra?' + '+extra:''),ans:String(v),how,traps:[{v:String(n*(cube?3:2)+extra),m:'You multiplied by '+(cube?3:2)+'. The small '+(cube?3:2)+' tells you how many '+n+'s to multiply together.'}],v:{t:'eval'}};
+});
+kind('fa-hcf',[3],'Найди наибольший общий делитель или наименьшее общее кратное.',[['highest common factor','наибольший общий делитель'],['lowest common multiple','наименьшее общее кратное']],'Перечисли делители (или кратные) обоих чисел и найди общее.',()=>{
+  if(rnd()<.5){for(;;){const g=ri(4,12),[x,y]=pickN([2,3,4,5,7],2);if(gcd(x,y)!==1)continue;const a=g*x,b=g*y;return {type:'num',q:'What is the highest common factor of '+a+' and '+b+'?',ans:String(g),how:['Factors of '+a+': '+range(1,a).filter(i=>a%i===0).join(', ')+'.','Factors of '+b+': '+range(1,b).filter(i=>b%i===0).join(', ')+'.','The biggest number in both lists is '+g+': '+E(g+' × '+x+' = '+a)+' and '+E(g+' × '+y+' = '+b)],v:{t:'hcf',a,b}}}}
+  const [a,b]=one([[4,6],[6,8],[5,6],[8,12],[6,9],[9,12],[10,15],[4,7],[6,7],[8,10]]),L=lcm(a,b);
+  return {type:'num',q:'What is the lowest common multiple of '+a+' and '+b+'?',ans:String(L),how:['Multiples of '+a+': '+range(1,L/a+1).map(i=>i*a).join(', ')+'.','Multiples of '+b+': '+range(1,L/b+1).map(i=>i*b).join(', ')+'.','The first number in both lists is '+L+': '+E(a+' × '+L/a+' = '+L)+' and '+E(b+' × '+L/b+' = '+L)],v:{t:'lcm',a,b}};
+});
+
+/* ---- 9 negative numbers, sequences, time ---- */
+const NEGRULE='Представь градусник: вычитание - вниз, сложение - вверх. Переход через ноль считай в два шага.';
+const PL=['Kars','Oslo','a mountain hut','an ice cave','the garden','a freezer room'];
+kind('ng-fall',[1,2],'Температура падает или растет. Какой она станет?',[['colder','холоднее'],['warmer','теплее'],['degrees','градусы'],['temperature','температура'],['falls','падает'],['rises','поднимается']],NEGRULE,t=>{
+  const fall=rnd()<.5;let a,d;
+  if(fall){a=ri(1,t===1?8:6);d=a+ri(2,t===1?7:14);if(t===2&&rnd()<.5){a=-ri(2,9);d=ri(3,12)}}else{a=-ri(3,t===1?9:15);d=-a+ri(1,t===1?6:12)}
+  const r=fall?a-d:a+d,h=[];
+  if(fall){if(a>0){h.push('Count down to zero first: '+E(a+' − '+a+' = 0')+'.');h.push('Degrees still to go: '+E(d+' − '+a+' = '+(d-a)));h.push('Go that far below zero: '+E('0 − '+(d-a)+' = '+signed(r)))}else h.push('You are already below zero. Go further down: '+E(signed(a)+' − '+d+' = '+signed(r)))}
+  else{h.push('Count up to zero first: '+E(signed(a)+' + '+(-a)+' = 0'));h.push('Degrees still to go: '+E(d+' − '+(-a)+' = '+(d+a)));h.push(E(signed(a)+' + '+d+' = '+signed(r)))}
+  return {type:'num',q:'What is the temperature now?',story:'In '+one(PL)+' it is '+signed(a)+' °C. The temperature '+(fall?'falls':'rises')+' by '+d+' degrees.',unit:'°C',ans:signed(r),how:h,
+    traps:[{v:signed(-r),m:'Check the sign: is the new temperature above or below zero?'},{v:signed(fall?a+d:a-d),m:'Wrong direction: the temperature '+(fall?'FALLS':'RISES')+'.'}],v:{t:'story',expr:signed(a)+' '+(fall?'−':'+')+' '+d,nums:[signed(a),String(d)]}};
+});
+kind('ng-diff',[2,3],'На сколько градусов отличаются две температуры?',[['difference','разность, разница'],['between','между'],['at night','ночью'],['at noon','в полдень']],'Разница = расстояние на градуснике: от нижней температуры до нуля и от нуля до верхней.',t=>{
+  const a=-ri(3,t===2?9:25),b=rnd()<.75?ri(2,t===2?12:25):a+ri(2,-a-1),diff=b-a;
+  const h=b>0?['From '+signed(a)+' up to 0 is '+(-a)+' degrees.','From 0 up to '+b+' is '+b+' degrees.',E((-a)+' + '+b+' = '+diff)]:['Both are below zero, so count the steps between them: '+E((-a)+' − '+(-b)+' = '+diff)];
+  return {type:'num',q:'What is the difference in temperature?',story:'At night it is '+signed(a)+' °C. At noon it is '+signed(b)+' °C.',unit:'degrees',ans:String(diff),how:h,traps:[{v:signed(Math.abs(b+a)),m:'Do not just subtract the digits. Count the steps on the thermometer, through zero.'}],v:{t:'story',expr:signed(b)+' − '+signed(a),nums:[signed(a),signed(b)]}};
+});
+kind('ng-calc',[2,3],'Вычисли с отрицательными числами.',[['work out','вычисли']],NEGRULE,t=>{
+  const f=ri(0,2);let a,b,op;
+  if(f===0){a=ri(2,t===2?12:30);b=a+ri(2,t===2?12:30);op='−'}else if(f===1){a=-ri(3,t===2?15:40);b=ri(2,t===2?20:50);op='+'}else{a=-ri(2,t===2?12:30);b=ri(2,t===2?12:30);op='−'}
+  const r=op==='+'?a+b:a-b;
+  return {type:'num',q:'Work out.',math:signed(a)+' '+op+' '+b,ans:signed(r),how:['On a number line start at '+signed(a)+' and move '+b+' to the '+(op==='+'?'right':'left')+'.','Answer: '+E(signed(a)+' '+op+' '+b+' = '+signed(r))],traps:[{v:signed(-r),m:'The number is right but check the sign. Where do you land: above or below zero?'}].filter(x=>r!==0),v:{t:'eval'}};
+});
+kind('ng-seq',[1,2,3],'Какое число следующее в последовательности?',[['sequence','последовательность'],['next term','следующий член']],'Найди шаг между соседними числами и сделай еще один такой же шаг.',t=>{
+  const step=t===1?ri(2,6):t===2?ri(3,9):ri(11,19),down=t>1||rnd()<.5,st=down?ri(step,step*3-1):ri(1,20);
+  const s=down?-step:step,terms=[0,1,2,3].map(i=>st+s*i),nx=st+s*4;
+  const dp=t===3&&rnd()<.4;const fm=v=>dp?dec(v,1):signed(v);
+  return {type:'num',q:'What is the next number?',math:terms.map(fm).join(',  ')+',  □',ans:fm(nx),terms:terms.map(fm),
+    how:['Find the step: '+E(fm(terms[0])+(down?' − ':' + ')+(dp?dec(step,1):step)+' = '+fm(terms[1])),'The step is '+(down?'−':'+')+(dp?dec(step,1):step)+' every time.',E(fm(terms[3])+(down?' − ':' + ')+(dp?dec(step,1):step)+' = '+fm(nx))],v:{t:'seq'}};
+});
+const TIMES=[['hours','minutes',60],['minutes','seconds',60],['days','hours',24],['years','months',12]];
+kind('tm-convert',[1,2,3],'Переведи в другие единицы времени.',[['hour','час'],['minute','минута'],['second','секунда'],['day','сутки'],['year','год'],['month','месяц']],'В часе 60 минут, а не 100! Поэтому 0.5 часа = 30 минут, 0.25 часа = 15 минут.',t=>{
+  const [big,small,f]=t===1?one(TIMES.slice(0,2)):one(TIMES);
+  const fracs=f===60?(t===3?[1,2,3,4,6,7,8,9,25,75].map(v=>v<10?v*10:v):[50,25,75]):f===24?[50,25,75]:[50,25,75];
+  const w=ri(1,t===1?3:6),fp=one(fracs),r=w*f+f*fp/100,x=dec(w*100+fp,2);
+  if(!Number.isInteger(r))return K['tm-convert'].fn(t);
+  return {type:'num',q:'How many '+small+'?',story:x+' '+big+' = ? '+small,unit:small,ans:String(r),
+    how:['1 '+big.slice(0,-1)+' = '+f+' '+small+'.','Whole part: '+E(w+' × '+f+' = '+w*f),'Decimal part: '+E(dec(fp,2)+' × '+f+' = '+f*fp/100),'Add: '+E(w*f+' + '+f*fp/100+' = '+r)],
+    traps:[{v:String(w*f+fp),m:x+' '+big+' is NOT '+w+' '+(w===1?big.slice(0,-1):big)+' '+fp+' '+small+'. The decimal part is a fraction of '+f+'.'},{v:String(w*100+fp),m:'There are '+f+' '+small+' in 1 '+big.slice(0,-1)+', not 100.'}],v:{t:'story',expr:x+' × '+f,nums:[x]}};
+});
+kind('tm-back',[3],'Переведи минуты в часы (десятичной дробью).',[['hours','часы'],['minutes','минуты'],['as a decimal','десятичной дробью']],'Часы = минуты ÷ 60. 15 мин = 0.25 ч, 30 мин = 0.5 ч, 6 мин = 0.1 ч.',()=>{
+  const w=ri(1,4),fm=one([15,30,45,6,12,18,24,36,42,48,54]),m=w*60+fm,fp=fm*100/60;
+  return {type:'num',q:'Write this time in hours, as a decimal.',story:m+' minutes = ? hours',unit:'hours',ans:dec(w*100+fp,2),how:['Take out the whole hours: '+E(w+' × 60 = '+w*60)+', and '+E(m+' − '+w*60+' = '+fm),'The rest is a fraction of an hour: '+E(fm+'/60 = '+dec(fp,2)),E(w+' + '+dec(fp,2)+' = '+dec(w*100+fp,2))],
+    traps:[{v:dec(w*100+fm,2),m:fm+' minutes is not 0.'+String(fm).padStart(2,'0')+' of an hour. Divide by 60.'}],v:{t:'story',expr:m+' ÷ 60',nums:[String(m)]}};
+});
+
+/* ---- 10 rounding and estimating ---- */
+const RRULE='Смотри на следующую цифру справа: 5 или больше - округляем вверх, меньше 5 - оставляем.';
+kind('es-round',[1,2,3],'Округли число.',[['round','округлить'],['nearest whole number','до целого'],['decimal place','знак после точки'],['nearest ten','до десятков'],['nearest hundred','до сотен']],RRULE,t=>{
+  let n,p,tp,label;
+  if(t===1){p=1;tp=0;n=nz(11,299);label='to the nearest whole number'}
+  else if(t===2){if(rnd()<.5){p=2;tp=1;n=nz(101,2999);label='to 1 decimal place'}else{p=2;tp=0;n=nz(101,4999);label='to the nearest whole number'}}
+  else{const c=ri(0,2);if(c===0){p=3;tp=2;n=nz(1001,29999);label='to 2 decimal places'}else if(c===1){p=1;tp=-1;n=nz(101,9999);label='to the nearest ten'}else{p=1;tp=-2;n=nz(1001,49999);label='to the nearest hundred'}}
+  const unit=P10(p-tp),q=Math.floor(n/unit),rem=n-q*unit,up=rem*2>=unit,res=(up?q+1:q),s=dec(n,p),rs=tp>0?padp(dec(res,tp),tp):dec(res,tp);
+  const nd=Math.floor(rem*10/unit);
+  return {type:'num',q:'Round '+label+'.',math:s,ans:rs,how:['The answer is either '+dec(q,tp)+' or '+dec(q+1,tp)+'.','Look at the next digit: it is '+nd+'. '+(up?'5 or more, so round UP.':'Less than 5, so round DOWN.'),s+' rounds to '+rs+': '+E(rs+(up?' > ':rem?' < ':' = ')+s)],
+    traps:[{v:dec(up?q:q+1,tp),m:'Check the next digit: '+nd+' means round '+(up?'up':'down')+'.'}],v:{t:'round',tp}};
+});
+function estItem(math,E1,how){
+  const o=shuffle([E1,E1*10,E1/10,one([E1*3,E1*4,E1*5])]).map(v=>String(Math.round(v*100)/100));
+  return {type:'pick',q:'Which is the best estimate?',math,opts:o,ans:o.indexOf(String(Math.round(E1*100)/100)),how,v:{t:'estimate'}};
+}
+const EST='Округли каждое число до удобного (десятки, целые) и посчитай в уме. Так проверяют, не потерялась ли десятичная точка.';
+kind('es-mul',[1,2,3],'Выбери лучшую прикидку (оценку) ответа.',[['estimate','прикидка, оценка'],['best','лучший']],EST,t=>{
+  const A=ri(2,t===1?6:9)*10,b=ri(3,9),da=one([-1,1])*ri(1,t===3?19:9),db=one([-2,-1,1,2]);
+  const a=A*10+da,bb=b*10+(t===1?0:db);
+  const as=dec(a,1),bs=dec(bb,1);
+  return estItem(as+' × '+bs,A*b,['Round each number: '+as+' is close to '+A+(bs===String(b)?'':', and '+bs+' is close to '+b)+'.',E(A+' × '+b+' = '+A*b)]);
+});
+kind('es-div',[2,3],'Выбери лучшую прикидку (оценку) ответа.',[['estimate','прикидка, оценка'],['best','лучший']],EST,t=>{
+  const b=ri(3,9),q=ri(2,9)*10,A=b*q,a=A*10+one([-1,1])*ri(2,t===2?9:19),bb=b*10+one([-2,-1,1]);
+  return estItem(dec(a,1)+' ÷ '+dec(bb,1),q,['Round to numbers that divide nicely: '+dec(a,1)+' is close to '+A+', and '+dec(bb,1)+' is close to '+b+'.',E(A+' ÷ '+b+' = '+q)]);
+});
+kind('es-sum',[1,2,3],'Выбери лучшую прикидку (оценку) суммы.',[['estimate','прикидка, оценка'],['best','лучший']],EST,t=>{
+  const ws=[ri(11,49),ri(11,49),t===1?null:ri(5,29)].filter(x=>x!==null),ns=ws.map(w=>w*10+one([-3,-2,-1,1,2,3]));
+  const S=ws.reduce((a,b)=>a+b,0),ss=ns.map(n=>dec(n,1));
+  return estItem(ss.join(' + '),S,['Round each number to the nearest whole number: '+ws.join(', ')+'.',E(ws.join(' + ')+' = '+S)]);
+});
+
+/* ---------- levels ---------- */
+const LV=[
+ {ico:'🔢',name:'Place value',ds:'× and ÷ by 10, 100, 1000',kinds:['pv-shift','pv-type','pv-missing','pv-digit','pv-chain']},
+ {ico:'➕',name:'Decimals + −',ds:'line up the points',kinds:['as-1dp','as-mixed','as-whole','as-three','as-money']},
+ {ico:'✖️',name:'Multiply & divide',ds:'decimals and long methods',kinds:['md-easy','md-mul','md-div','md-longmul','md-longdiv','md-story']},
+ {ico:'🍰',name:'Fractions',ds:'add, take, of, × and ÷',kinds:['fr-same','fr-of','fr-simplify','fr-related','fr-unlike','fr-times','fr-divide','fr-mixed']},
+ {ico:'🔁',name:'F - D - % swap',ds:'convert, compare, order',kinds:['fdp-f2d','fdp-f2p','fdp-d2f','fdp-p2f','fdp-cmp','fdp-order']},
+ {ico:'💯',name:'Percentages',ds:'of an amount, up and down',kinds:['pc-of','pc-change','pc-what']},
+ {ico:'🧮',name:'Order of operations',ds:'brackets, × ÷, + −',kinds:['oo-two','oo-brackets','oo-sign','oo-place']},
+ {ico:'🧩',name:'Factor jungle',ds:'factors, multiples, primes, squares',kinds:['fa-factors','fa-multiples','fa-common','fa-commonmult','fa-prime','fa-div','fa-squares','fa-cubes','fa-power','fa-hcf']},
+ {ico:'🌡️',name:'Below zero & time',ds:'negatives, sequences, time',kinds:['ng-fall','ng-diff','ng-calc','ng-seq','tm-convert','tm-back']},
+ {ico:'🎯',name:'Round & estimate',ds:'is the answer sensible?',kinds:['es-round','es-mul','es-div','es-sum']},
+ {ico:'👑',name:'Summit: mixed climb',ds:'every skill, like Paper 1',kinds:null,boss:true}
+];
+LV[10].kinds=[].concat(...LV.slice(0,10).map(l=>l.kinds));
+const goalOf=n=>LV[n-1].boss?14:8;
+function kindsFor(n,tier){return LV[n-1].kinds.filter(k=>K[k].tiers.includes(tier))}
+function make(k,tier){const it=K[k].fn(tier);it.k=k;it.tier=tier;
+  if(it.traps){const A=typedVal(it.ans);it.traps=it.traps.filter(t=>{const v=typedVal(t.v);return !v||!same(v,A)})}
+  return it}
+
+/* ---------- storage ---------- */
+const MEM={};
+const LS=SELFTEST?{getItem:k=>k in MEM?MEM[k]:null,setItem:(k,v)=>{MEM[k]=String(v)}}:{getItem:k=>localStorage.getItem(k),setItem:(k,v)=>localStorage.setItem(k,v)};
+function jget(k){try{const v=LS.getItem(k);if(v==null)return {};const o=JSON.parse(v);return (o&&typeof o==='object'&&!Array.isArray(o))?o:{}}catch(e){return {}}}
+function jset(k,o){try{LS.setItem(k,JSON.stringify(o))}catch(e){}}
+function dayStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return dayStr(d)}
+function touchDay(){const p=jget(PKEY),today=dayStr(new Date());if(p.day===today)return;p.streak=p.day===yesterday()?(p.streak||0)+1:1;p.day=today;jset(PKEY,p)}
+function streak(){const p=jget(PKEY);return (p.day===dayStr(new Date())||p.day===yesterday())?(p.streak||0):0}
+function addQuizXp(x){
+  try{const raw=LS.getItem(QKEY);let o={};if(raw!=null){o=JSON.parse(raw);if(!o||typeof o!=='object'||Array.isArray(o))return}
+    o.xp=(+o.xp||0)+x;LS.setItem(QKEY,JSON.stringify(o))}catch(e){}
+}
+let G;
+function loadG(){G=jget(GKEY);for(const k of ['stars','tiers','runs','up'])if(!G[k]||typeof G[k]!=='object')G[k]={};G.answered=+G.answered||0;G.right=+G.right||0;G.bestRow=+G.bestRow||0;G.row=+G.row||0}
+const saveG=()=>jset(GKEY,G);
+
+/* ---------- rendering helpers ---------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function fmt(s){
+  return esc(s).replace(/[{}]/g,'').replace(/(\d+ )?(\d+)\/(\d+)/g,(m,w,a,b)=>'<span class="mx">'+(w?w.trim()+' ':'')+'<span class="fr"><i>'+a+'</i><i>'+b+'</i></span></span>').replace(/□/g,'<span class="box"></span>');
+}
+const $=s=>document.querySelector(s);
+const app=()=>document.getElementById('app');
+function ruBlock(k){return '<details class="ru"'+(G.ru?' open':'')+' id="ru"><summary>Перевод на русский</summary><div>'+esc(K[k].ru)+'</div><div class="gl">'+K[k].gl.map(g=>'<span><b>'+esc(g[0])+'</b> - '+esc(g[1])+'</span>').join('')+'</div></details>'}
+
+/* ---------- state ---------- */
+let S=null;   /* current climb */
+function showMap(){
+  S=null;const acc=G.answered?Math.round(100*G.right/G.answered):0;
+  app().innerHTML='<div class="top"><a class="btn alt" href="../">← Quiz</a><div class="chips"><span class="chip">🔥 '+streak()+' day'+(streak()===1?'':'s')+'</span><span class="chip">⭐ '+Object.values(G.stars).reduce((a,b)=>a+b,0)+'/'+LV.length*3+'</span><span class="chip">🍌 best row '+G.bestRow+'</span></div></div>'+
+  '<h1>🐒 Mango Climb</h1><p class="sub">Paper 1 training: NO calculator. Pick a tree and climb to the mango.'+(G.answered?' So far: '+G.right+' of '+G.answered+' answers right ('+acc+'%).':'')+'</p>'+
+  '<div class="card"><b>How to climb:</b> a right answer = one step up. A mistake? Read the method, then solve a twin question to win the step. Questions get harder when you are doing well.'+
+  '<details class="ru"><summary>Перевод на русский</summary><div>Экзамен без калькулятора. Верный ответ - шаг вверх. Ошибся - прочитай способ решения и реши похожий пример, чтобы получить шаг. Чем лучше получается, тем сложнее вопросы (точки ●●● показывают уровень).</div></details></div>'+
+  '<div class="map">'+LV.map((l,i)=>{const n=i+1,s=G.stars[n]||0,r=G.runs[n];return '<button class="lv'+(l.boss?' boss':'')+'" data-lv="'+n+'">'+(r&&r.h?'<span class="res">'+r.h+'/'+goalOf(n)+'</span>':'')+'<span class="ico">'+l.ico+'</span><span class="nm">'+n+'. '+esc(l.name)+'</span><span class="ds">'+esc(l.ds)+'</span><span class="st">'+'★'.repeat(s)+'<i>'+'★'.repeat(3-s)+'</i></span></button>'}).join('')+'</div>';
+  app().querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>start(+b.dataset.lv));
+  window.scrollTo(0,0);
+}
+function start(n,opt){
+  opt=opt||{};const r=opt.fresh?null:G.runs[n];
+  S={n,goal:goalOf(n),h:r?r.h:0,miss:r?r.miss:0,row:G.row,queue:[],twin:null,xp:0,forceTier:opt.tier||0,forceKind:opt.kind||null,lastK:null};
+  next();
+}
+function tierNow(){if(S.forceTier)return S.forceTier;if(LV[S.n-1].boss){return G.tiers[S.n]||2}return G.tiers[S.n]||1}
+function chooseKind(tier){
+  if(S.forceKind)return S.forceKind;
+  if(!S.queue.length||S.queueTier!==tier){let ks=shuffle(kindsFor(S.n,tier));if(ks.length>1&&ks[0]===S.lastK)ks.push(ks.shift());S.queue=ks;S.queueTier=tier}
+  return S.queue.shift();
+}
+function next(){
+  if(S.h>=S.goal)return finish();
+  let k,tier;
+  if(S.twin){k=S.twin.k;tier=S.twin.tier}else{tier=tierNow();k=chooseKind(tier);if(!K[k].tiers.includes(tier))tier=K[k].tiers[0]}
+  let it=make(k,tier);for(let i=0;i<8&&S.last&&sig(it)===S.last;i++)it=make(k,tier);
+  S.last=sig(it);S.lastK=k;present(it);
+}
+const sig=it=>(it.math||'')+(it.story||'')+it.q+(it.opts||[]).join();
+function present(it){
+  S.it=it;S.isTwin=!!S.twin;S.buf='';S.sel=[];S.shift=0;S.done=false;S.nudged=false;
+  const l=LV[S.n-1],pct=100*S.h/S.goal,long=(it.math||'').length>13;
+  app().innerHTML='<div class="ptop"><button class="btn alt" id="mapbtn">← Map</button><div class="ptitle">'+l.ico+' '+esc(l.name)+'<small>Step '+Math.min(S.h+1,S.goal)+' of '+S.goal+'</small></div><span class="chip" id="rowchip">🍌 '+G.row+'</span></div>'+
+  '<div class="vine" id="vine"><div class="rail"><div class="fill" id="fill" style="width:'+pct+'%"></div>'+Array.from({length:S.goal+1},(_,i)=>'<span class="dot'+(i<=S.h?' on':'')+'" style="left:'+(100*i/S.goal)+'%"></span>').join('')+'<span class="monkey" id="monkey" style="left:'+pct+'%">🐒</span></div><span class="goal">🥭</span></div>'+
+  '<div class="pgrid"><div class="card qcard" id="qcard"><div class="tag"><span>'+(S.isTwin?'🔁 Twin question: use the method':'Question')+'</span><b title="difficulty">'+'●'.repeat(it.tier)+'<span style="color:#d9dec6">'+'●'.repeat(3-it.tier)+'</span></b></div>'+
+  (it.story?'<div class="story">'+fmt(it.story)+'</div>':'')+'<div class="instr">'+fmt(it.q)+'</div>'+(it.math?'<div class="math'+(long?' long':'')+'">'+fmt(it.math)+'</div>':'')+ruBlock(it.k)+'</div><div class="answer" id="ans"></div></div>';
+  $('#mapbtn').onclick=showMap;
+  $('#ru').ontoggle=e=>{G.ru=e.target.open;saveG()};
+  renderInput();window.scrollTo(0,0);
+}
+function renderInput(){
+  const it=S.it,a=$('#ans');
+  if(it.type==='num'||it.type==='frac'){
+    const fr=it.type==='frac',neg=!fr&&LV[8].kinds.includes(it.k);
+    const keys=['7','8','9','⌫','4','5','6','−','1','2','3','/','.','0','␣','OK'];
+    a.innerHTML='<div class="disp" id="disp"></div><div class="pad">'+keys.map(k=>{
+      const dis=(k==='−'&&!neg)||(k==='/'&&!fr)||(k==='␣'&&!fr)||(k==='.'&&fr);
+      return '<button class="key'+(k==='OK'?' ok':/[⌫−\/␣]/.test(k)?' fn':'')+'" data-k="'+k+'"'+(dis?' disabled':'')+(k==='␣'?' aria-label="space for mixed number"':'')+'>'+(k==='/'?'<span class="fr" style="font-size:.62em"><i>▢</i><i>▢</i></span>':k==='␣'?'<span style="font-size:15px">space</span>':k)+'</button>'}).join('')+'</div>'+
+      (fr?'<div class="chip" style="display:block;margin-top:10px;white-space:normal;font-size:14px;text-align:center">Fraction: top, then the fraction key, then bottom. Mixed number: whole, space, fraction.</div>':'');
+    a.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>key(b.dataset.k));
+    drawDisp();
+  }else if(it.type==='pick'){
+    a.innerHTML='<div class="opts'+(it.cols?' '+it.cols:'')+'">'+it.opts.map((o,i)=>'<button class="opt" data-o="'+i+'">'+fmt(o)+'</button>').join('')+'</div>';
+    a.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>submit(+b.dataset.o));
+  }else if(it.type==='cmp'){
+    a.innerHTML='<div class="opts three">'+['<','=','>'].map((o,i)=>'<button class="opt" data-c="'+esc(o)+'" style="font-size:40px;min-height:92px">'+esc(o)+'<div style="font-size:13px;font-weight:600">'+['less than','equal to','greater than'][i]+'</div></button>').join('')+'</div>';
+    a.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>submit(b.dataset.c));
+  }else if(it.type==='multi'||it.type==='order'){
+    const ord=it.type==='order';
+    a.innerHTML='<div class="opts'+(ord?'':' four')+'">'+it.opts.map((o,i)=>'<button class="opt" data-o="'+i+'">'+fmt(o)+'</button>').join('')+'</div><button class="btn wide" id="check" disabled>Check ✓</button>'+(ord?'<div class="chip" style="display:block;margin-top:10px;text-align:center;font-size:14px;white-space:normal">Tap again to remove a number.</div>':'');
+    a.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{
+      if(S.done)return;const i=+b.dataset.o,p=S.sel.indexOf(i);if(p<0)S.sel.push(i);else S.sel.splice(p,1);
+      a.querySelectorAll('[data-o]').forEach(c=>{const q=S.sel.indexOf(+c.dataset.o);c.classList.toggle('sel',q>=0);const n=c.querySelector('.n');if(n)n.remove();if(ord&&q>=0)c.insertAdjacentHTML('beforeend','<span class="n">'+(q+1)+'</span>')});
+      $('#check').disabled=ord?S.sel.length!==it.opts.length:!S.sel.length;
+    });
+    $('#check').onclick=()=>submit(S.sel.slice());
+  }else if(it.type==='shift'){
+    a.innerHTML='<div class="chart"><div class="cols" id="cols"></div></div><div class="arrows"><button class="btn alt" id="left">◀ digits left</button><button class="btn alt" id="right">digits right ▶</button></div><button class="btn wide" id="check">Check ✓</button>';
+    $('#left').onclick=()=>move(1);$('#right').onclick=()=>move(-1);$('#check').onclick=()=>submit(S.shift);
+    drawChart();
+  }
+}
+/* digits of the number, with the power of ten of each digit */
+function shiftRange(){const it=S.it,s=String(it.sig);const hi=s.length-1-it.p,lo=-it.p;return {s,hi,lo}}
+function move(d){if(S.done)return;const r=shiftRange(),n=S.shift+d;if(r.hi+n>3||r.lo+n<-3)return;S.shift=n;drawChart()}
+function drawChart(){
+  const r=shiftRange(),hi=r.hi+S.shift,lo=r.lo+S.shift;
+  const heads=['Th','H','T','O','t','h','th'],pows=[3,2,1,0,-1,-2,-3];
+  const cell=p=>{let ch='',z='';if(p<=hi&&p>=lo)ch=r.s[hi-p];else if(p<=0&&p>hi){ch='0';z=' zero'}else if(p>=0&&p<lo){ch='0';z=' zero'}return '<div class="dg'+z+'" data-p="'+p+'">'+ch+'</div>'};
+  const row=a=>a.slice(0,4).join('')+'%'+a.slice(4).join('');
+  $('#cols').innerHTML=row(heads.map(h=>'<div class="hd">'+h+'</div>')).replace('%','<div></div>')+row(pows.map(cell)).replace('%','<div class="pt">.</div>');
+}
+function chartValue(){let w='',f='';$('#cols').querySelectorAll('.dg').forEach(c=>{const p=+c.dataset.p,ch=c.textContent;if(p>=0)w+=ch||'';else f+=ch||'0'});return typedVal((w||'0')+'.'+f)}
+function drawDisp(){
+  const it=S.it,d=$('#disp');if(!d)return;
+  const unit=it.unit?'<span class="unit">'+esc(it.unit)+'</span>':'';
+  let body=S.buf?fmt(S.buf).replace(/\/(?![^<]*>)$/,'<span class="fr"><i>&nbsp;</i></span>'):'<span class="ph">type your answer</span>';
+  if(/\d\/$/.test(S.buf))body=fmt(S.buf.replace(/(\d+)\/$/,''))+'<span class="fr"><i>'+S.buf.match(/(\d+)\/$/)[1]+'</i><i>?</i></span>';
+  d.innerHTML=(it.unit==='$'?unit:'')+'<span>'+body+'</span>'+(it.unit&&it.unit!=='$'?unit:'');
+}
+function key(k){
+  if(!S||S.done)return;const it=S.it;let b=S.buf;
+  if(k==='OK'){if(b)submit(b);return}
+  if(k==='⌫')b=b.slice(0,-1);
+  else if(k==='−'){b=b.startsWith('−')?b.slice(1):'−'+b}
+  else if(k==='.'){if(it.type==='num'&&!b.includes('.')&&/\d$/.test(b))b+='.'}
+  else if(k==='/'){if(it.type==='frac'&&!b.includes('/')&&/\d$/.test(b))b+='/'}
+  else if(k==='␣'){if(it.type==='frac'&&/^\d+$/.test(b))b+=' '}
+  else if(/^\d$/.test(k)&&b.length<10)b+=k;
+  S.buf=b;drawDisp();
+}
+function judge(it,u){
+  if(it.type==='num'){const x=typedVal(u),y=typedVal(it.ans);return {ok:same(x,y),bad:!x}}
+  if(it.type==='frac'){const x=typedVal(u),y=typedVal(it.ans);if(!x)return {ok:false,bad:true};if(!same(x,y))return {ok:false};
+    if(x.badMixed)return {ok:false,nudge:'In a mixed number the fraction part must be smaller than 1.'};
+    if(x.frac&&gcd(x.a,x.b)>1)return {ok:false,nudge:'Right value! Now write it in its simplest form.'};
+    if(x.frac&&x.b===1)return {ok:false,nudge:'Right value! Write it as a whole number.'};return {ok:true}}
+  if(it.type==='pick')return {ok:u===it.ans};
+  if(it.type==='cmp')return {ok:u===it.ans};
+  if(it.type==='shift')return {ok:u===it.ans};
+  if(it.type==='multi')return {ok:u.length===it.ans.length&&u.every(i=>it.ans.includes(i))};
+  if(it.type==='order')return {ok:u.length===it.ans.length&&u.every((v,i)=>v===it.ans[i])};
+}
+function answerText(it){
+  if(it.type==='shift')return it.answerText;
+  if(it.type==='pick')return it.opts[it.ans];
+  if(it.type==='multi')return it.ans.map(i=>it.opts[i]).join(',  ');
+  if(it.type==='order')return it.ans.map(i=>it.opts[i]).join('  <  ');
+  if(it.type==='cmp')return it.l+'  '+it.ans+'  '+it.r;
+  const a=it.unit==='$'&&/\.\d$/.test(it.ans)?it.ans+'0':it.ans;
+  return (it.unit==='$'?'$':'')+a+(it.unit&&it.unit!=='$'?' '+it.unit:'');
+}
+function userText(it,u){
+  if(it.type==='shift')return null;
+  if(it.type==='pick')return it.opts[u];
+  if(it.type==='multi')return u.map(i=>+it.opts[i]).sort((a,b)=>a-b).join(',  ');
+  if(it.type==='order')return u.map(i=>it.opts[i]).join(',  ');
+  if(it.type==='cmp')return it.l+'  '+u+'  '+it.r;
+  return (it.unit==='$'?'$':'')+u+(it.unit&&it.unit!=='$'?' '+it.unit:'');
+}
+function diagnose(it,u){
+  if(it.type==='num'||it.type==='frac'){const x=typedVal(u);for(const t of it.traps||[]){const y=typedVal(t.v);if(y&&same(x,y)&&!same(x,typedVal(it.ans)))return t.m}return ''}
+  if(it.type==='shift'){if(u===0)return 'The digits have not moved yet.';if(Math.sign(u)!==Math.sign(it.ans))return it.ans>0?'Wrong direction: × makes the number bigger, so digits go LEFT.':'Wrong direction: ÷ makes the number smaller, so digits go RIGHT.';return 'You moved '+Math.abs(u)+' place'+(Math.abs(u)>1?'s':'')+', but you need '+Math.abs(it.ans)+'.'}
+  if(it.type==='multi'){const miss=it.ans.filter(i=>!u.includes(i)),extra=u.filter(i=>!it.ans.includes(i));return extra.map(i=>'✗ '+it.why[i]).concat(miss.map(i=>'Missed '+it.opts[i]+': '+it.why[i])).join('\n')}
+  return '';
+}
+function submit(u){
+  if(!S||S.done)return;const it=S.it,j=judge(it,u);
+  if(j.bad){const d=$('#disp');if(d&&!$('#nudge'))d.insertAdjacentHTML('afterend','<div class="chip" id="nudge" style="display:block;margin-bottom:10px;white-space:normal">Finish the number first.</div>');return}
+  if(j.nudge&&!S.nudged){S.nudged=true;const d=$('#disp');let n=$('#nudge');if(!n){d.insertAdjacentHTML('afterend','<div class="chip" id="nudge" style="display:block;margin-bottom:10px;white-space:normal;background:var(--warnbg)"></div>');n=$('#nudge')}n.textContent=j.nudge;S.buf='';drawDisp();return}
+  S.done=true;const ok=j.ok,wasTwin=S.isTwin;let gain=0,bonus=0;
+  G.answered++;if(ok)G.right++;
+  const L=S.n;
+  if(ok){
+    S.h++;G.row++;if(G.row>G.bestRow)G.bestRow=G.row;
+    gain=wasTwin?4:4+it.tier*2;if(G.row%5===0)bonus=10;
+    if(!wasTwin&&!S.forceTier){G.up[L]=(G.up[L]||0)+1;if(G.up[L]>=2){G.tiers[L]=Math.min(3,tierNow()+1);G.up[L]=0}}
+    S.twin=null;
+  }else{
+    G.row=0;S.miss++;G.up[L]=0;
+    if(!S.forceTier)G.tiers[L]=Math.max(1,tierNow()-1);
+    let t=it.tier;if(wasTwin){const lower=K[it.k].tiers.filter(x=>x<t);if(lower.length)t=lower[lower.length-1]}
+    S.twin={k:it.k,tier:t};
+  }
+  S.xp+=gain+bonus;
+  if(S.h>=S.goal)delete G.runs[L];else G.runs[L]={h:S.h,miss:S.miss};
+  saveG();if(gain+bonus)addQuizXp(gain+bonus);touchDay();
+  feedback(ok,u,gain,bonus,wasTwin);
+}
+const PRAISE=['Great climbing!','Correct!','You got it!','Super!','Spot on!'];
+function feedback(ok,u,gain,bonus,wasTwin){
+  const it=S.it,a=$('#ans'),pct=100*S.h/S.goal;
+  $('#fill').style.width=pct+'%';$('#monkey').style.left=pct+'%';document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i<=S.h));$('#rowchip').textContent='🍌 '+G.row;
+  if(!ok)$('#vine').classList.add('slip');
+  const steps='<ol>'+it.how.map(s=>'<li>'+fmt(s)+'</li>').join('')+'</ol>';
+  const last=S.h>=S.goal;
+  if(ok){
+    a.innerHTML='<div class="fb" id="fb"><h2>✅ '+(wasTwin?'Method mastered!':PRAISE[G.right%PRAISE.length])+' +'+(gain+bonus)+' XP</h2>'+(bonus?'<div class="trap">🍌 '+G.row+' in a row! Bonus +'+bonus+' XP</div>':'')+'<div class="cmpans">Answer: '+fmt(answerText(it))+'</div><details class="ru"><summary style="color:var(--ink)">Show the method</summary>'+steps+'</details><div class="act"><button class="btn" id="next">'+(last?'Grab the mango 🥭':'Climb on ▶')+'</button></div></div>';
+  }else{
+    const why=diagnose(it,u),ut=userText(it,u);
+    a.innerHTML='<div class="fb bad" id="fb"><h2>Not yet. Here is the method.</h2>'+(ut!==null?'<div class="cmpans">You: '+fmt(ut)+'</div>':'')+'<div class="cmpans">Correct answer: <b>'+fmt(answerText(it))+'</b></div>'+(why?'<div class="trap">'+why.split('\n').map(fmt).join('<br>')+'</div>':'')+steps+'<details class="ru"><summary>Правило по-русски</summary><div>'+esc(K[it.k].rule)+'</div></details><div class="act"><button class="btn" id="next">Try a twin question ▶</button></div></div>';
+  }
+  $('#next').onclick=next;
+  if(!SELFTEST&&window.innerWidth<900){const f=$('#fb');const top=f.getBoundingClientRect().top+window.scrollY-8;if(f.getBoundingClientRect().bottom>window.innerHeight)window.scrollTo({top,behavior:'smooth'})}
+}
+function finish(){
+  const n=S.n,m=S.miss,stars=m<=1?3:m<=3?2:1,prev=G.stars[n]||0,first=!prev;
+  const xp=(first?20:5)+10*Math.max(0,stars-prev);
+  G.stars[n]=Math.max(prev,stars);delete G.runs[n];saveG();addQuizXp(xp);touchDay();
+  const total=S.xp+xp;S.finished={stars,xp};
+  app().innerHTML='<div class="card done" id="done"><div style="font-size:64px">🐒🥭</div><h2>You reached the mango!</h2><div class="big">'+'★'.repeat(stars)+'<i>'+'★'.repeat(3-stars)+'</i></div><p>'+(m===0?'No slips at all. Brilliant!':m+' slip'+(m>1?'s':'')+' on the way.')+' <b>+'+total+' XP</b> from this climb.</p><p style="color:var(--soft)">'+(stars<3?'Three stars: finish with 0 or 1 slips.':'Try another tree, or the Summit.')+'</p><div class="row"><button class="btn" id="again">Climb again</button><button class="btn alt" id="mapbtn">Map</button></div></div>';
+  $('#again').onclick=()=>start(n,{fresh:true});$('#mapbtn').onclick=showMap;window.scrollTo(0,0);
+}
+document.addEventListener('keydown',e=>{
+  if(!S||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(S.done){if(e.key==='Enter'&&$('#next')&&document.activeElement!==$('#next')){e.preventDefault();$('#next').click()}return}
+  const t=S.it&&S.it.type;
+  if(t==='num'||t==='frac'){
+    const m={'Backspace':'⌫','-':'−','/':'/',' ':'␣',',':'.','.':'.','Enter':'OK'}[e.key]||(/^\d$/.test(e.key)?e.key:null);
+    if(m){e.preventDefault();const b=document.querySelector('[data-k="'+m+'"]');if(b&&!b.disabled)key(m)}
+  }else if(t==='shift'){if(e.key==='ArrowLeft')move(1);if(e.key==='ArrowRight')move(-1)}
+});
+
+/* =====================================================================
+   SELFTEST
+   Part 1: independent verifier (own parser, BigInt rationals) on thousands
+           of generated items.
+   Part 2: plays every level through the real buttons, with a wrong answer
+           for every question kind at every tier.
+   ===================================================================== */
+const V=(()=>{
+  const g=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b]}return a};
+  const R=(n,d=1n)=>{if(d===0n)throw new Error('division by zero');if(d<0n){n=-n;d=-d}const k=g(n,d)||1n;return {n:n/k,d:d/k}};
+  const add=(a,b)=>R(a.n*b.d+b.n*a.d,a.d*b.d),neg=a=>R(-a.n,a.d),sub=(a,b)=>add(a,neg(b)),mul=(a,b)=>R(a.n*b.n,a.d*b.d),div=(a,b)=>R(a.n*b.d,a.d*b.n);
+  const cmp=(a,b)=>{const x=a.n*b.d-b.n*a.d;return x<0n?-1:x>0n?1:0};
+  function parse(src){
+    const toks=[],re=/\s*(?:(\d+) (\d+)\/(\d+)|(\d+)\/(\d+)|(\d+(?:\.\d+)?)|(of)|([+−×÷()%²³-]))/y;
+    const s=src.trim();let pos=0,m;
+    while(pos<s.length){re.lastIndex=pos;m=re.exec(s);if(!m)throw new Error('bad token in "'+src+'" at '+pos);pos=re.lastIndex;
+      if(m[1])toks.push(add(R(BigInt(m[1])),R(BigInt(m[2]),BigInt(m[3]))));
+      else if(m[4])toks.push(R(BigInt(m[4]),BigInt(m[5])));
+      else if(m[6]){const [w,f='']=m[6].split('.');toks.push(R(BigInt(w+f),10n**BigInt(f.length)))}
+      else toks.push(m[7]||m[8])}
+    let i=0;
+    const expr=()=>{let v=term();while(toks[i]==='+'||toks[i]==='−'||toks[i]==='-'){const o=toks[i++];const w=term();v=o==='+'?add(v,w):sub(v,w)}return v};
+    const term=()=>{let v=fac();while(toks[i]==='×'||toks[i]==='÷'||toks[i]==='of'){const o=toks[i++];const w=fac();v=o==='÷'?div(v,w):mul(v,w)}return v};
+    const fac=()=>{if(toks[i]==='−'||toks[i]==='-'){i++;return neg(fac())}let v;const t=toks[i++];if(t==='('){v=expr();if(toks[i++]!==')')throw new Error('bracket in '+src)}else if(t&&typeof t==='object')v=t;else throw new Error('syntax in "'+src+'"');
+      while(toks[i]==='%'||toks[i]==='²'||toks[i]==='³'){const o=toks[i++];v=o==='%'?div(v,R(100n)):o==='²'?mul(v,v):mul(mul(v,v),v)}return v};
+    const out=expr();if(i!==toks.length)throw new Error('trailing tokens in "'+src+'"');return out;
+  }
+  function relation(s){const parts=s.split(/\s*(=|<|>)\s*/);if(parts.length<3)throw new Error('no relation in {'+s+'}');for(let i=1;i<parts.length;i+=2){const c=cmp(parse(parts[i-1]),parse(parts[i+1]));if(!((parts[i]==='='&&c===0)||(parts[i]==='<'&&c<0)||(parts[i]==='>'&&c>0)))return false}return true}
+  const eq=(a,b)=>cmp(a,b)===0;
+  function check(it){
+    const E_=[],fail=m=>E_.push(m),v=it.v;
+    const texts=[it.q,it.story||'',it.math||''].concat(it.how,it.why||[],(it.traps||[]).map(t=>t.m),it.opts||[],[String(it.ans)]);
+    if(texts.some(t=>/NaN|undefined|Infinity|null|\[object|\d\.\d{6,}/.test(t)))fail('bad text');
+    if(!it.how.length)fail('no method');
+    for(const h of it.how){const eqs=h.match(/\{[^}]*\}/g)||[];for(const e of eqs){try{if(!relation(e.slice(1,-1)))fail('false step '+e)}catch(x){fail(x.message)}}}
+    if(it.opts){if(new Set(it.opts).size!==it.opts.length)fail('duplicate option');if(it.type!=='order'&&it.type!=='multi'&&!(it.ans>=0&&it.ans<it.opts.length))fail('answer index')}
+    for(const t of it.traps||[]){try{if(eq(parse(t.v),parse(String(it.ans))))fail('trap equals answer '+t.v)}catch(x){/* a trap like 3.4 as typed text may not parse */}}
+    try{
+      if(it.type==='num'||it.type==='frac'){
+        const A=parse(it.ans);let want;const pc=v.t==='pct'||v.t==='storypct';const M=pc?div(A,R(100n)):A;
+        if(v.t==='eval')want=parse(it.math);
+        else if(v.t==='pct')want=mul(parse(it.math),R(100n));
+        else if(v.t==='story'||v.t==='storypct'){const shown=it.story+' '+it.q;for(const n of v.nums)if(!shown.includes(n))fail('number '+n+' not shown');want=parse(v.expr);if(v.t==='storypct')want=mul(want,R(100n));
+          const used=(shown.match(/\d+(?:\.\d+)?/g)||[]);for(const u of used)if(!v.expr.includes(u))fail('shown number '+u+' unused')}
+        else if(v.t==='round'){const x=parse(it.math);const k=v.tp>=0?R(10n**BigInt(v.tp)):R(1n,10n**BigInt(-v.tp));const y=add(mul(x,k),R(1n,2n));want=div(R(y.n/y.d),k);if(!it.q.includes(v.tp===2?'2 decimal':v.tp===1?'1 decimal':v.tp===0?'whole':v.tp===-1?'ten':'hundred'))fail('round label')}
+        else if(v.t==='seq'){const t=it.math.split(/,\s+/).slice(0,4).map(parse);const d=sub(t[1],t[0]);if(!eq(sub(t[2],t[1]),d)||!eq(sub(t[3],t[2]),d))fail('not arithmetic');want=add(t[3],d)}
+        else if(v.t==='hcf'||v.t==='lcm'){if(!it.q.includes(String(v.a))||!it.q.includes(String(v.b)))fail('numbers not shown');
+          if(v.t==='hcf'){let h=0;for(let i=1;i<=Math.min(v.a,v.b);i++)if(v.a%i===0&&v.b%i===0)h=i;want=R(BigInt(h))}else{let x=v.a;while(x%v.b)x+=v.a;want=R(BigInt(x))}}
+        else fail('unknown check '+v.t);
+        if(want&&!eq(want,A))fail('answer '+it.ans+' != '+want.n+'/'+want.d);
+        if(!it.how.some(h=>(h.match(/\{[^}]*\}/g)||[]).some(e=>e.slice(1,-1).split(/\s*[=<>]\s*/).some(s=>{try{return eq(parse(s),M)}catch(x){return false}}))||(v.t==='hcf'||v.t==='lcm')&&h.includes(it.ans)))fail('method does not reach the answer');
+        if(it.type==='frac'){const m=/^(?:\d+ )?(\d+)\/(\d+)$/.exec(it.ans);if(m&&(g(BigInt(m[1]),BigInt(m[2]))!==1n||+m[2]===1))fail('answer not simplest');if(!m&&!/^\d+$/.test(it.ans))fail('frac answer format')}
+        if(!typedVal(it.ans))fail('answer not typeable');
+        if(it.ans.length>10)fail('answer too long');
+        if(it.type==='num'&&it.ans.startsWith('−')&&!LV[8].kinds.includes(it.k))fail('negative answer without minus key');
+        if(it.type==='frac'&&it.ans.includes('−'))fail('negative fraction');
+      }else if(it.type==='pick'){
+        let good=[];
+        if(v.t==='missing')good=it.opts.map((o,i)=>relation(it.math.replace('□',o))?i:-1);
+        else if(v.t==='target'){if(!it.q.includes(it.target))fail('target not shown');good=it.opts.map((o,i)=>eq(parse(o),parse(it.target))?i:-1)}
+        else if(v.t==='digit'){const s=it.math,p=s.indexOf(String(v.d)),dot=s.indexOf('.');if(p<0||s.indexOf(String(v.d),p+1)>=0)fail('digit not unique');const e=p<dot?dot-p-1:dot-p;const want=e>=0?R(BigInt(v.d)*10n**BigInt(e)):R(BigInt(v.d),10n**BigInt(-e));good=it.opts.map((o,i)=>eq(parse(o),want)?i:-1);if(!it.q.includes(' '+v.d+' '))fail('digit not asked')}
+        else if(v.t==='estimate'){const x=parse(it.math);const err=it.opts.map(o=>{const d=sub(div(parse(o),x),R(1n));return Math.abs(Number(d.n)/Number(d.d))});good=err.map((e,i)=>e<0.2?i:-1);if(err.some((e,i)=>i!==it.ans&&e<0.45))fail('estimate options too close '+it.math+' '+it.opts)}
+        else fail('unknown pick check');
+        good=good.filter(i=>i>=0);if(good.length!==1||good[0]!==it.ans)fail('exactly-one failed: '+good+' vs '+it.ans+' '+it.math+' '+it.opts);
+        if(v.t==='digit'||v.t==='estimate'){const vals=it.opts.map(o=>{const r=parse(o);return r.n+'/'+r.d});if(new Set(vals).size!==vals.length)fail('equal option values')}
+      }else if(it.type==='cmp'){
+        const l=parse(it.l),r=parse(it.r),c=cmp(l,r),want=c<0?'<':c>0?'>':'=';if(want!==it.ans)fail('cmp');if(it.math!==it.l+' □ '+it.r)fail('cmp display');
+        if(['<','=','>'].filter(s=>relation(it.l+' '+s+' '+it.r)).length!==1)fail('cmp uniqueness');
+      }else if(it.type==='order'){
+        const vals=it.opts.map(parse);const idx=vals.map((_,i)=>i).sort((a,b)=>cmp(vals[a],vals[b]));if(idx.join()!==it.ans.join())fail('order');for(let i=1;i<idx.length;i++)if(eq(vals[idx[i]],vals[idx[i-1]]))fail('equal values in order');
+      }else if(it.type==='multi'){
+        const divides=(d,n)=>{let s=0;while(s<n)s+=d;return s===n};
+        const sq=n=>{for(let i=1;i*i<=n;i++)if(i*i===n)return true;return false};
+        const pred={factor:x=>divides(x,v.a),multiple:x=>divides(v.a,x),common:x=>divides(x,v.a)&&divides(x,v.b),commonmult:x=>divides(v.a,x)&&divides(v.b,x),
+          prime:x=>{let c=0;for(let i=1;i<=x;i++)if(x%i===0)c++;return c===2},square:sq,cube:x=>{for(let i=1;i*i*i<=x;i++)if(i*i*i===x)return true;return false}}[v.pred];
+        const want=it.opts.map((o,i)=>pred(+o)?i:-1).filter(i=>i>=0);
+        if(want.join()!==it.ans.join())fail('multi set '+it.q+' '+it.opts);if(!want.length||want.length===it.opts.length)fail('multi trivial');if(it.opts.length!==8)fail('multi size '+it.opts.length);
+        if(v.pred!=='prime'&&v.pred!=='square'&&v.pred!=='cube'){if(!it.q.includes(String(v.a)))fail('multi number not shown')}
+        if(it.why.length!==it.opts.length)fail('why');
+      }else if(it.type==='shift'){
+        const o=parse(v.orig),k=it.ans>=0?R(10n**BigInt(it.ans)):R(1n,10n**BigInt(-it.ans));
+        if(!eq(parse(it.math),mul(o,k)))fail('shift');if(!eq(parse(it.answerText),parse(it.math)))fail('shift answer text');if(!eq(R(BigInt(it.sig),10n**BigInt(it.p)),o))fail('shift digits');
+        const s=String(it.sig),hi=s.length-1-it.p,lo=-it.p;if(hi>3||lo<-3||hi+it.ans>3||lo+it.ans<-3)fail('off the chart '+it.math);
+      }
+    }catch(x){fail('exception '+x.message)}
+    return E_;
+  }
+  return {parse,check,relation};
+})();
+
+function runSelftest(){
+  const errs=[],seen={};let items=0,wrongPaths=0,played=0;
+  const bad=m=>{if(errs.length<40)errs.push(m)};
+  try{
+    /* verifier sanity: it must reject wrong things */
+    if(V.relation('2 + 3 × 4 = 20')||!V.relation('2 + 3 × 4 = 14')||!V.relation('10% of 80 = 8')||!V.relation('1 1/2 + 1/4 = 7/4')||!V.relation('−3 − 8 = −11'))bad('verifier sanity');
+    const broken=make('as-1dp',1);broken.ans='999';if(!V.check(broken).length)bad('verifier accepted a wrong answer');
+    for(const id in K){for(const t of K[id].tiers){for(let i=0;i<70;i++){const it=make(id,t);items++;seen[id+t]=seen[id+t]||new Set();seen[id+t].add(sig(it));const e=V.check(it);if(e.length)bad(id+' t'+t+': '+e[0]+' ['+(it.math||it.story||it.q)+']')}
+      if(seen[id+t].size<(id==='fa-cubes'?10:5))bad(id+' t'+t+' too little variation: '+seen[id+t].size)}}
+    for(let n=1;n<=LV.length;n++){for(let t=1;t<=3;t++)if(!kindsFor(n,t).length)bad('level '+n+' has no kinds at tier '+t)}
+    /* UI helpers */
+    const click=s=>{const b=document.querySelector(s);if(!b||b.disabled)throw new Error('cannot click '+s+' for '+S.it.k);b.click()};
+    const typeAns=s=>{while(S.buf)click('[data-k="⌫"]');const neg=s.startsWith('−');for(const c of neg?s.slice(1):s)click('[data-k="'+(c===' '?'␣':c)+'"]');if(neg)click('[data-k="−"]');if(S.buf!==s)throw new Error('typed '+S.buf+' instead of '+s);click('[data-k="OK"]')};
+    const act=(right)=>{const it=S.it;
+      if(it.type==='num'){let w=it.ans;if(!right){w=String(Math.floor(Math.abs(typedVal(it.ans).n/typedVal(it.ans).d))+7);if(it.traps&&it.traps.length){const t=it.traps.find(t=>/^−?\d+(\.\d+)?$/.test(t.v)&&t.v.length<=10&&!(t.v.startsWith('−')&&!LV[8].kinds.includes(it.k)));if(t)w=t.v}}typeAns(w)}
+      else if(it.type==='frac')typeAns(right?it.ans:'97/89');
+      else if(it.type==='pick')click('[data-o="'+(right?it.ans:(it.ans+1)%it.opts.length)+'"]');
+      else if(it.type==='cmp')document.querySelector('[data-c="'+(right?it.ans:['<','=','>'].find(s=>s!==it.ans))+'"]').click();
+      else if(it.type==='multi'){const set=right?it.ans:[it.opts.map((_,i)=>i).find(i=>!it.ans.includes(i))];set.forEach(i=>click('[data-o="'+i+'"]'));click('#check')}
+      else if(it.type==='order'){const seq=right?it.ans:it.ans.slice().reverse();seq.forEach(i=>click('[data-o="'+i+'"]'));click('#check')}
+      else if(it.type==='shift'){const d=right?it.ans:-it.ans;for(let i=0;i<Math.abs(d);i++)click(d>0?'#left':'#right');
+        if(right&&!same(chartValue(),typedVal(it.answerText)))throw new Error('chart shows wrong value for '+it.math);
+        if(!right&&S.shift===it.ans)throw new Error('wrong shift reached answer');click('#check')}
+    };
+    loadG();
+    /* every kind at every tier: wrong -> method shown, no step -> twin of same kind -> correct -> step */
+    for(let n=1;n<=10;n++)for(const k of LV[n-1].kinds)for(const t of K[k].tiers){
+      for(let rep=0;rep<3;rep++){
+        G.runs={};start(n,{fresh:true,tier:t,kind:k});
+        act(false);wrongPaths++;
+        const fb=$('#fb');if(!fb||!fb.classList.contains('bad'))throw new Error('no bad feedback '+k+' '+(S.it.math||S.it.q)+' ans '+S.it.ans);
+        if(S.h!==0||!S.twin||S.twin.k!==k)bad('wrong path state '+k);
+        if(fb.querySelectorAll('ol li').length!==S.it.how.length||!fb.textContent.includes('Correct answer'))bad('method missing '+k);
+        if(S.it.type==='multi'&&!fb.querySelector('.trap'))bad('multi reasons missing '+k);
+        if(!jget(GKEY).answered)bad('not saved');
+        const before=fb.innerHTML;submit(S.it.ans);if($('#fb').innerHTML!==before||S.h!==0)bad('double submit '+k);
+        click('#next');if(!S.isTwin||S.it.k!==k)bad('twin missing '+k);
+        act(true);if(S.h!==1||!$('#fb')||$('#fb').classList.contains('bad'))throw new Error('twin correct failed '+k+' '+(S.it.math||S.it.q)+' ans '+S.it.ans);
+        if(S.twin)bad('twin not cleared');played+=2;
+      }
+    }
+    /* a second wrong twin steps the difficulty down */
+    G.runs={};start(2,{fresh:true,tier:0});G.tiers[2]=3;next();const t0=S.it.tier,k0=S.it.k;act(false);click('#next');act(false);if(!S.twin||S.twin.k!==k0||S.twin.tier>t0)bad('twin step down');
+    /* simplest-form nudge */
+    G.runs={};start(4,{fresh:true,tier:1,kind:'fr-simplify'});typeAns(S.it.math);if(S.done||!$('#nudge'))bad('simplify nudge');typeAns(S.it.ans);if(S.h!==1)bad('after nudge');
+    G.runs={};start(4,{fresh:true,tier:1,kind:'fr-simplify'});typeAns(S.it.math);typeAns(S.it.math);if(!S.done||S.h!==0)bad('second unsimplified must count as mistake');
+    /* every level, played naturally from the first step to the mango */
+    for(let n=1;n<=LV.length;n++){
+      G.runs={};G.tiers={};G.up={};G.stars={};const xp0=jget(QKEY).xp||0;
+      start(n,{fresh:true});let guard=0,top=1;
+      while(!S.finished&&guard++<60){top=Math.max(top,S.it.tier);act(true);played++;if(!$('#fb')||$('#fb').classList.contains('bad'))throw new Error('correct rejected L'+n+' '+S.it.k+' '+(S.it.math||S.it.q)+' ans '+S.it.ans);const e=V.check(S.it);if(e.length)bad('live '+e[0]);click('#next')}
+      if(!S.finished||S.finished.stars!==3||G.stars[n]!==3||!$('#done'))bad('level '+n+' not finished');
+      if(top<3)bad('level '+n+' never got hard');
+      if(!((jget(QKEY).xp||0)>xp0))bad('no xp L'+n);
+      /* with mistakes */
+      start(n,{fresh:true});guard=0;let w=0;
+      while(!S.finished&&guard++<60){const wrong=w<4&&!S.isTwin;if(wrong)w++;act(!wrong);click('#next')}
+      if(!S.finished||S.finished.stars!==1||G.stars[n]!==3)bad('stars with mistakes L'+n);
+    }
+    /* resume */
+    G.runs={};start(1,{fresh:true});act(true);showMap();if(!G.runs[1]||G.runs[1].h!==1||!document.querySelector('.res'))bad('resume save');start(1);if(S.h!==1)bad('resume load');
+    /* storage rules */
+    for(const k in MEM)delete MEM[k];
+    MEM[QKEY]=JSON.stringify({xp:5,best:{boss:80},mist:{a:1}});MEM[PKEY]=JSON.stringify({day:yesterday(),streak:3});loadG();
+    start(1,{fresh:true,tier:1,kind:'pv-type'});act(true);
+    const q=JSON.parse(MEM[QKEY]),g=JSON.parse(MEM[GKEY]),p=JSON.parse(MEM[PKEY]);
+    if(q.xp!==5+S.xp||q.best.boss!==80||!q.mist||Object.keys(q).length!==3)bad('quiz record merge');
+    if('xp' in g)bad('xp in game record');if(p.streak!==4||p.day!==dayStr(new Date()))bad('streak');
+    click('#next');act(true);if(JSON.parse(MEM[PKEY]).streak!==4)bad('streak twice a day');
+    delete MEM[QKEY];click('#next');act(true);if(!(JSON.parse(MEM[QKEY]).xp>0))bad('create quiz record');
+    MEM[QKEY]='not json';click('#next');act(true);if(MEM[QKEY]!=='not json')bad('corrupt record overwritten');
+  }catch(e){bad('exception: '+e.message+' '+String(e.stack).split('\n')[1])}
+  if(items<2000)bad('too few items '+items);
+  const head=errs.length?'GAME_SELFTEST_FAIL '+errs.join(' ; '):'GAME_SELFTEST_OK levels='+LV.length+' kinds='+Object.keys(K).length+' verified='+items+' wrongPaths='+wrongPaths+' played='+played;
+  document.body.innerHTML='<pre id="selftest" style="color:#fff;white-space:pre-wrap">'+esc(head)+'</pre>';
+}
+
+/* ---------- boot ---------- */
+loadG();
+if(SELFTEST)runSelftest();
+else{
+  const n=+QS.get('level');
+  if(n>=1&&n<=LV.length){
+    start(n,{fresh:true,tier:+QS.get('tier')||0,kind:K[QS.get('kind')]?QS.get('kind'):null});
+    const show=QS.get('show');
+    if(show==='wrong'){const it=S.it;submit(it.type==='num'?(it.traps&&it.traps[0]?it.traps[0].v:'1'):it.type==='frac'?'97/89':it.type==='pick'?(it.ans+1)%it.opts.length:it.type==='cmp'?['<','=','>'].find(s=>s!==it.ans):it.type==='multi'?[0,1,2]:it.type==='order'?it.ans.slice().reverse():-it.ans)}
+    if(show==='right')submit(S.it.type==='multi'||S.it.type==='order'?S.it.ans.slice():S.it.ans);
+    if(show==='done'){S.h=S.goal;finish()}
+  }else showMap();
+}
+</script>
+</body>
+</html>

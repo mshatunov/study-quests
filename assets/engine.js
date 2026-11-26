@@ -1,6 +1,8 @@
 /* Study Quests - shared quiz engine.
    A test page loads this file, then its own data.js which calls QuizEngine.run(config).
    Optional config: games:[{href,ico,name,desc}] adds cards for game pages next to the game modes.
+   groups:[{id,name,when,paper}] + topic.group splits the home screen into sections, each with its own "Practice paper" round
+   (paper = number of questions, default 15). topic.keepOrder keeps the question order. psg({title,text},question) shows a reading text above a question.
    Question builders (mc, tf, multi, order, match, sort, fill, typed, write, label, odd, spot, scramble, slider, hotspot) are globals.
    Progress lives in localStorage: 'sq:<test id>' (XP, best scores, mistake bank, records, badges, unfinished round),
    'sq:profile' (daily streak), 'sq:ui' (UI preferences). XP and mistakes are written after EVERY answer,
@@ -35,6 +37,7 @@ en:{
  mistSaved:'🎯 Saved to "My mistakes" - train it before the test.', mistOne:'🎯 One more right answer clears this mistake.', mistClear:'🎯 Mistake cleared!',
  mistAdded:n=>'🎯 '+n+' new mistake'+(n===1?'':'s')+' saved. Train them before the test!',
  mistRes:(f,l)=>'Cleared: '+f+'. Still to fix: '+l+'.', mistEmpty:'No mistakes left to fix! 🎉',
+ paper:'Practice paper', paperDesc:n=>n+' mixed questions from this subject - like the exam.', paperStart:'Start paper', readText:'Read the text',
  modes:'Game modes', light:'Lightning round', lightDesc:'60 seconds. Answer as many as you can!', surv:'Survival', survDesc:'3 hearts. How far can you go?', record:'Record', go:'Go!',
  bossWin:'Boss defeated! 🏆', bossLose:'The boss survived - train and come back!',
  lightRes:n=>n+' right in 60 seconds', survRes:n=>n+' right before the hearts ran out', newRec:'New record! 🎉', timeUp:'Time is up!',
@@ -70,6 +73,7 @@ ru:{
  mistSaved:'🎯 Сохранено в «Мои ошибки» - потренируй перед контрольной.', mistOne:'🎯 Еще один верный ответ - и ошибка исправлена.', mistClear:'🎯 Ошибка исправлена!',
  mistAdded:n=>'🎯 Новых ошибок сохранено: '+n+'. Потренируй их перед контрольной!',
  mistRes:(f,l)=>'Исправлено: '+f+'. Осталось: '+l+'.', mistEmpty:'Ошибок для исправления не осталось! 🎉',
+ paper:'Пробный вариант', paperDesc:n=>'Вопросов по предмету вперемешку: '+n+' - как на экзамене.', paperStart:'Начать', readText:'Прочитай текст',
  modes:'Режимы игры', light:'Молния', lightDesc:'60 секунд. Ответь на как можно больше!', surv:'Выживание', survDesc:'3 жизни. Как далеко ты пройдешь?', record:'Рекорд', go:'Вперед!',
  bossWin:'Босс побежден! 🏆', bossLose:'Босс выстоял - потренируйся и возвращайся!',
  lightRes:n=>'Верных ответов за 60 секунд: '+n, survRes:n=>'Верных ответов, пока были жизни: '+n, newRec:'Новый рекорд! 🎉', timeUp:'Время вышло!',
@@ -83,8 +87,9 @@ ru:{
 const GLOSS_TITLE='Перевод терминов';
 const BADGE_ICO={first:'🐣',perfect:'💯',combo10:'🔥',boss:'👑',all90:'🏆',light:'⚡',surv:'❤️',fixer:'🎯'};
 const QUICK=['mc','tf','odd','spot','hotspot'];          /* types fast enough for the lightning round */
-const RESUMABLE=['topic','boss','mist','redo'];          /* rounds that can be continued after closing the page */
-const LIGHT_MS=60000, MIST_MAX=25, MIST_CLEAR=2;
+const RESUMABLE=['topic','boss','paper','mist','redo'];          /* rounds that can be continued after closing the page */
+const LIGHT_MS=60000, MIST_MAX=25, MIST_CLEAR=2, PAPER=15;
+const isQuick=q=>QUICK.includes(q.t)&&!q.passage;       /* a question with a reading text is never "quick" */
 
 /* ---------- builders (global) ---------- */
 window.mc   =(q,a,w,e,s)=>({t:'mc',q,a,w,e,s});
@@ -110,6 +115,9 @@ window.scramble=(q,word,e,s)=>({t:'scramble',q,word,e,s});
 window.slider=(q,scale,answer,tol,e,s)=>({t:'slider',q,scale,ans:answer,tol:tol||0,e,s});
 /* hotspot: tap the right dot on a picture; svg/points as in label, target = name of the point to find */
 window.hotspot=(q,svg,points,target,e,s)=>({t:'hotspot',q,svg,points,target,e,s});
+
+/* reading text above a question: passage={title,text}; paragraphs are separated by a blank line. Same object = same text */
+window.psg=(passage,q)=>Object.assign(q,{passage});
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -140,6 +148,7 @@ function visibleText(q){
   if(q.t==='fill')p.push(...q.bank);
   if(q.t==='label')p.push(...q.points.map(x=>x.n));
   if(q.t==='spot')p.push(String(q.text).replace(SPOT,'$1'));
+  if(q.passage)p.push(q.passage.title,q.passage.text);
   if(q.unit)p.push(q.unit);if(q.scale&&q.scale.unit)p.push(q.scale.unit);
   return p.filter(x=>x!=null).join(' \n ').replace(/<[^>]+>/g,' ');
 }
@@ -195,7 +204,20 @@ function mistKeys(){return Object.keys(saved.mist).filter(k=>KEYMAP[k])}
 function mistByTopic(){const o={};mistKeys().forEach(k=>{const t=KEYMAP[k][1];o[t]=(o[t]||0)+1});return o}
 function allQs(){const a=[];Q.topics.forEach(t=>t.Q.forEach(q=>a.push([q,t.id])));return a}
 function topicName(id){const t=Q.topics.find(x=>x.id===id);return t?t.ico+' '+t.name:''}
-function modeName(m,id){const b=id==='boss'?'👑 '+T.boss:id==='mist'?'🎯 '+T.mistTitle:id==='light'?'⚡ '+T.light:id==='surv'?'❤️ '+T.surv:topicName(id);return m==='redo'?b+' - '+T.mistTitle.toLowerCase():b}
+/* subject groups: optional cfg.groups + topic.group */
+function groups(){return (Q.groups||[]).filter(g=>Q.topics.some(t=>t.group===g.id))}
+function paperGroup(id){return groups().find(g=>'paper-'+g.id===id)}
+function groupQs(g){return allQs().filter(c=>(Q.topics.find(t=>t.id===c[1])||{}).group===g.id)}
+function paperSize(g){return Math.min(g.paper||PAPER,groupQs(g).length)}
+/* an even share of every topic of the subject (core topics first), questions on the same text stay together */
+function paperPick(g){
+  const size=paperSize(g),ts=Q.topics.filter(t=>t.group===g.id),core=ts.filter(t=>!t.bonus),per=Math.max(1,Math.floor(size*0.7/Math.max(1,core.length)));
+  const chosen=[];shuf(core).forEach(t=>pick(t.Q.map(q=>[q,t.id]),per).forEach(c=>chosen.push(c)));
+  pick(groupQs(g).filter(a=>!chosen.some(c=>c[0]===a[0])),Math.max(0,size-chosen.length)).forEach(c=>chosen.push(c));
+  const out=[];shuf(chosen.slice(0,size)).forEach(c=>{if(out.includes(c))return;out.push(c);if(c[0].passage)chosen.slice(0,size).forEach(d=>{if(d!==c&&d[0].passage===c[0].passage&&!out.includes(d))out.push(d)})});
+  return out;
+}
+function modeName(m,id){const pg=paperGroup(id);const b=pg?'📝 '+T.paper+': '+pg.name:id==='boss'?'👑 '+T.boss:id==='mist'?'🎯 '+T.mistTitle:id==='light'?'⚡ '+T.light:id==='surv'?'❤️ '+T.surv:topicName(id);return m==='redo'?b+' - '+T.mistTitle.toLowerCase():b}
 function toast(msg){if(SELFTEST)return;const d=document.createElement('div');d.className='toast';d.innerHTML=msg;d.style.top=(18+56*document.querySelectorAll('.toast:not(.out)').length)+'px';document.body.appendChild(d);setTimeout(()=>d.classList.add('out'),2600);setTimeout(()=>d.remove(),3200)}
 function award(id){if(saved.badges[id])return;saved.badges[id]=1;save();toast(`🏅 ${T.newBadge} ${BADGE_ICO[id]} ${esc(T.badgeNames[id])}`);if(!SELFTEST)confetti(90)}
 function stopTimer(){SCREEN++;ONHOME=false;if(TMR){clearInterval(TMR);TMR=null}}
@@ -208,7 +230,22 @@ function home(){
   const lvp=Math.round((tx-lv.from)/(lv.to-lv.from)*100),c=saved.cur;
   const cont=c&&c.keys&&c.keys.some(k=>KEYMAP[k])?`<div class="panel cont"><div><h3>▶ ${T.cont}</h3><div>${fmt(modeName(c.mode,c.id))} - ${c.i<c.keys.length?T.contQ(c.i+1,c.keys.length):T.contRes}</div></div>
     <div class="row" style="margin:0"><button class="btn" data-cont="1">${T.cont}</button><button class="btn gray" data-drop="1">${T.drop}</button></div></div>`:'';
-  const quick=allQs().filter(x=>QUICK.includes(x[0].t)).length;
+  const quick=allQs().filter(x=>isQuick(x[0])).length,gs=groups();
+  const card=t=>{
+    const b=saved.best[t.id]||0;
+    return `<div class="tcard">
+      <div class="ico">${t.ico}</div><h3>${fmt(t.name)}</h3><p>${fmt(t.blurb||'')}</p>
+      <div class="bar"><i style="width:${b}%"></i></div>
+      <div class="row"><span class="chip">${b?T.best+' '+b+'%':T.fresh} ${b>=90?'🏆':''}</span><span class="chip">${t.Q.length} ${T.questions}</span>${mt[t.id]?`<span class="chip">🎯 ${mt[t.id]}</span>`:''}</div>
+      <div class="row"><button class="btn" data-play="${t.id}">${T.play}</button>${t.sheet?`<button class="btn ghost" data-sheet="${t.id}">${T.sheet}</button>`:''}</div>
+    </div>`};
+  const paperCard=g=>{const id='paper-'+g.id,b=saved.best[id]||0;
+    return `<div class="tcard paper"><div class="ico">📝</div><h3>${T.paper}</h3><p>${T.paperDesc(paperSize(g))}</p><div class="bar"><i style="width:${b}%"></i></div>
+      <div class="row"><span class="chip">${b?T.best+' '+b+'%':T.fresh} ${b>=90?'🏆':''}</span></div><div class="row"><button class="btn" data-mode="${id}">${T.paperStart}</button></div></div>`};
+  const loose=topics.filter(t=>!gs.some(g=>g.id===t.group));
+  const grids=gs.map(g=>`<h2 class="h2 grp" id="grp-${esc(g.id)}">${fmt(g.name)}${g.when?` <span class="chip">${fmt(g.when)}</span>`:''}</h2>
+    <div class="grid">${topics.filter(t=>t.group===g.id).map(card).join('')}${paperCard(g)}</div>`).join('')+(loose.length?`<div class="grid"${gs.length?' style="margin-top:14px"':''}>${loose.map(card).join('')}</div>`:'');
+  const nav=gs.length>1?`<div class="chips grpnav">${gs.map(g=>`<button class="chip" data-jump="grp-${esc(g.id)}">${fmt(g.name)}${g.when?' · '+fmt(g.when):''}</button>`).join('')}</div>`:'';
   app.innerHTML=`
   <div class="top"><div class="logo">${fmt(Q.logo||Q.title)}</div>
     <div class="chips"><a class="chip" href="../../" style="text-decoration:none">← ${T.allTests}</a>${st?`<span class="chip">🔥 ${st}</span>`:''}<span class="chip">⭐ ${saved.xp} XP</span></div></div>
@@ -217,14 +254,8 @@ function home(){
   <div class="player"><span class="lv">${T.level} ${lv.L}</span><b>${esc(lv.name)}</b><div class="bar"><i style="width:${lvp}%"></i></div><span class="soft">⭐ ${tx} XP · ${T.toNext(lv.to-tx)}</span>${st?`<span class="soft">🔥 ${T.streak(st)}</span>`:''}</div>
   ${cont}
   ${mk?`<div class="panel mist"><div><h3>🎯 ${T.mistTitle}: ${mk}</h3><div>${T.mistDesc(mk)}</div><div class="chips" style="margin-top:8px">${Object.entries(mt).map(([k,n])=>`<span class="chip">${(topics.find(x=>x.id===k)||{}).ico||''} ${n}</span>`).join('')}</div></div><button class="btn" data-mist="1">${T.mistGo}</button></div>`:''}
-  <div class="grid">${topics.map(t=>{
-    const b=saved.best[t.id]||0;
-    return `<div class="tcard">
-      <div class="ico">${t.ico}</div><h3>${fmt(t.name)}</h3><p>${fmt(t.blurb||'')}</p>
-      <div class="bar"><i style="width:${b}%"></i></div>
-      <div class="row"><span class="chip">${b?T.best+' '+b+'%':T.fresh} ${b>=90?'🏆':''}</span><span class="chip">${t.Q.length} ${T.questions}</span>${mt[t.id]?`<span class="chip">🎯 ${mt[t.id]}</span>`:''}</div>
-      <div class="row"><button class="btn" data-play="${t.id}">${T.play}</button>${t.sheet?`<button class="btn ghost" data-sheet="${t.id}">${T.sheet}</button>`:''}</div>
-    </div>`}).join('')}</div>
+  ${nav}
+  ${grids}
   <div class="boss"><div><h3>👑 ${T.boss}</h3><div>${T.bossDesc(bossSize())}</div>${saved.best.boss?`<div style="margin-top:4px;font-weight:800">${T.best}: ${saved.best.boss}%</div>`:''}</div>
     <button class="btn" data-boss="1">${T.bossStart}</button></div>
   <h2 class="h2">🎮 ${T.modes}</h2>
@@ -241,6 +272,7 @@ function home(){
   app.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>start(b.dataset.play));
   app.querySelectorAll('[data-sheet]').forEach(b=>b.onclick=()=>sheet(b.dataset.sheet));
   app.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>start(b.dataset.mode));
+  app.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.jump);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})});
   app.querySelector('[data-boss]').onclick=()=>start('boss');
   const on=(sel,f)=>{const el=app.querySelector(sel);if(el)el.onclick=f};
   on('[data-mist]',()=>start('mist'));on('[data-cont]',resume);on('[data-drop]',()=>{saved.cur=null;save();home()});
@@ -308,7 +340,8 @@ function prep(q,topic){
 function newS(mode,id,qs){return {mode,id,qs,i:0,score:0,xp:0,combo:0,ok:0,wrong:[],byTopic:{},answered:false,hearts:3,fixed:0,added:0}}
 function start(id,customQs){
   stopTimer();
-  const mode=customQs?'redo':['boss','mist','light','surv'].includes(id)?id:'topic';
+  const pg=customQs?null:paperGroup(id);
+  const mode=customQs?'redo':pg?'paper':['boss','mist','light','surv'].includes(id)?id:'topic';
   let qs=[];
   if(customQs){qs=customQs.map(q=>prep(q,q.topic))}
   else if(mode==='boss'){
@@ -320,10 +353,11 @@ function start(id,customQs){
     pick(rest,size-chosen.length).forEach(c=>chosen.push(c));
     qs=shuf(chosen).slice(0,size).map(c=>prep(c[0],c[1]));
   }
+  else if(mode==='paper'){qs=paperPick(pg).map(c=>prep(c[0],c[1]))}
   else if(mode==='mist'){qs=shuf(mistKeys()).sort((a,b)=>(saved.mist[b].w||0)-(saved.mist[a].w||0)).slice(0,MIST_MAX).map(k=>prep(KEYMAP[k][0],KEYMAP[k][1]));qs=shuf(qs)}
-  else if(mode==='light'){qs=shuf(allQs().filter(c=>QUICK.includes(c[0].t))).map(c=>prep(c[0],c[1]))}
+  else if(mode==='light'){qs=shuf(allQs().filter(c=>isQuick(c[0]))).map(c=>prep(c[0],c[1]))}
   else if(mode==='surv'){qs=shuf(allQs()).map(c=>prep(c[0],c[1]))}
-  else{const t=Q.topics.find(x=>x.id===id);qs=shuf(t.Q).map(q=>prep(q,id))}
+  else{const t=Q.topics.find(x=>x.id===id);if(!t){home();return}qs=(t.keepOrder?t.Q:shuf(t.Q)).map(q=>prep(q,id))}
   if(!qs.length){home();return}
   S=newS(mode,id,qs);
   if(mode==='light'){S.end=Date.now()+LIGHT_MS;if(!SELFTEST)TMR=setInterval(tick,200)}
@@ -357,7 +391,7 @@ function show(){
   app.innerHTML=`<div class="qtop"><button class="xbtn" id="quit" title="${T.quit}">✕</button>${bar}
     <span class="chip">⭐ ${S.xp}</span>${S.combo>=2?`<span class="chip combo">🔥 ${S.combo}</span>`:''}</div>
   ${S.mode==='boss'?`<div class="bossline"><span class="bossico" id="bossico">${Q.boss||'🐉'}</span><div class="bar hp"><i id="hp" style="width:${hp}%"></i></div><span class="chip" id="hpn">${Math.round(hp)}%</span></div>`:''}
-  <div class="qcard" id="qcard"><div class="qtag">${fmt(tname)}</div><p class="qtext">${q.t==='fill'?T.fillHead:fmt(q.q)}</p>${q.img?`<img class="qimg" src="${esc(q.img)}" alt="">`:''}<div id="body"></div>
+  <div class="qcard" id="qcard"><div class="qtag">${fmt(tname)}</div>${q.passage?`<div class="psg" tabindex="0"><div class="psgh">📖 ${q.passage.title?fmt(q.passage.title):T.readText}</div>${String(q.passage.text).split(/\n\s*\n/).map(x=>`<p>${fmt(x.trim()).replace(/\n/g,'<br>')}</p>`).join('')}</div>`:''}<p class="qtext">${q.t==='fill'?T.fillHead:fmt(q.q)}</p>${q.img?`<img class="qimg" src="${esc(q.img)}" alt="">`:''}<div id="body"></div>
   <div class="fb" id="fb"></div><div class="actions"><button class="btn" id="check" disabled>${T.check}</button><button class="btn" id="next" style="display:none">${T.next} →</button></div>
   ${gl.length?`<details class="gloss" id="gloss"${UI.gl?' open':''}><summary>🇷🇺 ${GLOSS_TITLE} (${gl.length})</summary><div class="glist">${gl.map(x=>`<span class="gi"><b>${esc(x.show)}</b> - ${esc(x.ru)}</span>`).join('')}</div></details>`:''}</div>`;
   $('#quit').onclick=function(){if(this.dataset.sure){home()}else{this.dataset.sure=1;this.textContent=T.quitSure;this.style.fontSize='15px';this.style.fontWeight='800'}};
@@ -405,13 +439,13 @@ function results(){
   stopTimer();
   const mode=S.mode,done=mode==='light'||mode==='surv'?S.i+(S.answered?1:0):S.qs.length;
   const pct=Math.min(100,Math.round(S.score/Math.max(1,done)*100));
-  if(mode==='topic'||mode==='boss')saved.best[S.id]=Math.max(saved.best[S.id]||0,pct);
+  if(mode==='topic'||mode==='boss'||mode==='paper')saved.best[S.id]=Math.max(saved.best[S.id]||0,pct);
   if(RESUMABLE.includes(mode))saved.cur=null;
   let rec=0,isNew=false;
   if(mode==='light'||mode==='surv'){rec=saved.rec[mode]||0;isNew=S.ok>rec;if(isNew)saved.rec[mode]=S.ok}
   save();
   if(done>0)award('first');
-  if(pct===100&&done>=5&&(mode==='topic'||mode==='boss'))award('perfect');
+  if(pct===100&&done>=5&&(mode==='topic'||mode==='boss'||mode==='paper'))award('perfect');
   if(mode==='boss'&&pct>=90)award('boss');
   if(Q.topics.filter(t=>!t.bonus).every(t=>(saved.best[t.id]||0)>=90))award('all90');
   if(mode==='light'&&S.ok>=12)award('light');
@@ -715,9 +749,11 @@ function validate(){
   const chk=(c,m)=>{if(!c)bad.push(m)};
   Q.topics.forEach(t=>{
     chk(!ids.has(t.id),'duplicate topic id '+t.id);ids.add(t.id);
-    chk(!['boss','mist','light','surv'].includes(t.id),'topic id '+t.id+' is reserved');
+    chk(!['boss','mist','light','surv'].includes(t.id)&&!/^paper-/.test(t.id),'topic id '+t.id+' is reserved');
+    if(Q.groups)chk(Q.groups.some(g=>g.id===t.group),'topic '+t.id+' has no known group');
     chk(t.ico&&t.name&&Array.isArray(t.Q)&&t.Q.length>0,'topic '+t.id+' incomplete');
     (t.Q||[]).forEach((q,i)=>{const w=t.id+'#'+(i+1)+' ('+(q&&q.t)+')';try{
+      if(q.passage)chk(q.passage.text&&String(q.passage.text).trim().length>20,w+' passage without text');
       chk(TYPES.includes(q.t),w+' unknown type');chk(q.q,w+' no text');chk(q.e,w+' no explanation');
       const k=qkey(q,t.id);chk(!keys.has(k),w+' duplicate question');keys.add(k);
       if(q.t==='mc'){chk(q.a&&q.w&&q.w.length>=2,w+' needs answer + >=2 wrong');chk(!q.w.includes(q.a),w+' answer repeated in wrong');chk(new Set([q.a].concat(q.w)).size===q.w.length+1,w+' duplicate options')}
@@ -765,7 +801,7 @@ function selftest(){
     return n;
   };
   let total=0;const nq=Q.topics.reduce((n,t)=>n+t.Q.length,0);
-  for(const id of Q.topics.map(t=>t.id).concat(['boss'])){
+  for(const id of Q.topics.map(t=>t.id).concat(['boss'],groups().map(g=>'paper-'+g.id))){
     try{total+=playAll(id);const pct=(document.querySelector('.scorebig')||{}).textContent;if(pct!=='100%')out.push('SCORE '+id+' = '+pct+' (expected 100%)')}
     catch(err){out.push('ERROR '+id+': '+(err&&err.message))}
   }
@@ -822,7 +858,7 @@ window.QuizEngine={
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')fresh()});
     home();
     const pl=/[?&]play=([\w-]+)/.exec(location.search);   /* QA hook: ?play=<topicId|boss|light|surv|mist> opens a round directly */
-    if(pl&&(['boss','light','surv','mist'].includes(pl[1])||Q.topics.some(t=>t.id===pl[1]))){start(pl[1]);const ot=/[&?]only=(\w+)/.exec(location.search),ix=/[&?]idx=(\d+)/.exec(location.search);   /* QA: &only=<type>&idx=<n> shows one question of that type */
+    if(pl&&(['boss','light','surv','mist'].includes(pl[1])||paperGroup(pl[1])||Q.topics.some(t=>t.id===pl[1]))){start(pl[1]);const ot=/[&?]only=(\w+)/.exec(location.search),ix=/[&?]idx=(\d+)/.exec(location.search);   /* QA: &only=<type>&idx=<n> shows one question of that type */
       if(ot&&S){const f=S.qs.filter(q=>q.t===ot[1]);if(f.length){S.qs=[f[ix?+ix[1]:0]||f[0]];S.i=0;show()}}}
   }
 };

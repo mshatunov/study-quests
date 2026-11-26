@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Listening Station - ESL listening practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap">
+<style>
+:root{
+  --bg:#0f3d2a;--card:#fffbea;--ink:#23311f;--soft:#5d6b52;--line:#c9d8a8;
+  --brand:#e8710a;--brand2:#f59e0b;--tint:#ecf6cf;
+  --good:#2e9e4a;--goodbg:#dff4d2;--bad:#d6452d;--badbg:#fde1d8;--warn:#e8a200;--warnbg:#fdf0c4;
+  --font:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font);background:var(--bg);background-image:radial-gradient(circle at 12% 18%,rgba(163,230,53,.18) 0 60px,transparent 61px),radial-gradient(circle at 88% 70%,rgba(34,197,94,.2) 0 90px,transparent 91px),radial-gradient(circle at 40% 92%,rgba(250,204,21,.12) 0 70px,transparent 71px);background-attachment:fixed;color:var(--ink);font-size:18px;line-height:1.4;min-height:100vh;-webkit-tap-highlight-color:transparent}
+button,input{font:inherit}
+button{cursor:pointer;color:inherit;touch-action:manipulation}
+[hidden]{display:none!important}
+.wrap{max-width:780px;margin:0 auto;padding:14px 14px 110px;position:relative}
+.top{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:700;font-size:16px;white-space:nowrap}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:20px;padding:10px 18px;min-height:52px;font-weight:700;box-shadow:0 5px 0 #9a4a05;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;text-align:center}
+.btn:active{transform:translateY(4px);box-shadow:none}
+.btn.ghost{background:var(--card);color:#9a4a05;border:3px solid var(--brand);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+h1{color:#fffbea;font-size:34px;margin:8px 0 4px;line-height:1.15}
+.sub{color:#cfe8c4;margin:0 0 14px}
+h2{color:#fffbea;font-size:22px;margin:22px 0 4px}
+.card{background:var(--card);border-radius:28px;padding:16px;box-shadow:0 8px 0 rgba(0,0,0,.25);margin-bottom:16px}
+.card h3{margin:0 0 6px;font-size:21px}
+.soft{color:var(--soft);font-size:16px}
+details.ru{margin-top:8px}
+details.ru summary{cursor:pointer;font-weight:700;color:#9a4a05;min-height:40px;display:flex;align-items:center;gap:6px;list-style:none}
+details.ru summary::-webkit-details-marker{display:none}
+details.ru summary::after{content:"▾"}
+details.ru[open] summary::after{content:"▴"}
+details.ru p{margin:4px 0 8px;font-size:16px}
+.glt{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:4px 14px;font-size:16px}
+.glt b{color:#3c6e22}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:10px}
+.tile{background:var(--card);border:4px solid var(--line);border-radius:26px;box-shadow:0 6px 0 rgba(0,0,0,.25);padding:12px;min-height:132px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left}
+.tile .ico{font-size:34px;line-height:1.1}
+.tile .nm{font-weight:700;font-size:17px;line-height:1.2}
+.tile .st{margin-top:auto;font-size:22px;color:var(--brand2);letter-spacing:2px}
+.tile .st i{font-style:normal;color:#d5dcc0}
+.tile.next{border-color:#a3e635}
+.ace{font-size:14px;font-weight:700;color:#3c6e22}
+.mock{background:linear-gradient(120deg,#a3e635,#4ade80);color:#10331f}
+.mock .row{margin-top:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+/* player */
+#cplayer.stick{position:sticky;top:6px;z-index:20}
+.player{padding:12px;border:4px solid #a3e635}
+.prow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn.play{flex:1 1 170px;font-size:20px;min-height:56px}
+.speed{display:flex;border:3px solid var(--line);border-radius:18px;overflow:hidden;flex:0 0 auto}
+.speed button{border:0;background:var(--card);min-height:50px;padding:0 14px;font-weight:700;color:var(--soft)}
+.speed button.on{background:#16603a;color:#fff}
+.speed button:disabled{cursor:not-allowed;opacity:.55}
+.heads{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.head{display:flex;align-items:center;gap:6px;border:3px solid var(--line);border-radius:999px;padding:3px 10px 3px 6px;font-weight:600;font-size:15px;transition:transform .15s}
+.head span{font-size:20px}
+.head.on{background:#16603a;color:#fff;border-color:#a3e635;transform:scale(1.07)}
+.tickets{margin-left:auto;font-weight:700;font-size:15px;color:var(--soft);white-space:nowrap}
+.pbar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:10px}
+.pbar i{display:block;height:100%;width:0;background:var(--brand);transition:width .3s}
+.pmsg{font-size:16px;font-weight:600;margin-top:8px}
+.pmsg.err{color:#a02a18}
+.warnbox{background:var(--warnbg);border:3px solid var(--warn);border-radius:20px;padding:12px 14px;margin-bottom:16px;font-size:17px}
+.script{background:var(--card);border-radius:24px;padding:14px 16px;margin-bottom:16px;border:4px dashed var(--line)}
+.script p{margin:8px 0;font-size:18px}
+.script .who{font-weight:700;color:#3c6e22;margin-right:4px}
+mark{background:#fde68a;border-radius:6px;padding:0 2px;color:inherit}
+mark sup{font-weight:700;font-size:11px;color:#9a4a05}
+/* questions */
+.q{scroll-margin-top:170px}
+.q .qn{font-size:14px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.05em}
+.q .qt{font-size:21px;font-weight:600;margin:2px 0 10px}
+.opts{display:grid;gap:10px}
+.opt{border:3px solid var(--line);background:#fff;border-radius:18px;padding:11px 14px;min-height:52px;text-align:left;font-weight:600}
+.opt.sel{border-color:var(--brand);background:#ffedd5;box-shadow:inset 0 0 0 2px var(--brand)}
+.opt.ok{border-color:var(--good);background:var(--goodbg);box-shadow:none}
+.opt.no{border-color:var(--bad);background:var(--badbg);box-shadow:none}
+.opt:disabled{cursor:default}
+.gapline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:20px;font-weight:600}
+.gap{border:3px solid var(--line);border-radius:14px;padding:8px 12px;min-height:52px;width:210px;max-width:100%;background:#fff;color:var(--ink);font-size:20px}
+.gap:focus{outline:3px solid var(--brand2)}
+.gap.ok{border-color:var(--good);background:var(--goodbg)}
+.gap.no{border-color:var(--bad);background:var(--badbg)}
+.pred{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pred small{font-size:14px;color:var(--soft);font-weight:600;width:100%}
+.pred button{border:2px dashed #9db377;background:var(--tint);border-radius:999px;min-height:42px;padding:4px 14px;font-weight:600;font-size:15px}
+.pred button.on{border-style:solid;background:#16603a;border-color:#16603a;color:#fff}
+.pred button:disabled{cursor:default;opacity:.55}
+.pred button.on:disabled{opacity:1}
+.stmts{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.stmts li{display:flex;gap:10px;align-items:flex-start;background:var(--tint);border-radius:14px;padding:8px 10px;font-weight:600}
+.let{flex:none;width:30px;height:30px;border-radius:50%;background:#16603a;color:#fff;display:grid;place-items:center;font-weight:700}
+.letters{display:flex;gap:6px;flex-wrap:wrap}
+.lb{width:48px;height:52px;border:3px solid var(--line);background:#fff;border-radius:14px;font-weight:700;font-size:20px}
+.lb.used{opacity:.45}
+.lb.sel{opacity:1;background:var(--brand);color:#fff;border-color:var(--brand)}
+.lb.ok{opacity:1;background:var(--good);color:#fff;border-color:var(--good)}
+.lb.no{opacity:1;background:var(--bad);color:#fff;border-color:var(--bad)}
+.lb:disabled{cursor:default}
+.chosen{min-height:24px;margin-top:8px;font-size:16px;color:var(--soft);font-weight:600}
+.fb{margin-top:12px;border-radius:18px;padding:12px 14px;border:3px solid}
+.fb.good{background:var(--goodbg);border-color:var(--good)}
+.fb.bad{background:var(--badbg);border-color:var(--bad)}
+.fb b.h{display:block;font-size:19px}
+.fb p{margin:6px 0 0;font-size:17px}
+.fb .method{background:#fff;border-radius:12px;padding:8px 10px}
+.fb .heard{font-style:italic}
+.fb .btn{margin-top:8px;min-height:46px;font-size:16px}
+.foot{position:fixed;left:0;right:0;bottom:0;background:rgba(10,40,27,.96);padding:10px 14px max(10px,env(safe-area-inset-bottom));z-index:30}
+.foot .in{max-width:752px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.foot span{color:#e6f5de;font-weight:600;font-size:16px}
+.score{text-align:center}
+.score .stars{font-size:48px;letter-spacing:8px;color:var(--brand2);line-height:1.2}
+.score .stars i{font-style:normal;color:#d5dcc0}
+.score .big{font-size:32px;font-weight:700;color:#9a4a05}
+.score .row{justify-content:center;margin-top:12px}
+.replist{display:grid;gap:10px}
+.rep{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:60;width:100%;height:100%}
+@media (max-width:440px){
+  body{font-size:17px}
+  h1{font-size:29px}
+  .tiles{grid-template-columns:1fr 1fr;gap:10px}
+  .card{padding:13px;border-radius:24px}
+  .player{padding:10px}
+  .btn.play{flex-basis:130px;font-size:18px}
+  .speed button{padding:0 10px;font-size:15px}
+  .q .qt{font-size:19px}
+  .lb{width:44px}
+}
+@media (max-height:560px){#cplayer.stick{position:static}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<canvas id="fx"></canvas>
+<script>
+'use strict';
+/* =====================================================================
+   LISTENING STATION - ESL listening practice with the browser voice.
+   Storage: 'sq:mock1-checkpoint-dec' (only the numeric "xp" is changed),
+            'sq:profile' (daily streak), 'sq:game:listening-station' (progress).
+   QA: ?clip=m1  ?clip=m1&state=check  ?mock=1  ?novoice=1  ?selftest
+   ===================================================================== */
+const QS=new URLSearchParams(location.search);
+const SELFTEST=QS.has('selftest');
+const MEM=SELFTEST||QS.has('state');
+const QKEY='sq:mock1-checkpoint-dec',PKEY='sq:profile',UKEY='sq:ui',GKEY='sq:game:listening-station';
+
+/* ---------- storage ---------- */
+function memStore(){const m=new Map();return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>{m.set(k,String(v))},removeItem:k=>{m.delete(k)},key:i=>Array.from(m.keys())[i]||null,get length(){return m.size},clear:()=>m.clear()}}
+let LS=null;
+if(MEM)LS=memStore();else{try{LS=window.localStorage;LS.getItem(GKEY)}catch(e){LS=memStore()}}
+function jget(k,d){try{const v=LS.getItem(k);if(v==null)return d;const o=JSON.parse(v);return (o&&typeof o==='object'&&!Array.isArray(o))?o:d}catch(e){return d}}
+function jset(k,o){try{LS.setItem(k,JSON.stringify(o))}catch(e){}}
+function dayStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return dayStr(d)}
+function touchDay(){const p=jget(PKEY,{}),today=dayStr(new Date());if(p.day===today)return;p.streak=p.day===yesterday()?(p.streak||0)+1:1;p.day=today;jset(PKEY,p)}
+function dayStreak(){const p=jget(PKEY,{});return (p.day===dayStr(new Date())||p.day===yesterday())?(p.streak||0):0}
+function totalXp(){let n=0;try{for(let i=0;i<LS.length;i++){const k=LS.key(i);if(k&&k.indexOf('sq:')===0&&k!==PKEY&&k!==UKEY){try{const d=JSON.parse(LS.getItem(k)||'{}');n+=(d&&+d.xp)||0}catch(e){}}}}catch(e){}return n}
+function addXp(x){
+  try{const raw=LS.getItem(QKEY);let o={};if(raw!=null){o=JSON.parse(raw);if(!o||typeof o!=='object'||Array.isArray(o))return false}
+    o.xp=(+o.xp||0)+x;LS.setItem(QKEY,JSON.stringify(o));return true}catch(e){return false}
+}
+let G=null;
+function loadG(){G=jget(GKEY,{});['stars','ace','done','pdone','draft'].forEach(k=>{if(!G[k]||typeof G[k]!=='object')G[k]={}});G.run=+G.run||0;G.bestRun=+G.bestRun||0;G.slow=!!G.slow}
+function saveG(){jset(GKEY,G)}
+
+/* ---------- random ---------- */
+let seed=(Date.now()^0x2f6e2b1)>>>0;
+function rnd(){seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+const range=n=>Array.from({length:n},(_,i)=>i);
+
+/* =====================================================================
+   CONTENT (all original). In "mc" the first option is the correct one;
+   options are shuffled on screen.
+   ===================================================================== */
+const STATIONS=[
+ {id:1,ico:'📞',name:'Quick Messages',desc:'One speaker. Choose the right answer.'},
+ {id:2,ico:'📝',name:'Note Pad',desc:'Complete the notes with a word, a name or a number.'},
+ {id:3,ico:'💬',name:'Two Voices',desc:'A conversation. Follow what each person says.'},
+ {id:4,ico:'🧩',name:'Who Said It?',desc:'Match each speaker to a sentence. One sentence is extra.'}
+];
+const M=(q,o,ev,trap,e)=>({t:'mc',q,o,ev,trap,e});
+const Gp=(pre,post,type,a,ev,trap,e,x)=>Object.assign({t:'gap',pre,post,type,a,ev,trap,e},x||{});
+const H=(sp,a,ev,e)=>({t:'match',sp,a,ev,trap:'match',e});
+const CLIPS=[
+{id:'m1',st:1,ico:'🏊',title:'Swim Club Message',intro:'Coach Dana leaves a phone message for Oscar.',
+ who:[{n:'Coach Dana',g:'f',i:'👩'}],
+ lines:[[0,"Hi Oscar, it's Coach Dana from the swimming club."],[0,"I'm ringing about Saturday."],[0,"We usually meet at nine o'clock, but the big pool is being cleaned, so this week we'll start at half past ten instead."],[0,"Don't worry about bringing a towel - the centre is lending them out for free."],[0,"Please do bring your goggles, because we haven't got any spare ones."],[0,"Last week you said your shoulder was sore."],[0,"If it still hurts, just come and watch."],[0,"See you there!"]],
+ q:[
+  M('What time will they start this Saturday?',['10.30','9.00','9.30'],'this week we\'ll start at half past ten instead','change','Nine o\'clock is the usual time. "This week ... instead" gives the new time: half past ten.'),
+  M('Why has the time changed?',['The big pool is being cleaned.','The coach has hurt her shoulder.','The centre opens later on Saturdays.'],'the big pool is being cleaned','mention','The reason comes just before "so". The sore shoulder is Oscar\'s, and it does not change the time.'),
+  M('What does the coach ask Oscar to bring?',['🥽 his goggles','🧖 a towel','🧢 a swimming cap'],'Please do bring your goggles','mention','A towel is mentioned first, but he does NOT need it. "Please do bring" points to the goggles.'),
+  M('What should Oscar do if his shoulder still hurts?',['Come along and watch','Stay at home and rest','Swim more slowly'],'If it still hurts, just come and watch','detail','Listen to the part after "If it still hurts".')
+ ],
+ gl:[['ringing','звоню по телефону'],['usually','обычно'],['lending out','выдают на время'],['spare','запасной'],['sore','болит'],['hurts','болит']]},
+{id:'m2',st:1,ico:'📚',title:'Library News',intro:'A librarian makes an announcement about a club.',
+ who:[{n:'Librarian',g:'m',i:'👨'}],
+ lines:[[0,"Good afternoon, everyone."],[0,"This is a message from the library."],[0,"The Story Writing Club is moving."],[0,"It used to meet in the reading corner on Mondays, but from next week it will meet in the computer room on Wednesdays."],[0,"The club is for children aged nine to eleven."],[0,"You don't need to bring paper, as we've got plenty, but please bring a story you've already started."],[0,"At the end of term, the best stories will be read aloud on the local radio."],[0,"If you'd like to join, put your name on the list by the front door."]],
+ q:[
+  M('On which day will the club meet from next week?',['Wednesday','Monday','Friday'],'on Wednesdays','change','"It used to meet on Mondays" is the old day. After "from next week" comes the new one.'),
+  M('Where will the club meet from next week?',['In the computer room','In the reading corner','Beside the front door'],'it will meet in the computer room','mention','All these places are possible to hear. The front door is only where the list is.'),
+  M('What should members bring?',['A story they have begun','Some paper to write on','A book from the library shelf'],'please bring a story you\'ve already started','paraphrase','"Already started" means the same as "begun". Paper is not needed.'),
+  M('What will happen to the best stories?',['People will hear them on the radio.','They will be printed in a magazine.','They will be put up beside the door.'],'the best stories will be read aloud on the local radio','paraphrase','"Read aloud on the local radio" means people will hear them.')
+ ],
+ gl:[['announcement','объявление'],['used to meet','раньше собирался'],['aged','в возрасте'],['plenty','много, достаточно'],['term','четверть (в школе)'],['join','вступить, присоединиться']]},
+{id:'m3',st:1,ico:'🎒',title:'Lost on the Bus',intro:'Freya phones the bus company about something she lost.',
+ who:[{n:'Freya',g:'f',i:'👧'}],
+ lines:[[0,"Hello, my name's Freya."],[0,"I think I left my rucksack on the number fourteen bus this morning."],[0,"I got on near the park and got off at the museum at about quarter past eight."],[0,"The bag is dark green with a yellow zip, and it's not very big."],[0,"Inside there's my lunch box, a library book about sharks and my dad's old camera."],[0,"I'm really worried about the camera, because it belonged to my grandad first."],[0,"Please ring my mum if anyone finds it."],[0,"Thank you."]],
+ q:[
+  M('Which bus was Freya on?',['Number 14','Number 40','Number 4'],'on the number fourteen bus','number','fourTEEN has the strong sound at the end. FORty has it at the start.'),
+  M('What does the bag look like?',['Dark green with a yellow zip','Yellow with a dark green zip','Dark green with a black zip'],'The bag is dark green with a yellow zip','detail','Hold both colours in your head: the bag first, then the zip.'),
+  M('Where did Freya get off the bus?',['At the museum','At the park','At the library'],'got off at the museum','mention','She got ON near the park and got OFF at the museum. The question asks about "off".'),
+  M('What is Freya most worried about?',['Her dad\'s camera','Her lunch box','Her library book'],'I\'m really worried about the camera','opinion','Three things are in the bag. The feeling words "really worried" show which one matters.')
+ ],
+ gl:[['rucksack','рюкзак'],['got on','села (в автобус)'],['got off','вышла (из автобуса)'],['zip','молния (застежка)'],['worried','переживаю'],['belonged','принадлежал']]},
+{id:'m4',st:1,ico:'🎪',title:'Spring Fair Update',intro:'A radio presenter gives news about a fair.',
+ who:[{n:'Radio presenter',g:'m',i:'🎙️'}],
+ lines:[[0,"And now some news for families."],[0,"The Spring Fair at Mill Field was planned for Saturday, but heavy rain is expected all day, so it will now take place on Sunday afternoon."],[0,"The gates open at one o'clock."],[0,"Tickets cost four pounds for adults, and children under twelve get in free."],[0,"There will be pony rides, a puppet show and a baking contest."],[0,"Sadly, the bouncy castle has been cancelled this year."],[0,"The organisers advise visitors to wear boots, because the ground will still be muddy."]],
+ q:[
+  M('When will the fair take place?',['Sunday afternoon','Saturday afternoon','Saturday morning'],'it will now take place on Sunday afternoon','change','Saturday was the old plan. "It will now take place" gives the final day.'),
+  M('Who can get in without paying?',['Children younger than twelve','All the adults in a family','Visitors who bring their own boots'],'children under twelve get in free','paraphrase','"Under twelve" means "younger than twelve", and "get in free" means "without paying".'),
+  M('Which activity will NOT be at the fair this year?',['A bouncy castle','Pony rides','A puppet show'],'the bouncy castle has been cancelled','detail','Notice NOT in the question. Listen for "cancelled".'),
+  M('Why should visitors wear boots?',['The ground will be muddy.','It is going to snow on Sunday.','There will be a long walking race.'],'because the ground will still be muddy','detail','The reason comes straight after "because".')
+ ],
+ gl:[['fair','ярмарка'],['is expected','ожидается'],['take place','проходить, состояться'],['contest','конкурс'],['pony rides','катание на пони'],['puppet show','кукольный спектакль'],['bouncy castle','надувной замок-батут'],['cancelled','отменен'],['advise','советовать']]},
+
+{id:'n1',st:2,ico:'🌲',title:'Young Explorers Walk',intro:'A guide gives information about a walk.',
+ who:[{n:'Guide',g:'f',i:'👩'}],
+ lines:[[0,"Welcome to Pine Hill Nature Reserve."],[0,"Here's what you need to know about our Young Explorers walk."],[0,"The next walk is on the sixteenth of May."],[0,"We meet at the wooden bridge, not at the car park as we did last year."],[0,"The walk lasts ninety minutes."],[0,"It costs five pounds for each child."],[0,"Please bring binoculars if you've got them, because we often see herons on the lake."],[0,"Your guide will be Mrs Whitlow. That's W-H-I-T-L-O-W.","Your guide will be Mrs Whitlow. That's spelled: W, H, I, T, L, O, W."]],
+ q:[
+  Gp('Date of the next walk:','May','number',['16','16th','sixteenth','the sixteenth'],'on the sixteenth of May','number','Six-TEENTH: the strong sound is at the end. SIX-ty would sound different.',{strip:['may','of','the']}),
+  Gp('Meeting place: the wooden','','word',['bridge'],'We meet at the wooden bridge','change','The car park was last year\'s place. The meeting place now is the bridge.',{strip:['wooden']}),
+  Gp('The walk lasts','minutes','number',['90','ninety'],'The walk lasts ninety minutes','number','NINE-ty has the strong sound at the start; nine-TEEN has it at the end.',{strip:['minutes','mins','min']}),
+  Gp('Price for each child: £','','number',['5','five','5.00'],'It costs five pounds for each child','note','The £ sign tells you to listen for a price. Write just the number.',{strip:['pounds','pound']}),
+  Gp('If you have them, bring:','','word',['binoculars'],'Please bring binoculars','note','It is something you "have got" and bring to see birds. Keep the final s.',{alt:['pair of binoculars','some binoculars','your binoculars']}),
+  Gp("Guide's name: Mrs",'','name',['Whitlow'],"That's W-H-I-T-L-O-W",'spelling','Write each letter as you hear it: W-H-I-T-L-O-W. Check the letters on the second play.',{strip:['mrs','mrs.']})
+ ],
+ gl:[['nature reserve','природный заповедник'],['explorers','исследователи'],['lasts','длится'],['herons','цапли'],['guide','гид, экскурсовод']]},
+{id:'n2',st:2,ico:'🍝',title:'Little Chefs Course',intro:'Marco gives information about a cooking course.',
+ who:[{n:'Marco',g:'m',i:'👨‍🍳'}],
+ lines:[[0,"Hello, this is Marco from the Little Chefs cooking club."],[0,"You asked about our holiday course."],[0,"It begins on Tuesday the third of August."],[0,"Each session starts at quarter past two and finishes at four."],[0,"We cook in the kitchen on the first floor of the sports centre."],[0,"This year our theme is food from Italy, so on the first day we'll be making fresh pasta."],[0,"Please bring an apron. We'll give you all the ingredients."],[0,"To book, ask for Julie Kirkby. Kirkby is spelled K-I-R-K-B-Y.","To book, ask for Julie Kirkby. Kirkby is spelled: K, I, R, K, B, Y."]],
+ q:[
+  Gp('The course begins on Tuesday','August','number',['3','3rd','third','the third'],'on Tuesday the third of August','note','The day is printed, so the gap needs the date.',{strip:['august','of','the']}),
+  Gp('Each session starts at','','time',['2:15','2.15','quarter past two','two fifteen'],'starts at quarter past two','mention','Two times are said: one for the start and one for the finish. "Quarter past two" is 2.15.',{alt:['14:15','14.15']}),
+  Gp('The kitchen is on the','floor','number',['first','1st','1'],'in the kitchen on the first floor','note','"On the ___ floor" needs a word such as first, second or third.',{strip:['floor']}),
+  Gp('Food they will make on day one: fresh','','word',['pasta'],"we'll be making fresh pasta",'detail','Listen for "on the first day".',{strip:['fresh']}),
+  Gp('Please bring: an','','word',['apron'],'Please bring an apron','note','"An" tells you the word begins with a vowel sound. The ingredients are given to you.'),
+  Gp('To book, ask for: Julie','','name',['Kirkby'],'Kirkby is spelled K-I-R-K-B-Y','spelling','Names are often spelled out. Write letter by letter: K-I-R-K-B-Y.',{strip:['julie']})
+ ],
+ gl:[['course','курс (занятий)'],['session','занятие'],['theme','тема'],['ingredients','продукты, ингредиенты'],['to book','чтобы записаться']]},
+{id:'n3',st:2,ico:'🦕',title:'Night at the Museum',intro:'A recorded message from a science museum.',
+ who:[{n:'Museum message',g:'f',i:'👩‍🔬'}],
+ lines:[[0,"Thank you for calling the City Science Museum."],[0,"Our next Night at the Museum is on Friday the twentieth of June."],[0,"Children from eight to twelve years old can sleep next to the dinosaur skeletons."],[0,"Doors open at seven in the evening."],[0,"Please bring a sleeping bag and a torch."],[0,"You don't need food, because supper and breakfast are included."],[0,"The price is thirty-two pounds per person."],[0,"To find us, go to the side door on Garden Street."]],
+ q:[
+  Gp('Day of the event:','20 June','day',['Friday'],'on Friday the twentieth of June','note','The date is printed, so listen for the day of the week. Days start with a capital letter.',{alt:['on friday','fri']}),
+  Gp('For children aged 8 to','','number',['12','twelve'],'from eight to twelve years old','note','The gap is the top age in "from ... to ...".',{strip:['years','old','year']}),
+  Gp('Doors open at','p.m.','time',['7','seven','7:00','7.00'],'Doors open at seven in the evening','paraphrase','"In the evening" is the same as p.m.',{alt:['19:00','19.00'],strip:['in the evening']}),
+  Gp('Bring a sleeping bag and a','','word',['torch'],'a sleeping bag and a torch','note','You hear two things. One is printed, so write the other one.',{alt:['flashlight']}),
+  Gp('Price per person: £','','number',['32','thirty-two','thirty two','32.00'],'The price is thirty-two pounds per person','number','THIR-ty two, not thir-TEEN. Listen for where the strong sound falls.',{strip:['pounds','pound']}),
+  Gp('Use the side door on','Street','name',['Garden'],'the side door on Garden Street','detail','Street names start with a capital letter.',{strip:['street','st','st.']})
+ ],
+ gl:[['skeletons','скелеты'],['supper','ужин'],['included','включено в цену'],['per person','за человека'],['event','мероприятие']]},
+{id:'n4',st:2,ico:'🚲',title:'Bike Safety Day',intro:'Neil talks about a day for young cyclists.',
+ who:[{n:'Neil',g:'m',i:'🚴'}],
+ lines:[[0,"Hi there, cyclists. I'm Neil, and I'm running the Bike Safety Day in the town square."],[0,"It's on Sunday, from ten until half past twelve."],[0,"Bring your bicycle and, most importantly, your helmet."],[0,"Without one, you won't be allowed to ride."],[0,"We'll check your brakes and your lights for free."],[0,"After that, there's a short ride along the river."],[0,"Last year forty children came, but this year we expect about fifty."],[0,"Everyone who finishes gets a bright orange reflector to put on their bag."]],
+ q:[
+  Gp('Place: the town','','word',['square'],'in the town square','note','"Town ___" is a place in a town.',{strip:['town']}),
+  Gp('The event finishes at','','time',['12:30','12.30','half past twelve','twelve thirty'],'until half past twelve','mention','"From ten UNTIL half past twelve": the finish is the second time.'),
+  Gp('You must have a','to ride.','word',['helmet'],'most importantly, your helmet','paraphrase','"Without one, you won\'t be allowed to ride" means you must have it.'),
+  Gp('Free check of your brakes and','','word',['lights'],"We'll check your brakes and your lights",'note','Two things are checked. One is printed.',{alt:['light'],strip:['your','bike']}),
+  Gp('Children expected this year: about','','number',['50','fifty'],'this year we expect about fifty','change','Forty was last year. The question asks about this year.',{strip:['about','children']}),
+  Gp('Gift for finishers: an orange','','word',['reflector'],'a bright orange reflector','detail','Listen after the word "orange".',{strip:['bright','orange']})
+ ],
+ gl:[['cyclists','велосипедисты'],['running','здесь: проводит, организует'],['allowed','разрешено'],['brakes','тормоза'],['expect','ожидаем'],['finishers','те, кто доехал до конца']]},
+
+{id:'d1',st:3,ico:'🎁',title:'A Present for Gran',intro:'Ella and her brother Hugo are choosing a present.',
+ who:[{n:'Ella',g:'f',i:'👧'},{n:'Hugo',g:'m',i:'👦'}],
+ lines:[[0,"Hugo, have you got Gran's present yet?"],[1,"Not yet. I was going to buy her some chocolates."],[0,"She's trying not to eat sweet things at the moment. What about a scarf?"],[1,"Aunt Rosa has already knitted her one. I know! Gran loves growing things. Let's get her a little lemon tree."],[0,"Great idea, but isn't that expensive?"],[1,"It's fifteen pounds. If we share, it's seven pounds fifty each."],[0,"Fine. Can you collect it? I've got dance practice until six."],[1,"Sure. I'll go straight after football."]],
+ q:[
+  M('What do they decide to buy?',['🍋 a lemon tree','🍫 a box of chocolates','🧣 a warm scarf'],"Let's get her a little lemon tree",'mention','All three ideas are said. The decision comes with "Let\'s get her..."'),
+  M('Why are chocolates a bad idea?',['Gran is avoiding sweet food.','Gran has never liked chocolate.','They are too expensive.'],"She's trying not to eat sweet things",'paraphrase','"Trying not to eat sweet things" means she is avoiding sweet food. Nobody says she dislikes chocolate.'),
+  M('How much will each child pay?',['£7.50','£15','£6.50'],"it's seven pounds fifty each",'maths','£15 is the whole price. "Each" is half of it: £7.50.'),
+  M('Who will collect the present?',['Hugo','Ella','Aunt Rosa'],"I'll go straight after football",'detail','Ella asks "Can you collect it?" and Hugo answers "Sure".'),
+  M('What will Ella be doing until six?',['Dancing','Playing football','Knitting'],"I've got dance practice until six",'mention','Football is Hugo\'s activity. Ella has dance practice.')
+ ],
+ gl:[['present','подарок'],['at the moment','сейчас'],['knitted','связала (спицами)'],['share','разделить пополам'],['collect','забрать'],['practice','тренировка, репетиция']]},
+{id:'d2',st:3,ico:'🎬',title:'After the Film',intro:'Zara and Tom talk about a film they have just seen.',
+ who:[{n:'Zara',g:'f',i:'👧'},{n:'Tom',g:'m',i:'👦'}],
+ lines:[[0,"So, what did you think of the film, Tom?"],[1,"Honestly? I expected it to be boring, because it's about a lighthouse keeper. But I really enjoyed it."],[0,"Me too, although I thought the beginning was rather slow."],[1,"It was. The storm scene made up for it, though. My heart was thumping!"],[0,"What about the music?"],[1,"Far too loud for me. I couldn't hear what the girl was saying."],[0,"I didn't mind it. My favourite part was the ending, when the dog found its way home."],[1,"Would you watch it again?"],[0,"Probably not, but I want to read the book it comes from."]],
+ q:[
+  M('Before the film, Tom thought it would be...',['dull','thrilling','frightening'],'I expected it to be boring','paraphrase','"Expected it to be boring" is what he thought BEFORE. "Dull" means boring.'),
+  M('Which part did Zara think was weak?',['The slow start','The storm scene','The ending'],'I thought the beginning was rather slow','paraphrase','"The beginning was rather slow" = the slow start. She loved the ending.'),
+  M('What was Tom\'s problem with the music?',['It was so loud that words got lost.','It was far too quiet for a storm.','It made him feel sleepy.'],"Far too loud for me. I couldn't hear what the girl was saying",'opinion','He says "too loud" and then gives the result: he could not hear the girl.'),
+  M('What was Zara\'s favourite part?',['The dog getting home','The storm at sea','The very first scene'],'My favourite part was the ending, when the dog found its way home','opinion','Tom praises the storm, but the question is about Zara. Listen for "My favourite part".'),
+  M('What does Zara want to do next?',['Read the book','See the film again','Buy the music'],'I want to read the book it comes from','change','"Probably not" answers watching again. After "but" comes what she does want.')
+ ],
+ gl:[['lighthouse keeper','смотритель маяка'],['expected','ожидал'],['although','хотя'],['made up for it','это все компенсировала'],['thumping','сильно колотилось'],["didn't mind",'не возражала'],['weak','слабый']]},
+{id:'d3',st:3,ico:'🌴',title:'The Rainforest Poster',intro:'Priya and Sam plan their project.',
+ who:[{n:'Priya',g:'f',i:'👧'},{n:'Sam',g:'m',i:'👦'}],
+ lines:[[0,"Sam, our poster about rainforests has to be ready by Thursday."],[1,"Thursday? I thought it was Friday."],[0,"It was, but it's been moved a day earlier."],[1,"OK. I can draw the animals tonight."],[0,"Actually, I've drawn them already. Could you find some facts about the weather there?"],[1,"Sure. Shall we use the computers in the library after lessons today?"],[0,"The library closes early on Tuesdays. Come to my house instead."],[1,"All right. What time?"],[0,"Half past four. And bring your coloured pens - mine have run out."]],
+ q:[
+  M('When must the poster be ready?',['Thursday','Friday','Tuesday'],"it's been moved a day earlier",'change','Friday was the old day. It has been moved one day earlier, to Thursday.'),
+  M('What will Sam do for the poster?',['Find out about the weather','Draw the animals','Write the title'],'Could you find some facts about the weather there?','change','Sam offers to draw, but "Actually, I\'ve drawn them already" changes the plan.'),
+  M('Where will they work today?',["At Priya's house","In the library","At Sam's house"],'Come to my house instead','mention','Priya is speaking when she says "my house", so it is Priya\'s home.'),
+  M('Why will they not work in the library?',['It shuts early that day.','The computers there are broken.','It is too noisy for talking.'],'The library closes early on Tuesdays','paraphrase','"Closes early" and "shuts early" mean the same thing.'),
+  M('What must Sam bring?',['Coloured pens','A glue stick','Some photos'],'bring your coloured pens','detail','Listen for the word "bring". Hers have run out, so she needs his.')
+ ],
+ gl:[['poster','плакат'],['rainforests','тропические леса'],['moved','здесь: перенесли'],['instead','вместо этого'],['run out','закончились'],['broken','сломаны']]},
+{id:'d4',st:3,ico:'👟',title:'In the Sports Shop',intro:'Nadia talks to a shop assistant.',
+ who:[{n:'Nadia',g:'f',i:'👧'},{n:'Assistant',g:'m',i:'🧑‍💼'}],
+ lines:[[1,"Hello. Can I help you?"],[0,"Yes, please. I'm looking for some running shoes."],[1,"What size do you take?"],[0,"I used to take size three, but my feet have grown. Could I try a four?"],[1,"Of course. We've got blue ones and red ones."],[0,"The red ones look great."],[1,"I'm afraid we've only got those in size five."],[0,"Never mind, I'll try the blue ones. Oh, they're really comfortable. I'll take them."],[1,"They were forty pounds, but today they're thirty."],[0,"Brilliant. I've got thirty-five pounds, so I can buy some socks too."],[1,"The socks are three pounds a pair."]],
+ q:[
+  M('Which size does Nadia ask to try?',['Size 4','Size 3','Size 5'],'Could I try a four?','change','Three is her old size ("used to"). Five is the size of the red shoes.'),
+  M('Which colour shoes does she buy?',['Blue','Red','Black'],"I'll try the blue ones",'change','She likes the red ones first, but they are not in her size. "I\'ll take them" means the blue ones.'),
+  M('Why does she not buy the red shoes?',['None are in her size.','They hurt her feet.','They are too expensive.'],"we've only got those in size five",'paraphrase','"Only got those in size five" means there are none in size four.'),
+  M('How much do the shoes cost today?',['£30','£40','£35'],"but today they're thirty",'change','£40 was the old price and £35 is the money she has.'),
+  M('She buys the shoes and one pair of socks. How much money is left?',['£2','£5','£3'],'The socks are three pounds a pair','maths','Write the numbers as you hear them: 35 - 30 - 3 = 2.')
+ ],
+ gl:[['running shoes','беговые кроссовки'],['size','размер'],['grown','выросли'],["I'm afraid",'к сожалению'],['comfortable','удобные'],['a pair','пара'],['left','здесь: осталось']]},
+
+{id:'h1',st:4,ico:'🎨',title:'My Hobby',intro:'Four children talk about their hobbies.',
+ who:[{n:'Speaker 1',g:'f',i:'1️⃣'},{n:'Speaker 2',g:'m',i:'2️⃣'},{n:'Speaker 3',g:'f',i:'3️⃣'},{n:'Speaker 4',g:'m',i:'4️⃣'}],
+ s:['This hobby helps me to feel calm.','Someone in my family got me started.','I had to wait before I could begin.','I share this hobby with a pet.','I have won a prize for it.'],
+ lines:[[0,"I paint little stones and leave them in the park. When I've had a noisy day, sitting quietly with my brush makes me feel peaceful again."],[1,"My uncle plays the drums in a band. One summer he showed me a few beats, and I've been practising ever since. The neighbours aren't very pleased!"],[2,"I wanted to join the climbing club for ages, but you have to be eight, so I had to be patient. Now I go every Friday."],[3,"I take my dog, Biscuit, to agility training. He jumps over bars and runs through tunnels while I run beside him."]],
+ q:[
+  H(0,0,'makes me feel peaceful again','"Peaceful" means calm. The idea is the same, but the word is different.'),
+  H(1,1,'My uncle plays the drums in a band','An uncle is a family member, and he showed the first beats.'),
+  H(2,2,'you have to be eight, so I had to be patient','The age rule made this speaker wait.'),
+  H(3,3,'I take my dog, Biscuit, to agility training','Biscuit is a dog, so the hobby is shared with a pet.')
+ ],
+ gl:[['calm','спокойный'],['got me started','приобщил меня'],['share','разделять'],['pet','домашнее животное'],['prize','приз'],['drums','барабаны'],['agility training','тренировка по аджилити (полоса препятствий для собак)']]},
+{id:'h2',st:4,ico:'🚌',title:'On the Way',intro:'Five children describe their morning journey.',
+ who:[{n:'Speaker 1',g:'m',i:'1️⃣'},{n:'Speaker 2',g:'f',i:'2️⃣'},{n:'Speaker 3',g:'m',i:'3️⃣'},{n:'Speaker 4',g:'f',i:'4️⃣'},{n:'Speaker 5',g:'m',i:'5️⃣'}],
+ s:['My journey gives me good exercise.','I set off very early because the trip is long.','I used to travel in a different way.','I often read while I am travelling.','I enjoy chatting with someone I know.','I look after a younger brother or sister.'],
+ lines:[[0,"I ride my scooter. It's uphill all the way, so by the time I get there my legs have had a real workout."],[1,"My journey takes an hour on two buses, which means I'm out of the door before seven."],[2,"Dad drove me every day last year, but since we moved flat, I've been taking the tram."],[3,"I go by train. As soon as I find a seat, I open my book. Yesterday I was so deep in the story that I nearly missed my stop!"],[4,"Our neighbour gives me a lift with her son, Kofi. We talk about football in the back seat the whole way, so it never feels long."]],
+ q:[
+  H(0,0,'my legs have had a real workout','A "workout" is exercise.'),
+  H(1,1,"I'm out of the door before seven",'An hour on two buses is a long trip, and "before seven" is very early.'),
+  H(2,2,"but since we moved flat, I've been taking the tram",'Last year it was the car, now it is the tram: the way has changed.'),
+  H(3,3,'As soon as I find a seat, I open my book','Opening a book on the train means reading while travelling.'),
+  H(4,4,'We talk about football in the back seat','"Talk" is the same idea as "chatting".')
+ ],
+ gl:[['journey','дорога, поездка'],['exercise','физическая нагрузка'],['set off','отправляюсь'],['trip','поездка'],['chatting','болтать'],['look after','присматривать за'],['uphill','в гору'],['gives me a lift','подвозит меня']]},
+{id:'h3',st:4,ico:'🌟',title:'A Day to Remember',intro:'Four children remember a special day.',
+ who:[{n:'Speaker 1',g:'m',i:'1️⃣'},{n:'Speaker 2',g:'f',i:'2️⃣'},{n:'Speaker 3',g:'f',i:'3️⃣'},{n:'Speaker 4',g:'m',i:'4️⃣'}],
+ s:['I was nervous at first, but then I enjoyed it.','I was disappointed.','I was proud because I helped someone.','I got a big surprise.','I was frightened by an animal.'],
+ lines:[[0,"When they handed me the microphone, my hands were shaking. But after the first line of my song, I didn't want to stop!"],[1,"We'd planned the beach trip for weeks, and then it poured with rain, so we had to stay at home. I could have cried."],[2,"An old man dropped all his shopping on the steps. I picked everything up and carried a bag to his door. I felt ten feet tall."],[3,"I opened the front door and there was my cousin from Canada! Nobody had told me she was coming. I couldn't believe my eyes."]],
+ q:[
+  H(0,0,"my hands were shaking. But after the first line of my song, I didn't want to stop",'Shaking hands show nerves. After "But" the feeling changes to enjoyment.'),
+  H(1,1,'it poured with rain, so we had to stay at home','A long-planned trip was lost, so the speaker felt disappointed.'),
+  H(2,2,'I felt ten feet tall','The idiom "felt ten feet tall" means felt very proud.'),
+  H(3,3,'Nobody had told me she was coming','Something nobody told you about is a surprise.')
+ ],
+ gl:[['nervous','взволнованный'],['disappointed','расстроенный'],['proud','гордый'],['frightened','напуганный'],['microphone','микрофон'],['shaking','дрожали'],['poured with rain','лил дождь']]},
+{id:'h4',st:4,ico:'♟️',title:'About My Club',intro:'Five children talk about their clubs.',
+ who:[{n:'Speaker 1',g:'f',i:'1️⃣'},{n:'Speaker 2',g:'m',i:'2️⃣'},{n:'Speaker 3',g:'f',i:'3️⃣'},{n:'Speaker 4',g:'m',i:'4️⃣'},{n:'Speaker 5',g:'f',i:'5️⃣'}],
+ s:['My club has taught me to be more patient.','I joined to get to know people.','I wish my club met more often.','I thought about giving up, but I carried on.','My club costs a lot of money.','I would like to teach other children.'],
+ lines:[[0,"Chess club has changed me. I used to move my pieces at once, but now I can sit and think for ages before I do anything."],[1,"We had only just arrived in town and I didn't know anyone, so I signed up for the choir."],[2,"Art club is only once a month. If it were every week, I'd be so happy!"],[3,"In the beginning, I kept landing on my back at judo and I nearly quit. I'm glad I didn't - I got my yellow belt last week."],[4,"Our riding club is wonderful, but one month there used up nearly all my birthday money!"]],
+ q:[
+  H(0,0,'now I can sit and think for ages before I do anything','Waiting and thinking before moving shows patience.'),
+  H(1,1,"I didn't know anyone, so I signed up for the choir",'The reason for joining was to meet people.'),
+  H(2,2,'If it were every week, I\'d be so happy','Once a month is not enough for this speaker.'),
+  H(3,3,"I nearly quit. I'm glad I didn't",'"Nearly quit" means thought about giving up.'),
+  H(4,4,'used up nearly all my birthday money','Spending nearly all the money shows it is expensive.')
+ ],
+ gl:[['patient','терпеливый'],['get to know','познакомиться'],['wish','хотелось бы'],['giving up','бросить'],['carried on','продолжил'],['choir','хор'],['belt','пояс']]}
+];
+/* second, separately written answer key (used by the self-test to cross-check every answer) */
+const KEY2={
+ m1:['10.30','cleaned','goggles','watch'],m2:['Wednesday','computer','begun','radio'],m3:['14','green with a yellow','museum','camera'],m4:['Sunday','younger than','castle','muddy'],
+ n1:['16','bridge','90','5','binoculars','whitlow'],n2:['3','2:15','1','pasta','apron','kirkby'],n3:['friday','12','7','torch','32','garden'],n4:['square','12:30','helmet','lights','50','reflector'],
+ d1:['lemon','avoiding','7.50','Hugo','Dancing'],d2:['dull','start','loud','dog','book'],d3:['Thursday','weather','Priya','shuts','pens'],d4:['4','Blue','size','30','£2'],
+ h1:['calm','family','wait','pet'],h2:['exercise','early','different','read','chatting'],h3:['nervous','disappointed','proud','surprise'],h4:['patient','know people','more often','carried on','money']
+};
+const BYID={};CLIPS.forEach(c=>BYID[c.id]=c);
+
+const TIPS={
+ change:'Speakers often change the plan. Words like "but", "instead", "actually", "used to" or "now" are signals: wait for the final answer.',
+ mention:'You may hear all the choices. Do not take the first one you hear: check which one answers the exact question.',
+ paraphrase:'The answer often uses different words from the recording. Before you listen, think of words with the same meaning.',
+ detail:'Before you listen, find the key word in the question. Then wait for that part of the recording.',
+ number:'Numbers can sound alike. In -teen the strong sound is at the end; in -ty it is at the start. Check numbers on the second play.',
+ spelling:'When a name is spelled, write one letter at a time as you hear it. Check every letter on the second play.',
+ opinion:'For opinions and feelings, listen for phrases like "I thought", "for me", "I\'m worried" or "my favourite", and check WHO says them.',
+ maths:'Jot down each number as you hear it, then work out the answer.',
+ note:'Read the words around the gap first and predict the kind of word you need: a day, a number, a time, a name or a thing.',
+ match:'Match the whole idea, not one word. Cross off each letter you use. One sentence is not needed.'
+};
+const TIPNAME={change:'Change of plan',mention:'Many choices heard',paraphrase:'Different words',detail:'Key word',number:'Numbers',spelling:'Spelling',opinion:'Opinion',maths:'Work it out',note:'Predict the gap',match:'Match the idea'};
+const PTYPES=[['day','Day'],['number','Number'],['time','Clock time'],['name','Name'],['word','Thing or place']];
+
+/* =====================================================================
+   ANSWER CHECKING for note completion
+   ===================================================================== */
+const ONES={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,
+ first:1,second:2,third:3,fourth:4,fifth:5,sixth:6,seventh:7,eighth:8,ninth:9,tenth:10,eleventh:11,twelfth:12,thirteenth:13,fourteenth:14,fifteenth:15,sixteenth:16,seventeenth:17,eighteenth:18,nineteenth:19};
+const TENS={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90,twentieth:20,thirtieth:30};
+function norm(s,g){
+  let t=String(s).toLowerCase().replace(/[’‘]/g,"'").replace(/[£$]/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim().replace(/[.,;:!?]+$/,'').trim();
+  if(g&&g.type==='time'){t=t.replace(/(\d)\s*[.]\s*(\d\d)/g,'$1:$2').replace(/(\d|\b[a-z]+)\s*(a\.?m\.?|p\.?m|o'? ?clock)\.?$/,'$1').replace(/^at /,'').trim()}
+  t=t.replace(/^(a|an|the) /,'');
+  const strip=(g&&g.strip)||[];
+  for(let again=true;again;){again=false;for(const w of strip){if(t.startsWith(w+' ')){t=t.slice(w.length+1);again=true}if(t.endsWith(' '+w)){t=t.slice(0,-w.length-1);again=true}}}
+  return t.trim();
+}
+/* canonical form: number words -> digits, clock phrases -> h:mm, spelled letters joined */
+function canon(s,g){
+  let t=norm(s,g).replace(/[.,;!?](?=\s|$)/g,'');
+  t=t.replace(/(^| )([a-z](?: [a-z](?= |$)){2,})/g,(m,p,l)=>p+l.replace(/ /g,''));
+  const w=t.split(' '),out=[];
+  for(let i=0;i<w.length;i++){
+    const x=w[i];
+    if(x in TENS){let v=TENS[x];const n=w[i+1];if(n&&n in ONES&&ONES[n]>0&&ONES[n]<10){v+=ONES[n];i++}out.push(String(v))}
+    else if(x in ONES)out.push(String(ONES[x]));
+    else out.push(x);
+  }
+  t=out.join(' ').replace(/\b(\d+)(st|nd|rd|th)\b/g,'$1').replace(/\b(a )?quarter past (\d+)/g,(m,a,h)=>h+':15').replace(/\bhalf past (\d+)/g,'$1:30').replace(/\b(\d+)[.:]00\b/g,'$1');
+  if(g&&g.type==='time')t=t.replace(/\b(\d{1,2}) (15|30|45)\b/g,'$1:$2').replace(/(\d)\.(\d\d)/g,'$1:$2');
+  return t;
+}
+function gapOk(input,g){
+  if(!String(input||'').trim())return false;
+  const n=norm(input,g);if(!n)return false;
+  if(g.a.concat(g.alt||[]).some(a=>norm(a,g)===n))return true;
+  return canon(input,g)===canon(g.a[0],g);
+}
+function lev(a,b){const m=a.length,n=b.length,d=range(n+1);for(let i=1;i<=m;i++){let p=d[0];d[0]=i;for(let j=1;j<=n;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[n]}
+function nearMiss(input,g){if(g.type==='number'||g.type==='time')return false;const n=norm(input,g),a=norm(g.a[0],g);return a.length>=4&&n!==a&&lev(n,a)<=1}
+
+/* =====================================================================
+   SPEECH
+   ===================================================================== */
+let SY=null,UT=null;
+if(!SELFTEST&&!QS.has('novoice')&&'speechSynthesis'in window&&'SpeechSynthesisUtterance'in window){SY=window.speechSynthesis;UT=window.SpeechSynthesisUtterance}
+const VS={state:SY?'loading':'unsupported',list:[]};   /* loading | ok | none (no English voice) | unknown (empty list) | unsupported */
+let FQ=null;                                           /* fake timer queue used by the self-test */
+function later(fn,ms){if(FQ){const h={fn,ms,dead:false};FQ.push(h);return h}return setTimeout(fn,ms)}
+function unlater(h){if(!h)return;if(typeof h==='object'&&'dead'in h)h.dead=true;else clearTimeout(h)}
+const NOVELTY=/^(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|deranged|hysterical|pipe organ|fred|junior|ralph|kathy|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
+const FEMALE=/(female|\bkate\b|serena|martha|stephanie|fiona|moira|karen|samantha|tessa|sonia|libby|maisie|susan|hazel|zira|victoria|catherine|allison|\bava\b|\bamy\b|emma|jenny|aria|isha|veena|nicky)/i;
+const MALE=/(\bmale\b|daniel|arthur|oliver|jamie|\bryan\b|george|rishi|\balex\b|\btom\b|aaron|thomas|gordon|\blee\b|\bguy\b|david|\bmark\b|james|evan|nathan)/i;
+const langOf=v=>String(v.lang||'').replace('_','-').toLowerCase();
+function scoreVoice(v){
+  const l=langOf(v),n=v.name+' '+(v.voiceURI||'');let s=0;
+  if(l.startsWith('en-gb'))s+=100;else if(/^en-(ie|au|nz)/.test(l))s+=50;else if(l.startsWith('en-us'))s+=30;else s+=5;
+  if(/premium|enhanced|natural/i.test(n))s+=15;
+  if(/daniel|kate|serena|martha|arthur|oliver|stephanie|jamie|sonia|ryan|libby|google uk/i.test(n))s+=8;
+  return s;
+}
+function englishVoices(list){
+  const en=Array.from(list||[]).filter(v=>/^en([-_]|$)/i.test(v.lang||''));
+  const good=en.filter(v=>!NOVELTY.test(v.name));
+  return (good.length?good:en).sort((a,b)=>scoreVoice(b)-scoreVoice(a));
+}
+function refreshVoices(final){
+  if(!SY){VS.state='unsupported';return}
+  let all=[];try{all=SY.getVoices()||[]}catch(e){}
+  const old=VS.state;
+  if(all.length){VS.list=englishVoices(all);VS.state=VS.list.length?'ok':'none'}
+  else if(final)VS.state='unknown';
+  if(VS.state!==old)onVoiceState();
+}
+function initVoices(){
+  if(!SY){VS.state='unsupported';return}
+  refreshVoices(false);
+  const h=()=>refreshVoices(false);
+  try{if(SY.addEventListener)SY.addEventListener('voiceschanged',h);else SY.onvoiceschanged=h}catch(e){}
+  let n=0;const poll=()=>{n++;refreshVoices(n>=12);if(VS.state==='loading')later(poll,250)};
+  if(VS.state==='loading')later(poll,250);
+}
+/* one voice and pitch for every speaker of a clip */
+function cast(who){
+  const used=new Set();
+  return who.map((w,i)=>{
+    const L=VS.list;let v=null;
+    const gender=x=>FEMALE.test(x.name)?'f':MALE.test(x.name)?'m':'?';
+    v=L.find(x=>!used.has(x)&&gender(x)===w.g)||L.find(x=>!used.has(x)&&gender(x)==='?')||null;
+    let pitch;
+    if(v){used.add(v);pitch=who.length>1?(w.g==='f'?1.08:0.95):1}
+    else{
+      const same=L.filter(x=>gender(x)===w.g);v=same.length?same[i%same.length]:(L.length?L[i%L.length]:null);
+      pitch=(w.g==='f'?[1.15,1.35,1.0,1.25,1.1]:[0.8,0.95,0.7,0.88,0.75])[i%5];
+    }
+    return {voice:v,pitch};
+  });
+}
+const PL={on:false,id:0,timers:[],keep:null,who:-1,done:0,total:1,fails:0};
+function clearTimers(){PL.timers.forEach(unlater);PL.timers=[]}
+function stopSpeech(){
+  PL.id++;PL.on=false;PL.who=-1;clearTimers();
+  if(SY){try{SY.cancel()}catch(e){}}
+}
+function chunks(lines){
+  const out=[];lines.forEach(l=>{const t=l[2]||l[1];(t.match(/[^.!?]+(?:[.!?]+|$)/g)||[t]).forEach(p=>{if(p.trim())out.push([l[0],p.trim()])})});return out;
+}
+/* speaks the chunks one by one; calls onDone() or onFail() exactly once unless stopped */
+function speakSeq(clip,list,onDone,onFail,onHeard){
+  if(!SY)return onFail();
+  try{if(SY.speaking||SY.pending)SY.cancel();if(SY.paused)SY.resume()}catch(e){}
+  clearTimers();
+  const id=++PL.id,cs=cast(clip.who);PL.on=true;PL.done=0;PL.total=list.length;
+  let k=0,heard=false;
+  const fail=()=>{if(id!==PL.id)return;stopSpeech();onFail()};
+  const next=()=>{
+    if(id!==PL.id)return;
+    if(k>=list.length){PL.on=false;PL.who=-1;clearTimers();return onDone()}
+    const [sp,text]=list[k++],c=cs[sp];let over=false,started=false,wd=null;
+    const finish=()=>{if(over||id!==PL.id)return;over=true;unlater(wd);PL.done=k;progress();
+      const gap=k<list.length&&list[k][0]!==sp?650:180;PL.timers.push(later(next,gap))};
+    try{
+      const u=new UT(text);if(c.voice){u.voice=c.voice;u.lang=c.voice.lang}else u.lang='en-GB';
+      const rate=curRate();u.rate=rate;u.pitch=c.pitch;
+      u.onstart=()=>{if(id!==PL.id||over)return;started=true;if(!heard&&onHeard)onHeard();heard=true;unlater(wd);PL.who=sp;progress();
+        wd=later(finish,text.length/(9*rate)*1000+8000);PL.timers.push(wd)};
+      const t0=Date.now();
+      /* some browsers never fire "start": an "end" after real speaking time still counts, an instant one is a failure */
+      u.onend=()=>{if(id!==PL.id||over)return;if(!started&&!heard){if(Date.now()-t0<500)return fail();heard=true;if(onHeard)onHeard()}finish()};
+      u.onerror=ev=>{if(id!==PL.id||over)return;const er=ev&&ev.error;if(er==='canceled'||er==='interrupted'){if(!heard)fail();else{stopSpeech();onFail()}return}fail()};
+      PL.keep=u;
+      wd=later(()=>{if(id!==PL.id||over||started)return;if(heard&&SY.speaking){wd=later(finish,text.length/(9*rate)*1000+8000);PL.timers.push(wd)}else fail()},6000);PL.timers.push(wd);
+      SY.speak(u);
+    }catch(e){fail()}
+  };
+  next();
+}
+
+/* =====================================================================
+   UI
+   ===================================================================== */
+const app=document.getElementById('app');
+const $=s=>app.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let V={screen:'home'};
+const noSound=()=>VS.state==='unsupported'||VS.state==='none';
+function curRate(){return (G.slow&&!(V.mock))?0.72:0.95}
+function starHtml(n){return '★'.repeat(n)+'<i>'+'★'.repeat(3-n)+'</i>'}
+function starsFor(ok,n){return ok===n?3:ok/n>=0.7?2:ok/n>=0.4?1:0}
+function chipsHtml(){const st=dayStreak();return `<span class="chip">⭐ <span id="xp">${totalXp()}</span> XP</span>${G.run>1?`<span class="chip">🎯 ${G.run} in a row</span>`:''}${st?`<span class="chip">🔥 ${st} day${st>1?'s':''}</span>`:''}`}
+function voiceLine(){
+  if(VS.state==='loading')return 'Looking for an English voice...';
+  if(VS.state==='ok'){const v=VS.list[0];return 'Voice ready: '+v.name+' ('+v.lang+')'+(VS.list.length>1?' and '+(VS.list.length-1)+' more':'')}
+  if(VS.state==='unknown')return 'The device did not list its voices. Tap Play on a clip to test the sound.';
+  return 'No English voice found on this device. Clips open in read mode.';
+}
+function onVoiceState(){
+  if(V.screen==='home'){const e=$('#voice');if(e)e.textContent=voiceLine()}
+  else if(V.screen==='clip'&&!V.res){drawTop();drawPlayer();drawExtra()}
+}
+function toTop(){if(!SELFTEST)window.scrollTo(0,0)}
+
+function showHome(){
+  stopSpeech();V={screen:'home'};
+  const total=CLIPS.reduce((a,c)=>a+(+G.stars[c.id]||0),0);
+  const next=CLIPS.find(c=>!(c.id in G.stars));
+  const mk=G.mock&&G.mock.i<G.mock.ids.length?G.mock:null;
+  app.innerHTML=`
+  <div class="top"><a class="btn ghost" href="../">← Quiz</a><div class="chips">${chipsHtml()}<span class="chip">★ ${total}/${CLIPS.length*3}</span></div></div>
+  <h1>🎧 Listening Station</h1>
+  <p class="sub">ESL listening practice: read the questions, listen twice, answer.</p>
+  <div class="card">
+    <h3>How to play</h3>
+    <div>1. Read the questions BEFORE you press Play.<br>2. You get <b>2 plays</b>, like in an exam. Answer on the first, check on the second.<br>3. Press <b>Check answers</b>. Then you can read the script.<br>4. Get everything right with only one play to win the <b>👂 sharp ear</b> badge.</div>
+    <details class="ru"><summary>🇷🇺 Перевод правил</summary><p>1. Прочитай вопросы ДО того, как нажмешь Play.<br>2. У тебя 2 прослушивания, как на экзамене: на первом отвечай, на втором проверяй себя.<br>3. Нажми «Check answers». После этого можно прочитать текст записи.<br>4. Все верно с одного прослушивания - значок «чуткое ухо». Звезды: все верно - 3, большинство - 2, часть - 1.</p></details>
+    <div class="soft" id="voice" style="margin-top:6px">${esc(voiceLine())}</div>
+  </div>
+  <div class="card mock"><h3>🏁 Mock Listening Paper</h3><div>4 random recordings, one from each station. Normal speed only, no answers until the end.</div>
+    <details class="ru"><summary>🇷🇺 Перевод</summary><p>Пробный экзамен: 4 случайные записи, по одной с каждой станции. Только обычная скорость, ответы - в конце.</p></details>
+    <div class="row">${mk?`<button class="btn" data-act="mockgo">Continue (${mk.i+1}/${mk.ids.length}) ▶</button><button class="btn ghost" data-act="mocknew">New paper</button>`:`<button class="btn" data-act="mocknew">Start ▶</button>`}${G.mockBest!=null?`<span class="chip">Best: ${G.mockBest}%</span>`:''}</div></div>
+  ${STATIONS.map(s=>`<h2>${s.ico} Station ${s.id}: ${s.name}</h2><div class="sub" style="margin:0">${s.desc}</div><div class="tiles">${CLIPS.filter(c=>c.st===s.id).map(c=>`<button class="tile${next&&next.id===c.id?' next':''}" data-act="open" data-id="${c.id}"><span class="ico">${c.ico}</span><span class="nm">${esc(c.title)}</span>${G.ace[c.id]?'<span class="ace">👂 sharp ear</span>':''}<span class="st">${starHtml(+G.stars[c.id]||0)}</span></button>`).join('')}</div>`).join('')}`;
+  toTop();
+}
+
+/* ---------- a clip ---------- */
+function newDraft(c){
+  return {ans:c.q.map(()=>null),pred:c.q.map(()=>null),plays:0,played:false,read:false,
+    order:c.q.map(q=>q.t==='mc'?shuffle(range(q.o.length)):null),so:c.s?shuffle(range(c.s.length)):null};
+}
+function validDraft(d,c){return d&&Array.isArray(d.ans)&&d.ans.length===c.q.length&&Array.isArray(d.order)&&c.q.every((q,i)=>q.t!=='mc'||(d.order[i]&&d.order[i].length===q.o.length))&&(!c.s||(d.so&&d.so.length===c.s.length))}
+function openClip(id,mock){
+  stopSpeech();const c=BYID[id];
+  let d=mock?G.mock.draft:G.draft[id];
+  if(!validDraft(d,c)){d=newDraft(c);if(mock)G.mock.draft=d;else G.draft[id]=d;saveG()}
+  V={screen:'clip',c,d,mock:!!mock,res:null,showScript:false,msg:'',err:false};
+  PL.fails=0;renderClip();toTop();
+}
+function renderClip(){
+  app.innerHTML='<div id="ctop"></div><div id="cplayer"></div><div id="cextra"></div><div id="cqs"></div><div id="cfoot"></div>';
+  drawTop();drawPlayer();drawExtra();drawQs();drawFoot();
+}
+function drawTop(){
+  const c=V.c,e=$('#ctop');if(!e)return;
+  const where=V.mock?(V.review?'Mock review':`Mock paper: part ${G.mock.i+1} of ${G.mock.ids.length}`):`Station ${c.st}: ${STATIONS[c.st-1].name}`;
+  e.innerHTML=`<div class="top"><button class="btn ghost" data-act="${V.review?'report':'home'}">← ${V.review?'Report':'Stations'}</button><div class="chips">${chipsHtml()}</div></div>
+  <h1 style="font-size:26px">${c.ico} ${esc(c.title)}</h1><p class="sub">${where}<br>${esc(c.intro)}</p>`;
+}
+const readMode=()=>noSound()||V.d.read;
+function drawPlayer(){
+  const box=$('#cplayer');if(!box)return;
+  box.className=(V.res||noSound())?'':'stick';
+  if(V.res){box.innerHTML=scoreHtml();return}
+  const d=V.d,left=Math.max(0,2-d.plays),loading=VS.state==='loading';
+  if(noSound()){box.innerHTML='';return}
+  const label=PL.on?'⏹ Stop':loading?'Loading voice...':left===0?'No plays left':d.plays===0?'▶ Play':'▶ Play again';
+  box.innerHTML=`<div class="card player">
+    <div class="prow"><button class="btn play" data-act="play" ${(!PL.on&&(left===0||loading))?'disabled':''}>${label}</button>
+    <div class="speed" role="group" aria-label="Speed"><button data-act="speed" data-v="0" class="${V.mock||!G.slow?'on':''}" ${V.mock?'disabled':''}>Normal</button><button data-act="speed" data-v="1" class="${!V.mock&&G.slow?'on':''}" ${V.mock?'disabled':''}>🐢 Slow</button></div></div>
+    <div class="heads" id="heads">${V.c.who.map((w,i)=>`<div class="head${PL.who===i?' on':''}" data-sp="${i}"><span>${w.i}</span>${V.c.who.length>3?'':esc(w.n)}</div>`).join('')}<span class="tickets">Plays left: ${'🎟️'.repeat(left)||'0'}</span></div>
+    <div class="pbar"><i style="width:${PL.on?Math.round(100*PL.done/PL.total):0}%"></i></div>
+    ${V.msg?`<div class="pmsg${V.err?' err':''}">${esc(V.msg)}</div>`:''}
+  </div>`;
+}
+function progress(){
+  if(V.screen!=='clip'||V.res)return;
+  const b=$('.pbar i');if(b)b.style.width=Math.round(100*PL.done/PL.total)+'%';
+  app.querySelectorAll('.head').forEach(h=>h.classList.toggle('on',+h.dataset.sp===PL.who));
+}
+function scriptHtml(mark){
+  const c=V.c;
+  return c.lines.map(l=>{
+    let t=esc(l[1]);
+    if(mark)c.q.forEach((q,i)=>{if(q.t==='match'&&q.sp!==l[0])return;const ev=esc(q.ev);const at=t.indexOf(ev);if(at>=0)t=t.slice(0,at)+'<mark><sup>'+(i+1)+'</sup> '+ev+'</mark>'+t.slice(at+ev.length)});
+    return `<p><span class="who">${esc(c.who[l[0]].n)}:</span> ${t}</p>`}).join('');
+}
+function drawExtra(){
+  const box=$('#cextra');if(!box)return;
+  if(V.res){box.innerHTML=V.showScript?`<div class="script" id="script"><b>Script</b> <span class="soft">The yellow parts hold the answers.</span>${scriptHtml(true)}</div>`:'';return}
+  const c=V.c,gaps=c.q.some(q=>q.t==='gap');
+  let h='';
+  if(noSound())h+=`<div class="warnbox" id="novoice"><b>${VS.state==='none'?'This device has no English voice.':'This browser cannot speak.'}</b><br>The recording cannot be played, so use <b>read mode</b>: ask someone to read the script aloud twice while you look only at the questions. On your own? Read it twice, then hide it and answer.
+    <details class="ru"><summary>🇷🇺 Перевод</summary><p>${VS.state==='none'?'На этом устройстве нет английского голоса.':'Этот браузер не умеет говорить.'} Режим чтения: попроси кого-нибудь прочитать текст вслух два раза, а сам смотри только на вопросы. Если ты один - прочитай текст дважды, спрячь его и отвечай.</p></details></div>`;
+  if(readMode())h+=`<div class="card"><div class="row"><button class="btn ghost" data-act="script">${V.showScript?'Hide the script':'Show the script'}</button>${!noSound()?'<button class="btn ghost" data-act="soundmode">Back to sound</button>':''}</div>${V.showScript?`<div class="script" id="script" style="margin:12px 0 0">${scriptHtml(false)}</div>`:''}</div>`;
+  h+=`<div class="card">
+    <b>${gaps?'First predict: what kind of word fits each gap?':c.s?'Read the sentences first.':'Read the questions first.'} ${readMode()?'Then show the script.':'Then press Play.'}</b>
+    <details class="ru"><summary>🇷🇺 Перевод задания и трудных слов</summary><p>${gaps?`Сначала угадай, какое слово нужно в каждый пропуск (день, число, время, имя, предмет или место) - за верную догадку бонус. Потом ${readMode()?'открой текст':'нажми Play'} и впиши ответы. Пиши одно слово, имя, число или время.`:c.s?'Соедини каждого говорящего (Speaker) с одним предложением: нажми букву. Одна буква или несколько могут остаться лишними. Сначала прочитай предложения.':`Прочитай вопросы, ${readMode()?'открой текст':'нажми Play'} и выбери один ответ на каждый вопрос.`}</p><div class="glt">${c.gl.map(g=>`<b>${esc(g[0])}</b><span>${esc(g[1])}</span>`).join('')}</div></details>
+    ${!noSound()&&!V.d.read?`<details class="ru"><summary>🔇 Can't hear anything?</summary><p>Turn the volume up and switch silent mode off, then tap Play. Still no sound? Use read mode.<br><span class="soft">Нет звука: прибавь громкость, выключи беззвучный режим. Если не помогло - режим чтения.</span></p><button class="btn ghost" data-act="readmode">Use read mode</button></details>`:''}
+  </div>`;
+  box.innerHTML=h;
+}
+function drawQs(){
+  const box=$('#cqs');if(!box)return;const c=V.c,d=V.d,r=V.res;
+  let h='';
+  if(c.s)h+=`<div class="card"><b>Sentences</b><ul class="stmts">${d.so.map((si,k)=>`<li><span class="let">${String.fromCharCode(65+k)}</span><span>${esc(c.s[si])}</span></li>`).join('')}</ul></div>`;
+  h+=c.q.map((q,i)=>{
+    let body='';
+    if(q.t==='mc'){
+      body=`<div class="qt">${esc(q.q)}</div><div class="opts">${d.order[i].map(oi=>{let cl=d.ans[i]===oi?' sel':'';if(r)cl=oi===0?' ok':d.ans[i]===oi?' no':'';return `<button class="opt${cl}" data-act="opt" data-q="${i}" data-o="${oi}" ${r?'disabled':''}>${r&&oi===0?'✔ ':r&&d.ans[i]===oi?'✘ ':''}${esc(q.o[oi])}</button>`}).join('')}</div>`;
+    }else if(q.t==='gap'){
+      body=`<div class="gapline"><span>${esc(q.pre)}</span><input class="gap${r?(r.ok[i]?' ok':' no'):''}" data-q="${i}" value="${esc(d.ans[i]||'')}" ${r?'disabled':''} autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Gap ${i+1}" enterkeyhint="next">${q.post?`<span>${esc(q.post)}</span>`:''}</div>
+      <div class="pred"><small>${r?(d.pred[i]==null?'No prediction':d.pred[i]===q.type?'🔮 Good prediction':'Prediction: it was "'+PTYPES.find(p=>p[0]===q.type)[1]+'"'):(d.plays||d.read||d.seen?'Your prediction':'Predict before you listen')}</small>${PTYPES.map(p=>`<button class="${d.pred[i]===p[0]?'on':''}" data-act="pred" data-q="${i}" data-p="${p[0]}" ${(r||d.plays||d.read||d.seen)?'disabled':''}>${p[1]}</button>`).join('')}</div>`;
+    }else{
+      const chosen=d.ans[i];
+      body=`<div class="qt">${c.who[q.sp].i} ${esc(c.who[q.sp].n)}</div><div class="letters">${d.so.map((si,k)=>{let cl=chosen===si?' sel':d.ans.indexOf(si)>=0?' used':'';if(r)cl=si===q.a?' ok':chosen===si?' no':' used';return `<button class="lb${cl}" data-act="let" data-q="${i}" data-s="${si}" ${r?'disabled':''} aria-label="Speaker ${q.sp+1}, sentence ${String.fromCharCode(65+k)}">${String.fromCharCode(65+k)}</button>`}).join('')}</div><div class="chosen">${chosen!=null?esc(c.s[chosen]):''}</div>`;
+    }
+    return `<div class="card q" id="q${i}"><div class="qn">Question ${i+1}</div>${body}${r?fbHtml(i):''}</div>`;
+  }).join('');
+  box.innerHTML=h;
+}
+function evLine(i){const c=V.c,q=c.q[i];return c.lines.findIndex(l=>(q.t!=='match'||l[0]===q.sp)&&l[1].indexOf(q.ev)>=0)}
+function fbHtml(i){
+  const c=V.c,q=c.q[i],r=V.res,ok=r.ok[i],a=V.d.ans[i];
+  let head=ok?'✔ Correct!':'✘ Not this time';
+  let extra='';
+  if(!ok&&q.t==='gap')extra=`<p>${a&&String(a).trim()?'You wrote: <b>'+esc(a)+'</b>. ':'You left it empty. '}Answer: <b>${esc(q.a[0])}</b>${a&&nearMiss(a,q)?'. So close! Check the spelling.':''}</p>`;
+  if(!ok&&q.t==='match'){const L=String.fromCharCode(65+V.d.so.indexOf(q.a));extra=`<p>Answer: <b>${L}</b> - ${esc(c.s[q.a])}</p>`}
+  if(ok)return `<div class="fb good"><b class="h">${head}</b><p>${esc(q.e)}</p></div>`;
+  return `<div class="fb bad"><b class="h">${head}</b>${extra}<p>${esc(q.e)}</p><p class="method">💡 <b>${TIPNAME[q.trap]}:</b> ${esc(TIPS[q.trap])}</p><p class="heard">In the recording: "${esc(q.ev)}"</p>${noSound()?'':`<button class="btn ghost" data-act="hear" data-q="${i}">🔊 Hear that part</button>`}</div>`;
+}
+function answered(i){const q=V.c.q[i],a=V.d.ans[i];return q.t==='gap'?!!String(a||'').trim():a!=null}
+function drawFoot(){
+  const box=$('#cfoot');if(!box)return;
+  if(V.res){box.innerHTML='';return}
+  const left=V.c.q.filter((q,i)=>!answered(i)).length,listened=V.d.played||readMode();
+  const msg=!listened?'Press Play first':left?`${left} to answer`:'All answered';
+  const ready=listened&&(!left||V.d.plays>=2);
+  box.innerHTML=`<div class="foot"><div class="in"><span>${msg}</span><button class="btn" data-act="check" ${ready?'':'disabled'}>${V.mock?'Lock in ▶':'Check answers'}</button></div></div>`;
+}
+function scoreHtml(){
+  const r=V.res,c=V.c;
+  const i=CLIPS.indexOf(c),nx=CLIPS[(i+1)%CLIPS.length];
+  return `<div class="card score"><div class="stars">${starHtml(r.stars)}</div><div class="big">${r.right} / ${c.q.length} correct</div>
+    <div>${r.review?'':`+${r.xp} XP`}${r.pred?` · 🔮 ${r.pred} good prediction${r.pred>1?'s':''}`:''}${r.ace?'<br><b>👂 Sharp ear: all correct with one play!</b>':''}</div>
+    ${r.right<c.q.length?'<div class="soft">Read the tips under the red answers, then listen to those parts again.</div>':''}
+    <div class="row"><button class="btn ghost" data-act="script">${V.showScript?'Hide the script':'📜 Show the script'}</button>
+    ${V.review?'<button class="btn" data-act="report">Back to report</button>':`<button class="btn ghost" data-act="again">↻ Try again</button><button class="btn" data-act="open" data-id="${nx.id}">Next: ${esc(nx.title)} ▶</button>`}</div></div>`;
+}
+function grade(c,d){return c.q.map((q,i)=>q.t==='mc'?d.ans[i]===0:q.t==='match'?d.ans[i]===q.a:gapOk(d.ans[i],q))}
+/* writes XP, streaks and progress for every answer of the clip */
+function award(c,d){
+  const ok=grade(c,d);let xp=0,pred=0;
+  ok.forEach((o,i)=>{
+    const k=c.id+':'+i;let x=0;
+    if(o){x+=G.done[k]?2:10;G.done[k]=1;G.run++;G.bestRun=Math.max(G.bestRun,G.run);if(G.run%5===0)x+=5}else G.run=0;
+    if(c.q[i].t==='gap'&&d.pred[i]===c.q[i].type){pred++;if(!G.pdone[k]){x+=1;G.pdone[k]=1}}
+    if(x){addXp(x);xp+=x}
+    saveG();touchDay();
+  });
+  const right=ok.filter(Boolean).length,stars=starsFor(right,c.q.length),prev=+G.stars[c.id]||0;
+  if(stars>prev){const b=5*(stars-prev);addXp(b);xp+=b}
+  G.stars[c.id]=Math.max(prev,stars);
+  const ace=right===c.q.length&&d.plays===1&&!d.read&&!d.seen&&!noSound()&&curRate()>0.9&&!d.slowUsed;
+  if(ace)G.ace[c.id]=1;
+  saveG();
+  return {ok,right,stars,xp,pred,ace};
+}
+function check(){
+  if(V.screen!=='clip'||V.res)return;
+  if(!(V.d.played||readMode()))return;
+  stopSpeech();
+  const c=V.c,res=award(c,V.d);
+  if(V.mock){
+    const m=G.mock;m.res.push({id:c.id,right:res.right,n:c.q.length,stars:res.stars,xp:res.xp,d:V.d});m.i++;m.draft=null;
+    if(m.i>=m.ids.length){const pc=Math.round(100*m.res.reduce((a,x)=>a+x.right,0)/m.res.reduce((a,x)=>a+x.n,0));G.mockBest=Math.max(pc,G.mockBest||0);saveG();showReport();confetti()}
+    else{saveG();openClip(m.ids[m.i],true)}
+    return;
+  }
+  delete G.draft[c.id];saveG();
+  V.res=res;V.showScript=false;V.msg='';
+  renderClip();toTop();
+  if(res.stars===3)confetti();
+}
+function mockPick(){return STATIONS.map(s=>shuffle(CLIPS.filter(c=>c.st===s.id))[0].id)}
+function newMock(){G.mock={ids:mockPick(),i:0,res:[],draft:null};saveG();openClip(G.mock.ids[0],true)}
+function showReport(){
+  stopSpeech();const m=G.mock;if(!m||!m.res.length)return showHome();
+  V={screen:'report'};
+  const right=m.res.reduce((a,x)=>a+x.right,0),n=m.res.reduce((a,x)=>a+x.n,0),pc=Math.round(100*right/n),xp=m.res.reduce((a,x)=>a+x.xp,0);
+  app.innerHTML=`<div class="top"><button class="btn ghost" data-act="home">← Stations</button><div class="chips">${chipsHtml()}</div></div>
+  <div class="card score"><h3>Mock paper finished</h3><div class="big">${right} / ${n} correct (${pc}%)</div><div>+${xp} XP</div><div class="soft">Open each part to see the tips and the script.</div></div>
+  <div class="replist">${m.res.map((x,k)=>{const c=BYID[x.id];return `<div class="card rep" style="margin:0"><div><b>${c.ico} ${esc(c.title)}</b><br><span class="soft">${x.right} / ${x.n} correct</span></div><button class="btn ghost" data-act="review" data-k="${k}">Review</button></div>`}).join('')}</div>
+  <div class="row" style="margin-top:20px"><button class="btn" data-act="mocknew">New paper ▶</button></div>`;
+  toTop();
+}
+function openReview(k){
+  const x=G.mock.res[k],c=BYID[x.id],ok=grade(c,x.d);
+  stopSpeech();
+  V={screen:'clip',c,d:x.d,mock:true,review:true,showScript:false,msg:'',res:{ok,right:x.right,stars:x.stars,xp:x.xp,review:true,pred:0,ace:false}};
+  renderClip();toTop();
+}
+function playClip(){
+  if(V.screen!=='clip'||V.res)return;
+  if(PL.on){stopSpeech();V.msg='Stopped. That play has been used.';V.err=false;drawPlayer();return}
+  const d=V.d,c=V.c;if(d.plays>=2||noSound()||VS.state==='loading')return;
+  const view=V;
+  d.plays++;if(curRate()<0.9)d.slowUsed=true;
+  V.msg=d.plays===1?'Listening: play 1 of 2. Answer as you go.':'Listening: play 2 of 2. Check your answers.';V.err=false;saveG();
+  speakSeq(c,chunks(c.lines),()=>{
+    if(V!==view)return;d.played=true;saveG();V.msg=d.plays<2?'Done. Play once more to check.':'Both plays used. Check your answers.';drawPlayer();drawFoot();
+  },()=>{
+    if(V!==view)return;d.plays=Math.max(0,d.plays-1);PL.fails++;V.err=true;
+    V.msg='The voice did not play. Check the volume and tap Play again.';
+    if(PL.fails>=2){d.read=true;V.showScript=false}
+    saveG();drawPlayer();drawExtra();drawQs();drawFoot();
+  },()=>{if(V!==view)return;d.played=true;saveG();drawFoot()});
+  saveG();drawPlayer();drawQs();drawFoot();
+}
+/* leaving the page or switching apps: stop talking; an unfinished play is given back */
+function interrupt(){
+  const was=PL.on;stopSpeech();
+  if(was&&V.screen==='clip'&&!V.res){V.d.plays=Math.max(0,V.d.plays-1);V.msg='Playback stopped when you left. That play was given back.';V.err=false;saveG();drawPlayer();drawFoot()}
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)interrupt()});
+addEventListener('pagehide',()=>stopSpeech());
+
+app.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b||!app.contains(b)||b.disabled)return;
+  const a=b.dataset.act,i=+b.dataset.q;
+  if(a==='home')showHome();
+  else if(a==='open')openClip(b.dataset.id,false);
+  else if(a==='mocknew')newMock();
+  else if(a==='mockgo')openClip(G.mock.ids[G.mock.i],true);
+  else if(a==='report')showReport();
+  else if(a==='review')openReview(+b.dataset.k);
+  else if(a==='play')playClip();
+  else if(a==='speed'){G.slow=b.dataset.v==='1';if(G.slow&&PL.on&&V.d)V.d.slowUsed=true;saveG();drawPlayer()}
+  else if(a==='readmode'){stopSpeech();V.d.read=true;V.showScript=false;saveG();drawPlayer();drawExtra();drawQs();drawFoot()}
+  else if(a==='soundmode'){V.d.read=false;PL.fails=0;V.msg='';V.showScript=false;saveG();drawPlayer();drawExtra();drawQs();drawFoot()}
+  else if(a==='script'){V.showScript=!V.showScript;if(!V.res&&V.showScript){V.d.seen=true;saveG();drawQs()}drawPlayer();drawExtra();if(V.showScript){const s=$('#script');if(s&&!SELFTEST)s.scrollIntoView({behavior:'smooth',block:'start'})}}
+  else if(a==='opt'){V.d.ans[i]=+b.dataset.o;saveG();app.querySelectorAll(`.opt[data-q="${i}"]`).forEach(x=>x.classList.toggle('sel',x===b));drawFoot()}
+  else if(a==='let'){const s=+b.dataset.s;V.d.ans.forEach((v,k)=>{if(v===s&&k!==i)V.d.ans[k]=null});V.d.ans[i]=s;saveG();const y=window.scrollY;drawQs();drawFoot();if(!SELFTEST)window.scrollTo(0,y)}
+  else if(a==='pred'){V.d.pred[i]=V.d.pred[i]===b.dataset.p?null:b.dataset.p;saveG();app.querySelectorAll(`[data-act="pred"][data-q="${i}"]`).forEach(x=>x.classList.toggle('on',x.dataset.p===V.d.pred[i]))}
+  else if(a==='check')check();
+  else if(a==='again'){G.draft[V.c.id]=null;delete G.draft[V.c.id];saveG();openClip(V.c.id,false)}
+  else if(a==='hear'){const c=V.c,k=evLine(i);if(k>=0){const l=c.lines[k];speakSeq(c,chunks([l]),()=>{},()=>{})}}
+});
+app.addEventListener('input',e=>{
+  const t=e.target;if(!t.classList.contains('gap')||V.res)return;V.d.ans[+t.dataset.q]=t.value;saveG();drawFoot();
+});
+app.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.classList.contains('gap')){e.preventDefault();const all=Array.from(app.querySelectorAll('.gap')),k=all.indexOf(e.target);if(all[k+1])all[k+1].focus();else e.target.blur()}
+});
+
+/* ---------- confetti ---------- */
+const fx=document.getElementById('fx'),fc=fx.getContext('2d');let CF=[],raf=0;
+function confetti(){
+  if(SELFTEST)return;fx.width=innerWidth;fx.height=innerHeight;const cols=['#a3e635','#f59e0b','#e8710a','#fffbea','#4ade80'];
+  for(let i=0;i<120;i++)CF.push({x:innerWidth/2+(Math.random()-.5)*120,y:innerHeight*.4,vx:(Math.random()-.5)*520,vy:-140-Math.random()*420,l:1.4+Math.random(),c:cols[i%5],z:5+Math.random()*6});
+  let last=performance.now();const step=t=>{const dt=Math.min(.05,(t-last)/1000);last=t;fc.clearRect(0,0,fx.width,fx.height);CF=CF.filter(p=>p.l>0);for(const p of CF){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=560*dt;p.l-=dt;fc.fillStyle=p.c;fc.fillRect(p.x,p.y,p.z,p.z)}raf=CF.length?requestAnimationFrame(step):0;if(!CF.length)fc.clearRect(0,0,fx.width,fx.height)};
+  if(!raf)raf=requestAnimationFrame(step);
+}
+
+/* =====================================================================
+   SELF-TEST (?selftest): drives the real screens with a fake voice and
+   in-memory storage; the real localStorage is only read for comparison.
+   ===================================================================== */
+function runSelftest(){
+  const errs=[],note=[];let checks=0;
+  const T=(c,m)=>{checks++;if(!c&&errs.length<60)errs.push(m)};
+  const snap=()=>{try{const o=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);o.push(k+'='+localStorage.getItem(k))}return o.sort().join('|')}catch(e){return 'na'}};
+  const before=snap();
+  const click=sel=>{const el=app.querySelector(sel);if(!el){errs.push('missing '+sel+' on '+(V.c?V.c.id:V.screen));return false}if(el.disabled)return false;el.click();return true};
+  const type=(i,val)=>{const el=app.querySelector(`.gap[data-q="${i}"]`);if(!el){errs.push('no gap '+V.c.id+' '+i);return}el.value=val;el.dispatchEvent(new Event('input',{bubbles:true}))};
+  /* fake voice */
+  const fake={speaking:false,pending:false,paused:false,voices:[],mode:'ok',q:[],cancels:0,spoken:[],
+    getVoices(){return this.voices},speak(u){this.q.push(u);this.spoken.push(u);this.speaking=true},cancel(){this.cancels++;this.q=[];this.speaking=false},resume(){}};
+  function FU(t){this.text=t}
+  const flush=()=>{let n=0;while(n++<4000){
+      if(fake.q.length&&fake.mode!=='silent'){const u=fake.q.shift();fake.speaking=false;if(fake.mode==='error')u.onerror({error:'synthesis-failed'});else if(fake.mode==='instant')u.onend();else{u.onstart();u.onend()}continue}
+      const live=FQ.filter(h=>!h.dead);if(!live.length)break;live.sort((a,b)=>a.ms-b.ms);const h=live[0];h.dead=true;h.fn()}
+    if(n>=4000)errs.push('flush loop')};
+  const V1={name:'Daniel',lang:'en-GB'},V2={name:'Kate',lang:'en-GB'},V3={name:'Samantha',lang:'en-US'},V4={name:'Zarvox',lang:'en-US'},VR={name:'Milena',lang:'ru-RU'};
+  try{
+    FQ=[];SY=fake;UT=FU;
+    /* voices: asynchronous arrival */
+    VS.state='loading';VS.list=[];loadG();openClip('d1',false);
+    T(app.querySelector('[data-act="play"]').disabled,'play disabled while loading');
+    initVoices();T(VS.state==='loading','state loading');
+    fake.voices=[VR,V4,V3,V1,V2];flush();
+    T(VS.state==='ok','voices arrive');T(VS.list[0].lang==='en-GB','en-GB preferred');T(!VS.list.includes(V4)&&!VS.list.includes(VR),'novelty and non-English filtered');
+    T(!app.querySelector('[data-act="play"]').disabled,'play enabled after voices');
+    const cs=cast(BYID.d1.who);T(cs[0].voice===V2&&cs[1].voice===V1,'two voices by gender');
+    VS.list=[V1];const c1=cast(BYID.h4.who);T(new Set(c1.map(x=>x.pitch)).size===5,'one voice: pitches differ');
+    const c2=cast(BYID.d1.who);T(c2[0].pitch!==c2[1].pitch,'one voice dialogue pitches');
+    VS.list=englishVoices(fake.voices);
+    /* two plays only */
+    openClip('d1',false);T(app.querySelector('[data-act="check"]').disabled,'no check before play');
+    click('[data-act="play"]');T(PL.on&&V.d.plays===1,'play 1 starts');flush();T(!PL.on&&V.d.plays===1,'play 1 ends');
+    T(new Set(fake.spoken.map(u=>u.voice&&u.voice.name)).size===2,'dialogue uses two voices');
+    T(fake.spoken.every(u=>u.rate===0.95),'normal rate');
+    click('[data-act="speed"][data-v="1"]');fake.spoken=[];click('[data-act="play"]');flush();T(V.d.plays===2&&fake.spoken.every(u=>u.rate===0.72),'slow second play');
+    T(app.querySelector('[data-act="play"]').disabled,'third play blocked');playClip();T(V.d.plays===2,'third play refused');
+    click('[data-act="speed"][data-v="0"]');
+    openClip('d1',false);T(V.d.plays===2,'plays remembered');
+    /* leaving stops speech and gives the play back */
+    delete G.draft.m1;openClip('m1',false);click('[data-act="play"]');let k=fake.cancels;click('[data-act="home"]');T(!PL.on&&fake.cancels>k,'leaving stops speech');flush();
+    delete G.draft.m1;openClip('m1',false);click('[data-act="play"]');k=fake.cancels;interrupt();T(!PL.on&&fake.cancels>k&&V.d.plays===0,'hidden tab refunds play');flush();
+    click('[data-act="play"]');click('[data-act="play"]');T(!PL.on&&V.d.plays===1,'stop button uses the play');flush();
+    /* failures */
+    delete G.draft.m2;openClip('m2',false);fake.mode='error';click('[data-act="play"]');flush();T(V.d.plays===0&&/did not play/.test(app.textContent),'error refunds');
+    click('[data-act="play"]');flush();T(V.d.read===true&&!!app.querySelector('[data-act="script"]'),'second failure -> read mode');
+    click('[data-act="script"]');T(!!app.querySelector('#script p'),'fallback transcript');
+    T(app.querySelector('[data-act="check"]').disabled,'read mode needs all answers');BYID.m2.q.forEach((q,i)=>click(`.opt[data-q="${i}"][data-o="0"]`));click('[data-act="check"]');T(V.res&&V.res.right===4&&!G.ace.m2,'read mode scores, no ear badge');
+    delete G.draft.m3;PL.fails=0;openClip('m3',false);fake.mode='silent';click('[data-act="play"]');flush();T(V.d.plays===0&&!PL.on,'silent voice detected');
+    fake.mode='instant';delete G.draft.m3;openClip('m3',false);click('[data-act="play"]');flush();T(V.d.plays===0&&!V.d.played,'instant end without start is a failure');
+    fake.mode='ok';
+    /* empty voice list still allows a try */
+    fake.voices=[];VS.state='loading';VS.list=[];refreshVoices(true);T(VS.state==='unknown','unknown state');delete G.draft.m4;openClip('m4',false);click('[data-act="play"]');flush();T(V.d.played&&fake.spoken[fake.spoken.length-1].lang==='en-GB','unknown voice speaks en-GB');
+    /* no English voice */
+    fake.voices=[VR];VS.state='loading';refreshVoices(false);T(VS.state==='none','no English voice');delete G.draft.m4;openClip('m4',false);
+    T(!!app.querySelector('#novoice')&&!app.querySelector('[data-act="play"]'),'no-voice message');click('[data-act="script"]');T(app.querySelectorAll('#script p').length===BYID.m4.lines.length,'no-voice transcript');
+    SY=null;VS.state='unsupported';openClip('m4',false);T(!!app.querySelector('#novoice'),'unsupported message');SY=fake;
+    fake.voices=[V1,V2,V3];VS.state='loading';refreshVoices(false);
+
+    /* every clip: all correct, then every wrong path */
+    LS.clear();loadG();
+    const listen=()=>{click('[data-act="play"]');flush()};
+    const fillRight=c=>c.q.forEach((q,i)=>{
+      if(q.t==='mc')click(`.opt[data-q="${i}"][data-o="0"]`);
+      else if(q.t==='match')click(`.lb[data-q="${i}"][data-s="${q.a}"]`);
+      else{click(`[data-act="pred"][data-q="${i}"][data-p="${q.type}"]`);type(i,q.a[0])}});
+    let wrongPaths=0;
+    for(const c of CLIPS){
+      openClip(c.id,false);
+      c.q.forEach((q,i)=>{if(q.t==='gap')click(`[data-act="pred"][data-q="${i}"][data-p="${q.type}"]`)});
+      listen();fillRight(c);
+      const xp0=totalXp();T(click('[data-act="check"]'),c.id+' check enabled');
+      T(V.res&&V.res.right===c.q.length&&V.res.stars===3,c.id+' all correct');T(totalXp()>xp0&&G.stars[c.id]===3,c.id+' saved');T(G.ace[c.id]===1,c.id+' ace');
+      T(app.querySelectorAll('.fb.good').length===c.q.length,c.id+' good feedback');
+      click('[data-act="script"]');T(app.querySelectorAll('#script mark').length===c.q.length,c.id+' marks '+app.querySelectorAll('#script mark').length);
+      /* each question: each wrong value on its own */
+      c.q.forEach((q,i)=>{
+        const wrongs=q.t==='mc'?[1,2]:q.t==='match'?range(c.s.length).filter(s=>s!==q.a):['zzz','',q.a[0]+'x'+'q'];
+        wrongs.forEach(w=>{
+          delete G.draft[c.id];openClip(c.id,false);listen();listen();
+          c.q.forEach((p,j)=>{
+            if(j===i){if(p.t==='mc')click(`.opt[data-q="${j}"][data-o="${w}"]`);else if(p.t==='match')click(`.lb[data-q="${j}"][data-s="${w}"]`);else type(j,w)}
+            else if(p.t==='mc')click(`.opt[data-q="${j}"][data-o="0"]`);else if(p.t==='gap')type(j,p.a[0]);
+          });
+          if(q.t==='match')c.q.forEach((p,j)=>{if(j!==i&&p.a!==w)click(`.lb[data-q="${j}"][data-s="${p.a}"]`)});
+          T(click('[data-act="check"]'),c.id+' q'+i+' check wrong');
+          T(V.res&&V.res.ok[i]===false,c.id+' q'+i+' wrong accepted: '+w);
+          const card=app.querySelector('#q'+i);T(card&&card.querySelector('.fb.bad .method')&&card.querySelector('.fb.bad').textContent.includes(q.ev),c.id+' q'+i+' teaching feedback');
+          T(G.run<=c.q.length-1-i,c.id+' run resets');
+          const n=fake.spoken.length;if(click(`#q${i} [data-act="hear"]`)){flush();T(fake.spoken.length>n,c.id+' hear part')}else T(false,c.id+' hear button');
+          wrongPaths++;
+        });
+      });
+      click('[data-act="again"]');T(V.d.plays===0&&!V.res,c.id+' try again resets');
+    }
+    note.push('wrongPaths='+wrongPaths);
+
+    /* accepted spellings and rejected near misses */
+    const gp=(id,i)=>BYID[id].q[i];
+    const yes=[['n1',0,['16','16th','Sixteenth','the sixteenth']],['n1',2,['90','ninety','90 minutes','Ninety mins']],['n1',3,['5','£5','five','five pounds','£5.00','5.00']],['n1',5,['whitlow','Mrs Whitlow','WHITLOW.']],['n1',1,['Bridge','wooden bridge','the bridge']],
+      ['n2',1,['2.15','2:15','quarter past two','a quarter past 2','two fifteen','2.15pm','2:15 p.m.','14:15','Quarter past two.']],['n2',2,['first','1st','1','the first floor']],['n3',2,['7','seven','7.00','7:00 pm','seven o\'clock','19:00']],['n3',4,['32','thirty-two','Thirty two','£32','32 pounds']],['n3',3,['torch','a torch','flashlight']],['n4',1,['12.30','12:30','half past twelve','half past 12','twelve thirty']],['n4',3,['lights','light']],['n3',0,['friday','Friday']],['n3',5,['Garden','garden street']]];
+    yes.forEach(([id,i,l])=>l.forEach(v=>T(gapOk(v,gp(id,i)),`accept ${id}.${i} "${v}"`)));
+    const no=[['n1',0,['60','6','15','sixty','16 June']],['n1',2,['19','nineteen','9']],['n1',3,['4','fifteen','50']],['n1',4,['binocular s','glasses','telescope']],['n1',5,['Whitlaw','Witlow','Whitelow']],['n2',1,['2.50','4','2:45','2.30','half past two','quarter to two']],['n3',4,['13','23','thirty','302']],['n4',1,['12','10','2.30','half past two']],['n4',4,['40','15','fifteen']],['n3',2,['17','11','7.30']]];
+    no.forEach(([id,i,l])=>l.forEach(v=>T(!gapOk(v,gp(id,i)),`reject ${id}.${i} "${v}"`)));
+    T(nearMiss('Witlow',gp('n1',5))&&!nearMiss('zzz',gp('n1',5)),'near miss');
+
+    /* mock paper through the UI: all right, then all wrong */
+    LS.clear();loadG();showHome();
+    for(const good of [true,false]){
+      click('[data-act="mocknew"]');
+      for(let p=0;p<4;p++){
+        const c=V.c;T(V.mock&&app.querySelector('[data-act="speed"]').disabled,'mock normal speed only');listen();
+        if(good)fillRight(c);else c.q.forEach((q,i)=>{if(q.t==='mc')click(`.opt[data-q="${i}"][data-o="1"]`);else if(q.t==='gap')type(i,'zzz');else click(`.lb[data-q="${i}"][data-s="${c.q[(i+1)%c.q.length].a}"]`)});
+        if(p===1){showHome();T(/Continue/.test(app.textContent),'mock resume');click('[data-act="mockgo"]')}
+        T(click('[data-act="check"]'),'mock lock in');
+      }
+      T(V.screen==='report','mock report');
+      const r=G.mock.res.reduce((a,x)=>a+x.right,0),n=G.mock.res.reduce((a,x)=>a+x.n,0);T(good?r===n:r===0,'mock score '+r+'/'+n);
+      for(let p=0;p<4;p++){click(`[data-act="review"][data-k="${p}"]`);T(V.review&&app.querySelectorAll('.fb').length===V.c.q.length,'mock review');click('[data-act="report"]')}
+    }
+
+    /* storage rules */
+    LS.clear();LS.setItem(QKEY,JSON.stringify({xp:7,best:{a:1},mist:{b:2}}));LS.setItem(PKEY,JSON.stringify({day:yesterday(),streak:3,x:1}));loadG();
+    openClip('m1',false);listen();click('.opt[data-q="0"][data-o="0"]');T(jget(GKEY,{}).draft.m1.ans[0]===0,'saved after each answer');
+    [1,2,3].forEach(i=>click(`.opt[data-q="${i}"][data-o="0"]`));click('[data-act="check"]');
+    const q=jget(QKEY,{}),p=jget(PKEY,{}),g=jget(GKEY,{});
+    T(q.xp===7+40+15&&q.best.a===1&&q.mist.b===2,'quiz record merge '+q.xp);T(p.streak===4&&p.day===dayStr(new Date())&&p.x===1,'daily streak');T(!('xp'in g)&&g.stars.m1===3,'game key has no xp');
+    openClip('m1',false);listen();[0,1,2,3].forEach(i=>click(`.opt[data-q="${i}"][data-o="0"]`));const x1=totalXp();click('[data-act="check"]');T(totalXp()-x1>=8&&totalXp()-x1<=13,'replay gives less XP');
+    LS.setItem(QKEY,'not json');T(addXp(5)===false&&LS.getItem(QKEY)==='not json','broken record untouched');
+
+    /* content checks, second method */
+    const ids=new Set();let mcN=0,tfq=0;
+    for(const c of CLIPS){
+      T(!ids.has(c.id),'dup id');ids.add(c.id);
+      T(KEY2[c.id]&&KEY2[c.id].length===c.q.length,'key length '+c.id);
+      c.q.forEach((x,i)=>{
+        tfq++;const key=KEY2[c.id][i];
+        const lines=c.lines.filter(l=>x.t!=='match'||l[0]===x.sp);
+        T(lines.some(l=>l[1].includes(x.ev)),`evidence ${c.id}.${i}`);T(TIPS[x.trap]&&x.e,'tip '+c.id+i);
+        if(x.t==='mc'){mcN++;T(new Set(x.o.map(s=>s.toLowerCase())).size===x.o.length&&x.o.length===3,'unique options '+c.id+i);const m=x.o.map((o,j)=>o.includes(key)?j:-1).filter(j=>j>=0);T(m.length===1&&m[0]===0,`key2 ${c.id}.${i} ${key} -> ${m}`)}
+        else if(x.t==='gap'){const ev=' '+canon(x.ev,{type:x.type})+' ';T(ev.includes(' '+canon(key,x)+' '),`evidence value ${c.id}.${i}: ${ev} / ${canon(key,x)}`);T(gapOk(key,x),`key2 gap ${c.id}.${i}`);x.a.forEach(a=>{T(gapOk(a,x),'listed answer '+a);T(canon(a,x)===canon(x.a[0],x),`spelling consistent ${c.id}.${i} ${a}: ${canon(a,x)}`)});T(PTYPES.some(t=>t[0]===x.type),'ptype')}
+        else{const m=c.s.map((s,j)=>s.includes(key)?j:-1).filter(j=>j>=0);T(m.length===1&&m[0]===x.a,`key2 match ${c.id}.${i} ${key} -> ${m}`)}
+      });
+      if(c.s){T(c.s.length>c.q.length,'spare sentence '+c.id);T(new Set(c.q.map(x=>x.a)).size===c.q.length,'one each '+c.id)}
+      /* glossary must not translate a gap answer */
+      c.gl.forEach(([en])=>c.q.forEach(x=>{if(x.t==='gap')T(!x.a.some(a=>a.toLowerCase()===en.toLowerCase()),'gloss leaks '+en)}));
+      const words=c.lines.map(l=>l[1]).join(' ').split(/\s+/).length;T(words>=50&&words<=170,'length '+c.id+' '+words);
+      c.lines.forEach(l=>T(c.who[l[0]],'speaker '+c.id));
+    }
+    T(CLIPS.length>=12,'12 clips');
+    /* generated rounds: random mock papers with shuffled choices */
+    let gen=0;seed=12345;
+    for(let n=0;n<220;n++){
+      const pickIds=mockPick();T(new Set(pickIds.map(i=>BYID[i].st)).size===4,'one per station');
+      for(const id of pickIds){const c=BYID[id],d=newDraft(c);
+        c.q.forEach((x,i)=>{gen++;const key=KEY2[id][i];
+          if(x.t==='mc'){const shown=d.order[i].map(j=>x.o[j]);T(new Set(shown).size===3&&shown.filter(s=>s.includes(key)).length===1,'gen mc '+id+i);T(shown.findIndex(s=>s.includes(key))===d.order[i].indexOf(0),'gen mc index '+id+i)}
+          else if(x.t==='match'){const shown=d.so.map(j=>c.s[j]);T(new Set(shown).size===c.s.length&&shown.filter(s=>s.includes(key)).length===1&&c.s[x.a].includes(key),'gen match '+id+i)}
+          else{const ev=' '+canon(x.ev,{type:x.type})+' ';T(ev.includes(' '+canon(key,x)+' ')&&gapOk(key,x)&&!gapOk('zzz',x),'gen gap '+id+i)}
+        })}
+    }
+    T(gen>=2000,'generated '+gen);note.push('generated='+gen,'questions='+tfq);
+    const all=JSON.stringify([CLIPS,TIPS,STATIONS])+document.documentElement.innerHTML;
+    T(!new RegExp('[\\u0451\\u0401\\u2013\\u2014]').test(all),'forbidden characters');
+    showHome();T(app.querySelectorAll('.tile').length===CLIPS.length,'home tiles');T(app.querySelector('a[href="../"]'),'back link');
+  }catch(e){errs.push('exception '+e.message+' '+(e.stack||'').split('\n').slice(1,3).join(' '))}
+  if(snap()!==before)errs.push('real storage was changed');
+  const head=errs.length?'GAME_SELFTEST_FAIL '+errs.join('; '):'GAME_SELFTEST_OK clips='+CLIPS.length+' checks='+checks+' '+note.join(' ');
+  document.body.innerHTML='<pre id="selftest" style="color:#fff;white-space:pre-wrap">'+esc(head)+'</pre>';
+}
+
+/* ---------- boot ---------- */
+if(SELFTEST){loadG();runSelftest()}
+else{
+  loadG();initVoices();
+  const qc=QS.get('clip');
+  if(qc&&BYID[qc]){
+    openClip(qc,false);
+    const st=QS.get('state');
+    if(st==='check'){V.d.played=true;V.d.plays=1;V.c.q.forEach((q,i)=>{const wrong=i%2===1;if(q.t==='mc')V.d.ans[i]=wrong?1:0;else if(q.t==='gap'){V.d.ans[i]=wrong?'zebra':q.a[0];V.d.pred[i]=q.type}else V.d.ans[i]=wrong?V.c.q[(i+1)%V.c.q.length].a:q.a});check()}
+    else if(st==='read'){V.d.read=true;V.showScript=true;renderClip()}
+  }else if(QS.has('mock'))newMock();
+  else showHome();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Editor's Desk - proofreading game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#0f3d2a;--card:#fffbea;--ink:#23311f;--soft:#5d6b52;--line:#c9d8a8;--brand:#e8710a;--tint:#ecf6cf;--good:#2e9e4a;--goodbg:#dff4d2;--bad:#d6452d;--badbg:#fde1d8;--font:"Fredoka","Trebuchet MS",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font);color:var(--ink);font-size:18px;line-height:1.4;min-height:100vh;background:var(--bg) radial-gradient(circle at 12% 18%,rgba(163,230,53,.18) 0 60px,transparent 61px)}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:disabled{cursor:default}
+.wrap{max-width:780px;margin:0 auto;padding:14px 14px 60px}
+.top{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:700;font-size:16px}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:20px;padding:10px 18px;min-height:52px;font-weight:700;box-shadow:0 5px 0 #9a4a05;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.btn.ghost{background:var(--card);color:#9a4a05;border:3px solid var(--brand);box-shadow:none}
+h1{color:#fffbea;font-size:34px;margin:8px 0 4px;line-height:1.15}
+.sub{color:#cfe8c4;margin:0 0 14px}
+.card{background:var(--card);border-radius:28px;padding:16px;box-shadow:0 8px 0 rgba(0,0,0,.25);margin-bottom:16px}
+details summary{cursor:pointer;font-weight:700;color:#9a4a05;min-height:40px;display:flex;align-items:center}
+details p{margin:4px 0 8px;font-size:16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.tile{background:var(--card);border:4px solid var(--line);border-radius:26px;box-shadow:0 6px 0 rgba(0,0,0,.25);padding:14px;text-align:left;display:flex;flex-direction:column;gap:4px;min-height:140px}
+.tile .ico{font-size:34px}
+.tile b{font-size:19px}
+.tile small{color:var(--soft);font-size:15px}
+.tile .st{margin-top:auto;font-size:22px;color:#f59e0b;letter-spacing:2px}
+.sentence{display:flex;flex-wrap:wrap;gap:8px 6px;font-size:23px;line-height:1.3;margin:8px 0}
+.wd{background:var(--tint);border:3px solid transparent;border-radius:14px;padding:6px 8px;min-height:46px;min-width:34px}
+.wd.sel{border-color:var(--brand);background:#ffedd5}
+.wd.ok{border-color:var(--good);background:var(--goodbg)}
+.wd.no{border-color:var(--bad);background:var(--badbg)}
+.opts{display:grid;gap:10px;margin-top:12px}
+.opt{border:3px solid var(--line);background:#fff;border-radius:18px;padding:10px 14px;min-height:52px;text-align:left;font-weight:600;font-size:20px}
+.opt.ok{border-color:var(--good);background:var(--goodbg)}
+.opt.no{border-color:var(--bad);background:var(--badbg)}
+.msg{font-weight:700;margin-top:10px}
+.fb{margin-top:12px;border-radius:20px;padding:12px 14px;border:3px solid var(--good);background:var(--goodbg)}
+.fb.bad{border-color:var(--bad);background:var(--badbg)}
+.fb p{margin:6px 0}
+.ru{color:var(--soft);font-size:16px}
+.big{font-size:56px;text-align:center}
+.center{text-align:center}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+"use strict";
+/* Each item: [sentence with ONE marker {wrong|right|other}, rule in English, rule in Russian].
+   QA: ?level=<0-5> opens a level, ?selftest plays everything on a throw-away storage. */
+const LEVELS=[
+{ico:'🔤',name:'Sound-alike words',desc:'their / there, its / it\'s ...',items:[
+ ['The players left {there|their|they\'re} boots by the door.','"Their" shows that something belongs to them. "There" is a place, "they\'re" means "they are".','their - принадлежит им; there - там; they\'re = they are.'],
+ ['{Your|You\'re|Yore} going to love the new library.','"You\'re" is short for "you are". "Your" shows that something is yours.','you\'re = you are; your - твой, ваш.'],
+ ['The puppy chased {it\'s|its|its\'} own tail.','"Its" shows belonging and has no apostrophe. "It\'s" only means "it is" or "it has".','its - его (без апострофа); it\'s = it is / it has.'],
+ ['We walked {passed|past|paste} the old windmill.','"Past" tells where you went. "Passed" is the past tense of the verb "pass".','past - мимо; passed - прошел (глагол).'],
+ ['This bag is {to|too|two} heavy for me to lift.','"Too" means more than enough. "To" shows direction or goes before a verb. "Two" is the number 2.','too - слишком; to - к; two - два.'],
+ ['I don\'t know {weather|whether|wether} the shop is open.','"Whether" means "if". "Weather" is rain, sun and wind.','whether - ли; weather - погода.'],
+ ['Please {right|write|rite} your name at the top of the page.','"Write" is what you do with a pen. "Right" means correct or the opposite of left.','write - писать; right - правильный, правый.'],
+ ['There is a big {whole|hole|howl} in my left sock.','A "hole" is an empty space. "Whole" means all of something.','hole - дырка; whole - целый.']
+]},
+{ico:'✒️',name:'Apostrophes and capitals',desc:'belonging, short forms, names',items:[
+ ['My {sisters|sister\'s|sisters\'} bike has a flat tyre, so she is walking.','One sister owns the bike: add apostrophe + s.','Велосипед одной сестры: апостроф + s.'],
+ ['My two {cousin\'s|cousins\'|cousins} bikes are both red.','Two cousins own the bikes: the apostrophe goes after the s.','Много владельцев: апостроф после s.'],
+ ['We {cant|can\'t|ca\'nt} find the key to the shed.','The apostrophe goes where the missing letters were: cannot = can\'t.','Апостроф ставится на месте пропущенных букв.'],
+ ['We have swimming after school on {monday|Monday|MonDay}.','Days of the week always start with a capital letter.','Дни недели пишутся с большой буквы.'],
+ ['The {childrens|children\'s|childrens\'} paintings are on the wall.','"Children" is already plural, so add apostrophe + s.','children уже множественное число: апостроф + s.'],
+ ['My cousin speaks {french|French|FRench} at home.','Languages and nationalities start with a capital letter.','Языки и национальности - с большой буквы.'],
+ ['She {didnt|didn\'t|did\'nt} hear the bell ring.','"Did not" becomes "didn\'t": the apostrophe replaces the o.','did not = didn\'t: апостроф вместо o.'],
+ ['There are three {apple\'s|apples|apples\'} in the bowl.','A simple plural needs no apostrophe.','Обычное множественное число - без апострофа.']
+]},
+{ico:'⏱️',name:'Verbs and agreement',desc:'tenses, he / she / they',items:[
+ ['We {go|went|goes} to the museum by bus yesterday.','"Yesterday" tells us it is the past, so go becomes went.','Вчера - прошедшее время: go - went.'],
+ ['Each of the girls {have|has|having} a locker.','"Each" means one at a time, so use the singular verb "has".','each - каждый по одному: has.'],
+ ['The box of crayons {are|is|be} on the top shelf.','The subject is "the box" (one thing), so use "is".','Подлежащее - коробка (одна): is.'],
+ ['He has {wrote|written|writed} two letters this week.','After "has" use the past participle: written.','После has - третья форма: written.'],
+ ['I {seen|saw|seed} a hedgehog in the garden last night.','Simple past of "see" is "saw". "Seen" needs has or have.','saw - прошедшее время; seen только с has/have.'],
+ ['She runs {quick|quickly|quickness} to catch the ball.','A word that describes how she runs is an adverb: quickly.','Как бежит? Наречие: quickly.'],
+ ['We {was|were|is} very tired after the long walk.','With "we" use "were".','С we - were.'],
+ ['Dad {don\'t|doesn\'t|aren\'t} like cold soup.','With he, she or one person use "doesn\'t".','С одним человеком (он, она) - doesn\'t.']
+]},
+{ico:'❗',name:'Commas and sentence marks',desc:'openers, lists, speech',items:[
+ ['After a long {climb|climb,|climb;} we finally reached the top.','Put a comma after a fronted adverbial (an opening phrase that tells when, where or how).','Запятая после вводного оборота в начале (когда, где, как).'],
+ ['I packed a {torch|torch,|torch.} a map and a bottle of water.','Separate items in a list with commas.','Предметы в списке разделяются запятыми.'],
+ ['"Where are you {going"|going?"|going"?} asked Mum.','A question inside speech marks ends with a question mark before the closing speech mark.','Вопрос в прямой речи: знак вопроса внутри кавычек.'],
+ ['Although it was {snowing|snowing,|snowing.} the buses were still running.','When the sentence starts with "although", put a comma after that first part.','Придаточное с although в начале отделяется запятой.'],
+ ['{However|However,|However?} the second plan worked much better.','"However" at the start of a sentence is followed by a comma.','После However в начале предложения - запятая.'],
+ ['The dog barked {loudly Then|loudly. Then|loudly, Then} it ran to the gate.','Two complete sentences need a full stop between them, not nothing.','Между двумя предложениями нужна точка.'],
+ ['{Mr Patel|Mr Patel,|Mr Patel.} who lives next door, keeps bees.','Extra information in the middle of a sentence has a comma before and after it.','Дополнительная часть в середине выделяется двумя запятыми.'],
+ ['"Close the {gate"|gate,"|gate"!} shouted the farmer.','Speech followed by "shouted the farmer" needs a punctuation mark before the closing speech mark - here a comma.','Перед закрывающей кавычкой и словами автора - запятая.']
+]},
+{ico:'🎯',name:'Spelling traps',desc:'double letters, silent letters, endings',items:[
+ ['We will {definately|definitely|definitly} come to your party.','Definitely has "finite" inside it.','definitely: внутри слово finite.'],
+ ['It was {neccessary|necessary|necesary} to take a coat.','Necessary: one c, two s.','necessary: одна c, две s.'],
+ ['The hotel can {accomodate|accommodate|acommodate} fifty guests.','Accommodate: two c and two m.','accommodate: две c и две m.'],
+ ['They sailed to a {seperate|separate|seperete} island.','Separate has "a rat" in the middle: sep-a-rat-e.','separate: в середине a rat.'],
+ ['I was {begining|beginning|beginnning} to feel hungry.','"Begin" ends with one vowel and one consonant in the stressed part, so double the n before -ing.','Перед -ing согласная удваивается: beginning.'],
+ ['She is {makeing|making|makking} a model of a castle.','Drop the silent e before adding -ing.','Немая e выпадает перед -ing.'],
+ ['The {babys|babies|babyes} were fast asleep.','Consonant + y: change y to i and add -es.','Согласная + y: y меняется на ies.'],
+ ['He told us a very {intresting|interesting|interresting} story.','Interesting: do not skip the first e - in-ter-est-ing.','interesting: не пропускай e.']
+]}
+];
+const FINAL=10, GKEY='sq:game:editors-desk', QKEY='sq:mock1-checkpoint-dec', PKEY='sq:profile';
+const QS=new URLSearchParams(location.search), TEST=QS.has('selftest');
+const mem={};
+const LS=TEST?{getItem:k=>k in mem?mem[k]:null,setItem:(k,v)=>{mem[k]=String(v)}}:null;
+function jget(k){try{const o=JSON.parse((LS||localStorage).getItem(k)||'null');return o&&typeof o==='object'&&!Array.isArray(o)?o:{}}catch(e){return {}}}
+function jset(k,o){try{(LS||localStorage).setItem(k,JSON.stringify(o))}catch(e){}}
+function dayStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function touchDay(){const p=jget(PKEY),now=new Date(),t=dayStr(now);if(p.day===t)return;const y=new Date();y.setDate(y.getDate()-1);p.streak=p.day===dayStr(y)?(p.streak||0)+1:1;p.day=t;jset(PKEY,p)}
+function addXp(n){try{const raw=(LS||localStorage).getItem(QKEY),q=raw==null?{}:JSON.parse(raw);if(q&&typeof q==='object'&&!Array.isArray(q)){q.xp=(+q.xp||0)+n;jset(QKEY,q)}}catch(e){}touchDay()}
+function load(){const g=jget(GKEY);if(!g.stars||typeof g.stars!=='object')g.stars={};if(!g.miss||typeof g.miss!=='object')g.miss={};return g}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const MARK=/\{([^{}]+)\}/;
+/* split a sentence into word buttons; the marked word keeps its punctuation neighbours as part of the same button */
+function parse(it){
+  const m=MARK.exec(it[0]),[wrong,right,other]=m[1].split('|');
+  const pre=it[0].slice(0,m.index),post=it[0].slice(m.index+m[0].length);
+  const lead=/\S*$/.exec(pre)[0],tail=/^\S*/.exec(post)[0];
+  const before=pre.slice(0,pre.length-lead.length).split(/\s+/).filter(Boolean),after=post.slice(tail.length).split(/\s+/).filter(Boolean);
+  const words=before.concat([lead+wrong+tail],after);
+  return {words,bad:before.length,wrong:lead+wrong+tail,right:lead+right+tail,other:lead+other+tail,
+    fixed:before.concat([lead+right+tail],after).join(' '),en:it[1],ru:it[2],id:it[0]};
+}
+const app=document.getElementById('app');
+let G=load(),R=null;
+function head(back){return `<div class="top">${back}<div class="chips"><span class="chip">⭐ ${+jget(QKEY).xp||0} XP</span></div></div>`}
+function home(){
+  R=null;G=load();
+  const missed=Object.keys(G.miss).length;
+  const tiles=LEVELS.map((l,i)=>`<button class="tile" data-l="${i}"><span class="ico">${l.ico}</span><b>${esc(l.name)}</b><small>${esc(l.desc)}</small><span class="st">${'★'.repeat(G.stars[i]||0)}${'☆'.repeat(3-(G.stars[i]||0))}</span></button>`).join('');
+  app.innerHTML=head('<a class="btn ghost" href="../">← Back</a>')+`<h1>✏️ Editor's Desk</h1>
+  <p class="sub">Every sentence has exactly ONE mistake. Tap the wrong word, then choose the correction.</p>
+  <div class="card"><details><summary>🇷🇺 Как играть</summary><p>В каждом предложении ровно одна ошибка (орфография, пунктуация или грамматика). Нажми на слово с ошибкой, потом выбери, как правильно. Звезды - за ответы с первой попытки.</p></details></div>
+  <div class="tiles">${tiles}<button class="tile" data-l="${LEVELS.length}"><span class="ico">📰</span><b>Front Page</b><small>${FINAL} mixed sentences, your old mistakes first</small>${missed?`<small>🎯 ${missed} to fix</small>`:''}<span class="st">${'★'.repeat(G.stars[LEVELS.length]||0)}${'☆'.repeat(3-(G.stars[LEVELS.length]||0))}</span></button></div>`;
+  app.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>start(+b.dataset.l));
+}
+function pool(l){
+  if(l<LEVELS.length)return shuf(LEVELS[l].items);
+  const all=[].concat(...LEVELS.map(x=>x.items)),old=shuf(all.filter(i=>G.miss[i[0]])).slice(0,FINAL);
+  return shuf(old.concat(shuf(all.filter(i=>!old.includes(i))).slice(0,FINAL-old.length)));
+}
+function start(l){G=load();R={l,items:pool(l).map(parse),i:0,first:0};show()}
+function show(){
+  const q=R.items[R.i];R.tries=0;R.found=false;R.done=false;R.clean=true;
+  app.innerHTML=head('<button class="btn ghost" id="map">← Desk</button>')+`<div class="card"><div class="chips"><span class="chip">${R.i+1}/${R.items.length}</span><span class="chip">✅ ${R.first}</span></div>
+  <div class="sentence">${q.words.map((w,i)=>`<button class="wd" data-w="${i}">${esc(w)}</button>`).join('')}</div><div class="msg" id="msg">Tap the part with the mistake.</div><div id="opts"></div><div id="fb"></div></div>`;
+  document.getElementById('map').onclick=home;
+  app.querySelectorAll('.wd').forEach(b=>b.onclick=()=>tap(+b.dataset.w,b));
+}
+function tap(i,b){
+  if(R.done||R.found)return;const q=R.items[R.i];
+  if(i!==q.bad){R.tries++;R.clean=false;b.classList.add('no');b.disabled=true;
+    if(R.tries>=2){finish(false);return}
+    document.getElementById('msg').textContent='That part is fine. One more try!';return}
+  R.found=true;b.classList.add('sel');
+  document.getElementById('msg').textContent='Found it! How should it be written?';
+  const opts=shuf([q.right,q.other,q.wrong]);
+  const box=document.getElementById('opts');
+  box.innerHTML=`<div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('')}</div>`;
+  box.querySelectorAll('.opt').forEach(x=>x.onclick=()=>{
+    if(R.done)return;const ok=opts[+x.dataset.k]===q.right;
+    x.classList.add(ok?'ok':'no');
+    box.querySelectorAll('.opt').forEach(y=>{y.disabled=true;if(opts[+y.dataset.k]===q.right)y.classList.add('ok')});
+    finish(ok);
+  });
+}
+function finish(ok){
+  R.done=true;const q=R.items[R.i],perfect=ok&&R.clean;
+  app.querySelectorAll('.wd').forEach((b,i)=>{b.disabled=true;if(i===q.bad){b.classList.remove('sel');b.classList.add('ok')}});
+  G=load();
+  if(perfect){R.first++;delete G.miss[q.id]}else G.miss[q.id]=1;
+  jset(GKEY,G);
+  const xp=perfect?5:ok?2:0;if(xp)addXp(xp);else touchDay();
+  document.getElementById('msg').textContent='';
+  const last=R.i===R.items.length-1;
+  document.getElementById('fb').innerHTML=`<div class="fb ${ok?'':'bad'}"><b>${perfect?'Perfect edit! +5 XP':ok?'Fixed! +2 XP':'Not this time - read the rule.'}</b><p>✅ ${esc(q.fixed)}</p><p>${esc(q.en)}</p><details><summary>🇷🇺 По-русски</summary><p class="ru">${esc(q.ru)}</p></details></div><div class="row"><button class="btn" id="next">${last?'See results':'Next →'}</button></div>`;
+  document.getElementById('next').onclick=()=>{if(last)results();else{R.i++;show()}};
+}
+function results(){
+  const n=R.items.length,p=R.first/n,s=p>=0.875?3:p>=0.65?2:p>=0.4?1:0;
+  G=load();G.stars[R.l]=Math.max(G.stars[R.l]||0,s);jset(GKEY,G);
+  const l=R.l;
+  app.innerHTML=head('<button class="btn ghost" id="map">← Desk</button>')+`<div class="card center"><div class="big">${s===3?'🏆':s?'📰':'💪'}</div><h2>${'★'.repeat(s)}${'☆'.repeat(3-s)}</h2><p><b>${R.first} of ${n}</b> perfect on the first try.</p><p>${s===3?'Ready for print!':'Wrong ones come back first in Front Page.'}</p><div class="row"><button class="btn" id="again">Play again</button><button class="btn ghost" id="desk">Choose a level</button></div></div>`;
+  document.getElementById('map').onclick=home;document.getElementById('desk').onclick=home;document.getElementById('again').onclick=()=>start(l);
+}
+function selftest(){
+  const bad=[],seen=new Set();let n=0,wrongPaths=0;
+  LEVELS.forEach((lv,l)=>lv.items.forEach((it,i)=>{
+    const w=l+'#'+(i+1);n++;
+    if((it[0].match(/\{[^{}]+\}/g)||[]).length!==1){bad.push(w+' marker');return}
+    const parts=MARK.exec(it[0])[1].split('|');if(parts.length!==3||new Set(parts).size!==3)bad.push(w+' needs 3 different forms');
+    const q=parse(it);if(q.words[q.bad]!==q.wrong)bad.push(w+' bad index');if(/[{}|]/.test(q.words.join(' ')+q.fixed))bad.push(w+' leftover marker');
+    if(seen.has(it[0]))bad.push(w+' duplicate');seen.add(it[0]);if(!it[1]||!it[2]||/[ёЁ—–]/.test(it.join(' ')))bad.push(w+' text')}));
+  const $=s=>app.querySelector(s),next=()=>$('#next').click();
+  const solve=()=>{const q=R.items[R.i];$(`.wd[data-w="${q.bad}"]`).click();[...app.querySelectorAll('.opt')].find(b=>b.textContent===q.right).click()};
+  for(let l=0;l<=LEVELS.length;l++){start(l);const len=R.items.length;for(let k=0;k<len;k++){solve();next()}if(load().stars[l]!==3)bad.push('level '+l+' stars')}
+  const xp=jget(QKEY).xp;const total=n+FINAL;if(xp!==total*5)bad.push('xp '+xp+' expected '+total*5);
+  jset(QKEY,{xp:10,best:{a:1}});
+  start(0);const q0=R.items[0];const others=q0.words.map((_,i)=>i).filter(i=>i!==q0.bad);
+  $(`.wd[data-w="${others[0]}"]`).click();$(`.wd[data-w="${others[1]}"]`).click();wrongPaths++;
+  if(!$('.fb.bad')||!load().miss[q0.id])bad.push('two wrong taps not recorded');next();
+  const q1=R.items[1];$(`.wd[data-w="${q1.bad}"]`).click();[...app.querySelectorAll('.opt')].find(b=>b.textContent===q1.wrong).click();wrongPaths++;
+  if(!$('.fb.bad')||!load().miss[q1.id])bad.push('wrong correction not recorded');
+  const after=jget(QKEY);if(after.xp!==10||!after.best||after.best.a!==1)bad.push('quiz storage changed by wrong answers');
+  G=load();if(!pool(LEVELS.length).some(i=>i[0]===q0.id))bad.push('old mistake not replayed');
+  document.body.innerHTML='<pre id="selftest">'+(bad.length?'GAME_SELFTEST_FAIL '+esc(bad.join('; ')):'GAME_SELFTEST_OK levels='+(LEVELS.length+1)+' sentences='+n+' wrongPaths='+wrongPaths)+'</pre>';
+}
+if(TEST)selftest();else{const l=QS.get('level');if(l!==null&&+l>=0&&+l<=LEVELS.length)start(+l);else home()}
+})();
+</script>
+</body>
+</html>

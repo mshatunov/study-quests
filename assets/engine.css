@@ -201,3 +201,14 @@ h1{font-size:34px;margin:6px 0 4px;line-height:1.15}
 .mem.done{background:var(--goodbg);border-color:var(--good)}
 @media(max-width:520px){.oddg{grid-template-columns:1fr}.sends{margin:2px 0 0}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* reading text above a question */
+.psg{max-height:min(46vh,420px);overflow:auto;background:var(--tint);border:2px solid var(--line);border-radius:var(--radius-sm);padding:12px 16px;margin:0 0 14px;font-size:17px;line-height:1.55;-webkit-overflow-scrolling:touch}
+.psg p{margin:0 0 10px}
+.psg p:last-child{margin:0}
+.psgh{font-weight:800;margin-bottom:8px}
+/* subject sections */
+.grp{display:flex;gap:10px;align-items:center;flex-wrap:wrap;scroll-margin-top:12px}
+.grp .chip{font-family:var(--font);font-size:15px;text-transform:none}
+.grpnav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.grpnav .chip{cursor:pointer;font:inherit;font-weight:800;font-size:15px}

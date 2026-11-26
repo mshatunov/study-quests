@@ -14,3 +14,5 @@ h1,.logo{color:#fffbea}
 .sub{color:#cfe8c4}
 .boss .btn{color:#166534}
 .qtext{font-weight:600}
+.h2{color:#fffbea}
+.h2 .chip{color:var(--ink)}

@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Science Lab Detective - investigation skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#0f3d2a;--card:#fffbea;--ink:#23311f;--soft:#5d6b52;--line:#c9d8a8;--brand:#e8710a;--brand2:#f59e0b;--tint:#ecf6cf;
+--good:#2e9e4a;--goodbg:#dff4d2;--bad:#d6452d;--badbg:#fde1d8;--warn:#e8a200;--warnbg:#fdf0c4;
+--font:"Fredoka","Trebuchet MS",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 18%,rgba(163,230,53,.18) 0 60px,transparent 61px),radial-gradient(circle at 88% 70%,rgba(34,197,94,.2) 0 90px,transparent 91px),radial-gradient(circle at 40% 92%,rgba(250,204,21,.12) 0 70px,transparent 71px);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+button{font:inherit;cursor:pointer;color:inherit;touch-action:manipulation}
+svg text{font-family:var(--font)}
+.wrap{max-width:1040px;margin:0 auto;padding:12px 12px 40px}
+.btn{font-weight:700;background:var(--brand);color:#fff;border:0;border-radius:20px;box-shadow:0 5px 0 #9a4a05;min-height:52px;min-width:52px;padding:10px 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;user-select:none;-webkit-user-select:none}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #9a4a05}
+.btn.alt{background:var(--card);color:var(--ink);box-shadow:0 5px 0 rgba(0,0,0,.28)}
+.btn:disabled{opacity:.45;cursor:default}
+.top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--card);border-radius:30px;padding:6px 12px;font-weight:600;font-size:16px;white-space:nowrap}
+h1{color:#fffbea;font-size:32px;margin:16px 0 4px;line-height:1.15}
+h3.sec{color:#fffbea;margin:22px 0 10px;font-size:22px}
+.sub{color:#cfe8c4;margin:0 0 14px}
+.card{background:var(--card);border:4px solid var(--line);border-radius:26px;box-shadow:0 8px 0 rgba(0,0,0,.25);padding:12px 14px;min-width:0}
+details.ru{margin-top:4px;font-size:16px}
+details.ru summary{cursor:pointer;font-weight:600;color:#9a4a05;list-style:none;padding:5px 0;min-height:34px}
+details.ru summary::-webkit-details-marker{display:none}
+details.ru summary::before{content:"▸ "}
+details.ru[open] summary::before{content:"▾ "}
+.gl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.gl span{background:var(--tint);border-radius:12px;padding:3px 9px;font-size:15px}
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.lv{position:relative;text-align:left;background:var(--card);border:4px solid var(--line);border-radius:24px;box-shadow:0 7px 0 rgba(0,0,0,.25);padding:10px 12px;min-height:126px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.lv:active{transform:translateY(3px)}
+.lv .ico{font-size:30px;line-height:1.15}
+.lv .nm{font-weight:700;line-height:1.2}
+.lv .ds{font-size:14px;color:var(--soft);line-height:1.25}
+.lv .st{margin-top:auto;color:var(--brand2);font-size:20px;letter-spacing:2px}
+.lv .st i{font-style:normal;color:#d9dec6}
+.lv.case{border-color:#e9c46a;background:#fff6d8}
+.lv.solved::after{content:"SOLVED";position:absolute;top:10px;right:8px;font-size:11px;font-weight:700;color:var(--bad);border:3px solid var(--bad);border-radius:8px;padding:0 5px;transform:rotate(8deg)}
+.ptop{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.ptop .btn{min-height:48px;padding:6px 14px;font-size:16px}
+.ptitle{flex:1;min-width:0;color:#fffbea;font-weight:700;line-height:1.15;font-size:17px}
+.ptitle small{display:block;color:#cfe8c4;font-weight:600;font-size:13px}
+.clues{display:flex;gap:4px;margin:0 0 8px}
+.clues i{flex:1;height:10px;border-radius:6px;background:rgba(255,251,234,.22)}
+.clues i.on{background:#a3e635}
+.clues i.now{background:var(--brand2)}
+.pgrid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"task" "stage" "ctrl";gap:10px}
+#task{grid-area:task}
+#stage{grid-area:stage}
+#ctrl{grid-area:ctrl;min-width:0}
+#stage:empty{display:none}
+.case-q{font-size:14px;color:var(--soft);font-weight:600;line-height:1.3;margin-bottom:4px}
+.instr{font-weight:700;font-size:20px;line-height:1.3}
+.sub2{font-size:16px;line-height:1.35;margin-top:3px}
+#stage.card{padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.inst{display:block;width:100%;height:min(290px,32vh)}
+.inst.wide{height:auto;max-height:300px}
+.inst.round{height:min(250px,30vh)}
+.graph{display:block;width:100%;max-width:540px;height:auto;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+table.res{border-collapse:collapse;width:100%;max-width:520px;font-size:15px;text-align:center}
+table.res th,table.res td{border:2px solid var(--line);padding:3px 4px;line-height:1.25}
+table.res th{background:var(--tint);font-weight:700}
+table.res.tap td{padding:12px 4px;cursor:pointer;font-size:20px;font-weight:600;background:#fff}
+table.res.tap tr.sel td{background:#ffe8b0}
+table.res.tap tr.no td{background:var(--badbg)}
+table.res.tap tr.yes td{background:var(--goodbg)}
+.disp{background:#fff;border:4px solid var(--brand);border-radius:18px;min-height:58px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:32px;font-weight:700;margin-bottom:8px}
+.disp .ph{color:#b9c3a4;font-size:19px;font-weight:600}
+.disp .unit{color:var(--soft);font-size:22px}
+.pad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.key{min-height:52px;border:0;border-radius:16px;background:var(--card);font-size:25px;font-weight:700;box-shadow:0 4px 0 rgba(0,0,0,.28);user-select:none;-webkit-user-select:none}
+.key:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.key.fn{background:var(--tint)}
+.key.ok{background:var(--brand);color:#fff;box-shadow:0 4px 0 #9a4a05;grid-column:span 3}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{min-height:60px;border:4px solid var(--line);border-radius:20px;background:var(--card);font-size:19px;font-weight:600;box-shadow:0 5px 0 rgba(0,0,0,.25);padding:8px 12px;text-align:left;line-height:1.3}
+.opt.no{background:var(--badbg);border-color:var(--bad);opacity:.7;cursor:default}
+.opt.yes{background:var(--goodbg);border-color:var(--good)}
+.opt:disabled{cursor:default}
+.vcard{background:var(--card);border:4px solid var(--line);border-radius:20px;padding:8px 10px;margin-bottom:9px}
+.vcard.no{border-color:var(--bad);background:var(--badbg)}
+.vcard.yes{border-color:var(--good);background:var(--goodbg)}
+.vcard .t{font-weight:700;line-height:1.25;margin-bottom:6px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg button{min-height:48px;border:3px solid var(--line);border-radius:14px;background:#fff;font-size:14px;font-weight:600;line-height:1.15;padding:2px}
+.seg button.sel{background:var(--brand);border-color:#9a4a05;color:#fff}
+.wide{width:100%;margin-top:10px;font-size:20px;min-height:58px}
+table.res.wt th{text-align:left;font-size:13px;width:34%}
+table.res.wt td.now{background:#ffb84d;font-weight:700}
+table.res.wt td{font-weight:600}
+.pointno{color:#fffbea;font-weight:700;text-align:center;margin-bottom:6px;font-size:15px}
+.nudge{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.nudge .btn{min-height:52px;padding:4px;font-size:22px}
+.fb{border:4px solid var(--good);background:var(--goodbg);border-radius:24px;padding:10px 14px;margin-bottom:10px}
+.fb.bad{border-color:var(--bad);background:var(--badbg)}
+.fb h2{margin:0 0 4px;font-size:20px}
+.fb .trap{background:var(--warnbg);border-radius:14px;padding:7px 10px;margin:6px 0;font-weight:600}
+.fb ol{margin:6px 0;padding-left:22px}
+.fb li{margin:4px 0}
+.fb .act{margin-top:8px}
+.fb .act .btn{width:100%;font-size:19px}
+.done{text-align:center;max-width:580px;margin:20px auto}
+.done .big{font-size:60px;color:var(--brand2);letter-spacing:6px}
+.done .big i{font-style:normal;color:#d9dec6}
+.done .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.stamp{display:inline-block;border:6px solid var(--bad);color:var(--bad);font-weight:700;font-size:28px;border-radius:14px;padding:4px 18px;transform:rotate(-7deg);margin:8px}
+@media (max-width:600px){body{font-size:17px}.map{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.chip{font-size:14px;padding:5px 9px}.instr{font-size:18px}}
+@media (min-width:700px) and (max-width:899px){.inst{height:440px}.inst.round{height:360px}.inst.wide{height:auto}.key{min-height:62px}.graph{max-width:640px}}
+@media (min-width:900px){
+ .pgrid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"stage task" "stage ctrl";grid-template-rows:auto 1fr;align-items:start}
+ .pgrid.nostage{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"task ctrl";grid-template-rows:auto}
+ .inst{height:min(520px,calc(100vh - 160px))}.inst.wide{height:auto;max-height:400px}.inst.round{height:min(440px,calc(100vh - 160px))}
+ .graph{max-width:min(560px,calc((100vh - 270px)*1.06))}
+}
+@media (min-width:900px) and (max-height:880px){.key{min-height:42px;font-size:22px}.pad{gap:6px}.disp{min-height:46px;font-size:26px}.fb{font-size:16px;padding:8px 12px}.fb ol{margin:3px 0}.fb li{margin:1px 0}.fb h2{font-size:18px;margin:0}.fb .trap{margin:4px 0;padding:5px 9px}.opt{min-height:52px;font-size:18px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+/* =====================================================================
+   Science Lab Detective - scientific enquiry practice. All data generated.
+   Storage (every access guarded):
+     'sq:mock1-checkpoint-dec'  quiz record; the game only adds to "xp"
+     'sq:profile'               shared daily streak {day, streak}
+     'sq:game:lab-detective'    game progress (no "xp" field)
+   QA: ?level=1..19 [&step=n] [&tier=1..3] [&seed=n]
+       [&show=wrong|solution|right|done]     ?selftest
+   ===================================================================== */
+'use strict';
+const QS=new URLSearchParams(location.search), SELFTEST=QS.has('selftest');
+const GKEY='sq:game:lab-detective', QKEY='sq:mock1-checkpoint-dec', PKEY='sq:profile';
+let seed=QS.has('seed')?(+QS.get('seed')>>>0):(SELFTEST?20261203:((Date.now()^(Math.random()*1e9))>>>0));
+function rnd(){seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}
+const ri=(a,b)=>a+Math.floor(rnd()*(b-a+1));
+const one=a=>a[Math.floor(rnd()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const pickN=(a,n)=>shuffle(a).slice(0,n);
+const num=v=>{const r=Math.round(v*100)/100;return (r<0?'−':'')+String(Math.abs(r))};
+const toNum=s=>{s=String(s).trim().replace(/−/g,'-').replace(',','.');return /^-?\d+(\.\d*)?$/.test(s)?Number(s):NaN};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const low=s=>s.charAt(0).toLowerCase()+s.slice(1);
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+
+/* =====================================================================
+   INSTRUMENTS (SVG). cls "lb" = scale numbers, "tk" = tick marks,
+   "ptr"/"liq"/"men"/"obj"/"ndl" = the thing to be read.
+   ===================================================================== */
+const TOOLS={
+  thermo:{name:'thermometer',unit:'°C',q:'temperature',tip:'Read the top of the liquid. Keep your eye level with it.',ru:'Смотри на верх столбика жидкости, глаза на его уровне.'},
+  cyl:{name:'measuring cylinder',unit:'ml',q:'volume of a liquid',tip:'Read the BOTTOM of the curved surface (the meniscus), with your eye level with it.',ru:'Читай по НИЖНЕЙ точке изогнутой поверхности (мениска), глаза на ее уровне.'},
+  force:{name:'force meter',unit:'N',q:'force',tip:'Read the scale at the pointer. On this meter the numbers get bigger going DOWN.',ru:'Смотри, где стрелка-указатель. На этом динамометре числа растут ВНИЗ.'},
+  ruler:{name:'ruler or tape measure',unit:'cm',q:'length',tip:'Start at the 0 mark and read where the object ends.',ru:'Начинай от отметки 0 и смотри, где кончается предмет.'},
+  dial:{name:'stopwatch',unit:'s',q:'time',tip:'Follow the needle to the scale and count the small marks.',ru:'Посмотри, куда показывает стрелка, и посчитай маленькие деления.'},
+  meter:{name:'sound level meter',unit:'dB',q:'loudness of a sound',tip:'Follow the needle to the scale and count the small marks.',ru:'Посмотри, куда показывает стрелка, и посчитай маленькие деления.'},
+  balance:{name:'balance (scales)',unit:'g',q:'mass'}
+};
+/* cfg = {min,max,major,minor,unit?} */
+function instSVG(type,cfg,v,hi){
+  const u=cfg.unit||TOOLS[type].unit,n=Math.round((cfg.max-cfg.min)/cfg.minor),per=Math.round(cfg.major/cfg.minor);
+  const val=i=>cfg.min+i*cfg.minor,frac=x=>(x-cfg.min)/(cfg.max-cfg.min),R2=x=>Math.round(x*100)/100;
+  const isMaj=i=>Math.abs(val(i)/cfg.major-Math.round(val(i)/cfg.major))<1e-6;
+  const isMid=i=>per%2===0&&Math.abs(val(i)/(cfg.major/2)-Math.round(val(i)/(cfg.major/2)))<1e-6;
+  const lit=i=>hi&&val(i)>=hi.a-1e-9&&val(i)<=hi.b+1e-9;
+  const tick=(i,x1,y1,x2,y2)=>'<line class="tk" x1="'+R2(x1)+'" y1="'+R2(y1)+'" x2="'+R2(x2)+'" y2="'+R2(y2)+'" stroke="'+(lit(i)?'#d6452d':'#23311f')+'" stroke-width="'+(isMaj(i)?2.6:lit(i)?2.2:1.3)+'"/>';
+  const lab=(i,x,y,a,size)=>'<text class="lb" x="'+R2(x)+'" y="'+R2(y)+'" dy="0.35em" text-anchor="'+a+'" font-size="'+(size||19)+'" font-weight="700" fill="'+(hi&&(Math.abs(val(i)-hi.a)<1e-9||Math.abs(val(i)-hi.b)<1e-9)?'#d6452d':'#23311f')+'">'+num(val(i))+'</text>';
+  let b='',vb,cls='inst';
+  if(type==='thermo'){
+    vb='0 0 200 380';const Y=x=>R2(320-280*frac(x));
+    b+='<rect x="62" y="20" width="30" height="320" rx="15" fill="#fff" stroke="#23311f" stroke-width="3"/><circle cx="77" cy="347" r="24" fill="#d6452d" stroke="#23311f" stroke-width="3"/>';
+    b+='<rect class="liq" x="68" y="'+Y(v)+'" width="18" height="'+R2(335-Y(v))+'" fill="#d6452d"/>';
+    for(let i=0;i<=n;i++){const y=Y(val(i));b+=tick(i,92,y,isMaj(i)?114:isMid(i)?108:103,y);if(isMaj(i))b+=lab(i,120,y,'start')}
+    b+='<text x="150" y="22" font-size="19" font-weight="700" fill="#5d6b52">'+u+'</text>';
+  }else if(type==='cyl'){
+    vb='0 0 200 380';const Y=x=>R2(330-290*frac(x)),y=Y(v);
+    b+='<path d="M45 335 L45 22 M135 22 L135 335" stroke="#23311f" stroke-width="3" fill="none"/><path d="M30 366 L150 366 L135 335 L45 335 Z" fill="#cfd8dc" stroke="#23311f" stroke-width="3"/>';
+    b+='<path d="M46.5 '+R2(y-7)+' Q90 '+R2(y+7)+' 133.5 '+R2(y-7)+' L133.5 334 L46.5 334 Z" fill="#9fd4f5"/><path class="men" d="M46.5 '+R2(y-7)+' Q90 '+R2(y+7)+' 133.5 '+R2(y-7)+'" fill="none" stroke="#1565a8" stroke-width="2.5"/>';
+    for(let i=0;i<=n;i++){const yy=Y(val(i));b+=tick(i,isMaj(i)?78:isMid(i)?88:94,yy,133.5,yy);if(isMaj(i))b+=lab(i,143,yy,'start')}
+    b+='<text x="90" y="16" font-size="19" font-weight="700" fill="#5d6b52" text-anchor="middle">'+u+'</text>';
+  }else if(type==='force'){
+    vb='0 0 200 380';const Y=x=>R2(56+250*frac(x)),y=Y(v);
+    b+='<circle cx="88" cy="14" r="9" fill="none" stroke="#23311f" stroke-width="4"/><rect x="45" y="24" width="108" height="300" rx="16" fill="#fff" stroke="#23311f" stroke-width="3"/>';
+    let z='M62 32';const m=10;for(let i=1;i<=m;i++)z+=' L'+(i%2?52:72)+' '+R2(32+(y-32)*i/(m+1));z+=' L62 '+y;
+    b+='<path d="'+z+'" fill="none" stroke="#78909c" stroke-width="3"/><line x1="62" y1="'+y+'" x2="62" y2="352" stroke="#78909c" stroke-width="4"/><path d="M62 352 q0 16 -12 12" fill="none" stroke="#23311f" stroke-width="4"/>';
+    for(let i=0;i<=n;i++){const yy=Y(val(i));b+=tick(i,88,yy,isMaj(i)?112:isMid(i)?108:104,yy);if(isMaj(i))b+=lab(i,118,yy,'start')}
+    b+='<line class="ptr" x1="50" y1="'+y+'" x2="100" y2="'+y+'" stroke="#d6452d" stroke-width="5"/><text x="162" y="40" font-size="20" font-weight="700" fill="#5d6b52">'+u+'</text>';
+  }else if(type==='ruler'){
+    vb='0 0 380 150';cls='inst wide';const X=x=>R2(24+332*frac(x));
+    b+='<rect class="obj" x="'+X(cfg.min)+'" y="28" width="'+R2(X(v)-X(cfg.min))+'" height="26" rx="2" fill="#f59e0b" stroke="none"/><line x1="'+X(v)+'" y1="18" x2="'+X(v)+'" y2="72" stroke="#d6452d" stroke-width="2" stroke-dasharray="5 4"/>';
+    b+='<rect x="10" y="70" width="360" height="62" rx="6" fill="#fff3c4" stroke="#23311f" stroke-width="2.5"/>';
+    for(let i=0;i<=n;i++){const xx=X(val(i));b+=tick(i,xx,71,xx,isMaj(i)?96:isMid(i)?88:83);if(isMaj(i))b+=lab(i,xx,112,'middle',cfg.max/cfg.major>12?13:17)}
+    b+='<text x="360" y="18" font-size="18" font-weight="700" fill="#5d6b52" text-anchor="end">'+u+'</text>';
+  }else{
+    vb='0 0 270 270';cls='inst round';const C=135,ang=x=>(120+300*frac(x))*Math.PI/180,P=(r,x)=>[R2(C+r*Math.cos(ang(x))),R2(C+r*Math.sin(ang(x)))];
+    b+='<circle cx="135" cy="135" r="130" fill="#fff" stroke="#23311f" stroke-width="5"/>';
+    for(let i=0;i<=n;i++){const p=P(isMaj(i)?101:isMid(i)?108:112,val(i)),q=P(124,val(i));b+=tick(i,p[0],p[1],q[0],q[1]);if(isMaj(i)){const l=P(80,val(i));b+=lab(i,l[0],l[1],'middle')}}
+    const e=P(116,v);b+='<line class="ndl" x1="135" y1="135" x2="'+e[0]+'" y2="'+e[1]+'" stroke="#d6452d" stroke-width="4" stroke-linecap="round"/><circle cx="135" cy="135" r="9" fill="#23311f"/><text x="135" y="222" font-size="24" font-weight="700" fill="#5d6b52" text-anchor="middle">'+u+'</text>';
+  }
+  return '<svg class="'+cls+'" viewBox="'+vb+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+TOOLS[type].name+'"><rect x="-200" y="-200" width="900" height="900" fill="#fffbea"/>'+b+'</svg>';
+}
+const SCALES={
+  thermo:[[{min:0,max:20,major:5,minor:1}],
+          [{min:0,max:50,major:10,minor:2},{min:0,max:100,major:20,minor:5},{min:0,max:60,major:10,minor:2}],
+          [{min:-20,max:30,major:10,minor:2},{min:-10,max:15,major:5,minor:1},{min:34,max:42,major:1,minor:0.2},{min:0,max:120,major:20,minor:4}]],
+  cyl:[[{min:0,max:100,major:20,minor:10},{min:0,max:50,major:10,minor:5}],
+       [{min:0,max:50,major:10,minor:2},{min:0,max:100,major:20,minor:5},{min:0,max:250,major:50,minor:10}],
+       [{min:0,max:25,major:5,minor:0.5},{min:0,max:100,major:10,minor:2},{min:0,max:500,major:100,minor:20}]],
+  force:[[{min:0,max:10,major:1,minor:0.5},{min:0,max:20,major:2,minor:1}],
+         [{min:0,max:5,major:1,minor:0.2},{min:0,max:10,major:2,minor:0.5},{min:0,max:50,major:10,minor:2}],
+         [{min:0,max:2,major:0.5,minor:0.1},{min:0,max:20,major:5,minor:1},{min:0,max:100,major:20,minor:4}]],
+  ruler:[[{min:0,max:10,major:1,minor:0.5},{min:0,max:50,major:10,minor:5}],
+         [{min:0,max:8,major:1,minor:0.2},{min:0,max:100,major:20,minor:5}],
+         [{min:0,max:200,major:50,minor:10},{min:0,max:60,major:10,minor:2},{min:0,max:10,major:2,minor:0.25}]],
+  dial:[[{min:0,max:60,major:10,minor:5},{min:0,max:30,major:5,minor:1}],
+        [{min:0,max:60,major:10,minor:2},{min:0,max:100,major:20,minor:5}],
+        [{min:0,max:6,major:1,minor:0.2},{min:0,max:10,major:2,minor:0.5},{min:0,max:120,major:20,minor:4}]]
+};
+function readTask(type,cfg,v,tier){
+  const t=TOOLS[type],u=cfg.unit||t.unit,A=Math.min(cfg.max-cfg.major,Math.floor(v/cfg.major+1e-9)*cfg.major),B=A+cfg.major,n=Math.round(cfg.major/cfg.minor),k=Math.round((v-A)/cfg.minor);
+  const hint=['Find the two numbers around the mark: <b>'+num(A)+'</b> and <b>'+num(B)+'</b> (shown in red).','Count the small SPACES between them: <b>'+n+'</b>.','One small space = '+num(cfg.major)+' ÷ '+n+' = <b>'+num(cfg.minor)+' '+u+'</b>.','Now count the spaces from '+num(A)+' to your mark.'];
+  const sol=hint.slice(0,3).concat(['The mark is '+k+' space'+(k===1?'':'s')+' past '+num(A)+': '+num(A)+' + '+k+' × '+num(cfg.minor)+' = <b>'+num(v)+' '+u+'</b>.']);
+  const onLabel=Math.abs(v/cfg.major-Math.round(v/cfg.major))<1e-6;
+  if(onLabel){hint.length=0;hint.push('Look very carefully: is the mark between two numbers, or exactly level with one of them?','Follow the mark straight across to the scale.');
+    sol.length=0;sol.push('The mark is exactly level with a printed number, so no counting is needed.','The reading is <b>'+num(v)+' '+u+'</b>.')}
+  return {type:'read',tool:type,cfg,v,tier,unit:u,A,B,k,onLabel,instr:'Read the '+t.name+'. Type the value.',hint,sol,tip:t.tip,ru:'Сними показание прибора и набери число. '+t.ru,gl:[['reading','показание прибора'],['space','промежуток между делениями']].concat(type==='cyl'?[['meniscus','мениск (изгиб поверхности)'],['measuring cylinder','мерный цилиндр']]:type==='force'?[['force meter','динамометр'],['newton (N)','ньютон']]:type==='thermo'?[['thermometer','термометр']]:type==='dial'?[['stopwatch','секундомер'],['needle','стрелка']]:[['ruler','линейка'],['tape measure','рулетка']])};
+}
+function genRead(type,tier){
+  const cfg=one(SCALES[type][tier-1]),n=Math.round((cfg.max-cfg.min)/cfg.minor),per=Math.round(cfg.major/cfg.minor);
+  let i;do{i=ri(type==='ruler'||type==='dial'||type==='force'?Math.max(2,Math.floor(n/6)):2,n-1)}while((cfg.min+i*cfg.minor)%cfg.major===0||Math.abs((cfg.min+i*cfg.minor)/cfg.major-Math.round((cfg.min+i*cfg.minor)/cfg.major))<1e-6&&per>1);
+  const v=Math.round((cfg.min+i*cfg.minor)*100)/100;
+  return readTask(type,cfg,v,tier);
+}
+
+/* =====================================================================
+   INVESTIGATIONS
+   y axis: 10 grid lines of size g; every value sits on a line or half-way.
+   steps/start are in half-lines.
+   ===================================================================== */
+const INV=[
+ {id:'sugar',ico:'🍬',name:'The slow sugar',q:'Does the temperature of the water change the time sugar takes to dissolve?',ru:'Влияет ли температура воды на время растворения сахара?',
+  iv:{card:'Temperature of the water',head:'Water temperature (°C)',unit:'°C',xs:[20,30,40,50,60],word:'a water temperature of'},dv:{card:'Time the sugar takes to dissolve',head:'Time to dissolve (s)',unit:'s',name:'time to dissolve'},
+  cv:['Volume of water','Mass of sugar','Number of stirs','Type of sugar','Shape of the cup'],tool:'dial',scale:{min:0,max:100,major:20,minor:5},g:10,dir:-1,start:[17,20],steps:[3,4],
+  con:{right:'The warmer the water, the less time the sugar takes to dissolve.',rev:'The warmer the water, the more time the sugar takes to dissolve.',none:'The water temperature makes no difference to the dissolving time.',vague:'The sugar dissolved in every cup of water.'},
+  gl:[['dissolve','растворяться'],['temperature','температура'],['volume','объем'],['mass','масса'],['stir','перемешивание'],['shape','форма']]},
+ {id:'spring',ico:'🌀',name:'The stretchy spring',q:'Does the mass hung on a spring change the length of the spring?',ru:'Влияет ли масса груза на пружине на длину пружины?',
+  iv:{card:'Mass hung on the spring',head:'Mass (g)',unit:'g',xs:[100,200,300,400,500],word:'a mass of'},dv:{card:'Length of the spring',head:'Spring length (cm)',unit:'cm',name:'length of the spring'},
+  cv:['Which spring is used','Where the length is measured from','The ruler used','How long you wait before measuring'],tool:'ruler',scale:{min:0,max:25,major:5,minor:1},g:2,dir:1,start:[4,6],steps:[3,3],
+  con:{right:'The greater the mass, the longer the spring.',rev:'The greater the mass, the shorter the spring.',none:'The mass makes no difference to the length of the spring.',vague:'The spring is made of metal.'},
+  gl:[['spring','пружина'],['mass','масса'],['hung','подвешенный'],['length','длина'],['measured from','измеряют от']]},
+ {id:'ramp',ico:'🚗',name:'The runaway car',q:'Does the height of a ramp change the distance a toy car rolls?',ru:'Влияет ли высота горки на расстояние, которое проезжает машинка?',
+  iv:{card:'Height of the ramp',head:'Ramp height (cm)',unit:'cm',xs:[5,10,15,20,25],word:'a ramp height of'},dv:{card:'Distance the car rolls',head:'Distance rolled (cm)',unit:'cm',name:'distance rolled'},
+  cv:['Which toy car is used','Surface of the floor','Starting point on the ramp','Letting go of the car without a push'],tool:'ruler',scale:{min:0,max:200,major:50,minor:10},g:20,dir:1,start:[3,5],steps:[3,4],
+  con:{right:'The higher the ramp, the further the car rolls.',rev:'The higher the ramp, the shorter the distance the car rolls.',none:'The height of the ramp makes no difference to the distance.',vague:'The car rolled along the floor each time.'},
+  gl:[['ramp','наклонная плоскость, горка'],['height','высота'],['distance','расстояние'],['surface','поверхность'],['push','толчок'],['further','дальше']]},
+ {id:'chute',ico:'🪂',name:'The floating toy',q:'Does the area of a parachute change the time it takes to fall?',ru:'Влияет ли площадь парашюта на время падения?',
+  iv:{card:'Area of the parachute',head:'Parachute area (cm²)',unit:'cm²',xs:[100,200,300,400,500],word:'a parachute area of'},dv:{card:'Time taken to fall',head:'Fall time (s)',unit:'s',name:'time to fall'},
+  cv:['Mass of the toy underneath','Height it is dropped from','Material of the parachute','Length of the strings'],tool:'dial',scale:{min:0,max:6,major:1,minor:0.2},g:0.4,dir:1,start:[3,4],steps:[3,4],
+  con:{right:'The bigger the parachute, the longer it takes to fall.',rev:'The bigger the parachute, the less time it takes to fall.',none:'The size of the parachute makes no difference to the fall time.',vague:'Every parachute reached the ground.'},
+  gl:[['parachute','парашют'],['area','площадь'],['fall','падать'],['dropped','брошенный (отпущенный)'],['material','материал'],['strings','стропы, нитки']]},
+ {id:'cool',ico:'☕',name:'The cooling cup',q:'Does the time that passes change the temperature of a cup of hot water?',ru:'Меняется ли со временем температура чашки горячей воды?',
+  iv:{card:'Time since the start',head:'Time (minutes)',unit:'minutes',xs:[0,5,10,15,20],word:'a time of'},dv:{card:'Temperature of the water',head:'Water temperature (°C)',unit:'°C',name:'temperature of the water'},
+  cv:['Volume of water','Which cup is used','Temperature of the room','Which thermometer is used'],tool:'thermo',scale:{min:0,max:100,major:20,minor:5},g:10,dir:-1,start:[17,18],steps:[4,3,3,2],curve:true,oddMin:5,
+  con:{right:'The more time passes, the cooler the water becomes.',rev:'The more time passes, the warmer the water becomes.',none:'The temperature stays the same as time passes.',vague:'The water was poured into a cup.'},
+  gl:[['passes','проходит'],['cooler','прохладнее'],['volume','объем'],['room','комната'],['since','с момента']]},
+ {id:'evap',ico:'💧',name:'The missing water',q:'Does the temperature of a place change the volume of water left in a dish after one day?',ru:'Влияет ли температура места на объем воды, оставшейся в блюдце через день?',
+  iv:{card:'Temperature of the place',head:'Place temperature (°C)',unit:'°C',xs:[10,15,20,25,30],word:'a temperature of'},dv:{card:'Volume of water left after one day',head:'Water left (ml)',unit:'ml',name:'volume of water left'},
+  cv:['Volume of water at the start','Shape and size of the dish','How long the dish is left','How windy the place is'],tool:'cyl',scale:{min:0,max:100,major:20,minor:5},g:10,dir:-1,start:[17,19],steps:[2,3],
+  con:{right:'The warmer the place, the less water is left after one day.',rev:'The warmer the place, the more water is left after one day.',none:'The temperature makes no difference to the water left.',vague:'There was water in every dish at the start.'},
+  gl:[['dish','блюдце, чашка'],['volume','объем'],['left','оставшийся'],['windy','ветрено'],['evaporate','испаряться']]},
+ {id:'weight',ico:'⚖️',name:'The heavy bag',q:'Does the mass of a bag of marbles change the reading on a force meter?',ru:'Влияет ли масса мешочка с шариками на показание динамометра?',
+  iv:{card:'Mass of the bag',head:'Mass (g)',unit:'g',xs:[200,400,600,800,1000],word:'a mass of'},dv:{card:'Reading on the force meter',head:'Force (N)',unit:'N',name:'force'},
+  cv:['Which force meter is used','Holding the meter still and straight','The planet where you do the test','Which bag holds the marbles'],tool:'force',scale:{min:0,max:12,major:2,minor:0.5},g:1,dir:1,start:[4,4],steps:[4,4],
+  con:{right:'The greater the mass, the greater the force reading.',rev:'The greater the mass, the smaller the force reading.',none:'The mass makes no difference to the force reading.',vague:'The marbles were kept inside a bag.'},
+  gl:[['marbles','стеклянные шарики'],['force meter','динамометр'],['reading','показание'],['mass','масса'],['still','неподвижно']]},
+ {id:'drag',ico:'📦',name:'The stubborn box',q:'Does the mass inside a box change the force needed to drag it?',ru:'Влияет ли масса внутри коробки на силу, нужную, чтобы тащить ее?',
+  iv:{card:'Mass inside the box',head:'Mass in box (g)',unit:'g',xs:[200,400,600,800,1000],word:'a mass of'},dv:{card:'Force needed to drag the box',head:'Pull force (N)',unit:'N',name:'pull force'},
+  cv:['Surface the box is dragged on','Which box is used','Speed of pulling','Direction of pulling'],tool:'force',scale:{min:0,max:12,major:2,minor:0.5},g:1,dir:1,start:[3,4],steps:[3,4],
+  con:{right:'The more mass in the box, the bigger the force needed to drag it.',rev:'The more mass in the box, the smaller the force needed to drag it.',none:'The mass makes no difference to the force needed.',vague:'The box moved when it was pulled.'},
+  gl:[['drag','тащить волоком'],['surface','поверхность'],['speed','скорость'],['direction','направление'],['pull','тянуть']]},
+ {id:'shadow',ico:'🔦',name:'The giant shadow',q:'Does the distance from a torch to a toy change the height of the shadow on the wall?',ru:'Влияет ли расстояние от фонарика до игрушки на высоту тени на стене?',
+  iv:{card:'Distance from the torch to the toy',head:'Torch to toy (cm)',unit:'cm',xs:[10,20,30,40,50],word:'a distance of'},dv:{card:'Height of the shadow',head:'Shadow height (cm)',unit:'cm',name:'height of the shadow'},
+  cv:['Height of the toy','Distance from the toy to the wall','Which torch is used','Height of the torch above the table'],tool:'ruler',scale:{min:0,max:50,major:10,minor:2},g:4,dir:-1,start:[18,20],steps:[5,4,3,2],curve:true,
+  con:{right:'The further the torch is from the toy, the shorter the shadow.',rev:'The further the torch is from the toy, the taller the shadow.',none:'The distance makes no difference to the height of the shadow.',vague:'A shadow appeared on the wall each time.'},
+  gl:[['torch','фонарик'],['shadow','тень'],['distance','расстояние'],['height','высота'],['further','дальше'],['taller','выше']]},
+ {id:'sound',ico:'🔔',name:'The fading buzzer',q:'Does the distance from a buzzer change how loud it sounds on a sound meter?',ru:'Влияет ли расстояние до зуммера на громкость по шумомеру?',
+  iv:{card:'Distance from the buzzer',head:'Distance (m)',unit:'m',xs:[1,2,3,4,5],word:'a distance of'},dv:{card:'Loudness shown on the sound meter',head:'Loudness (dB)',unit:'dB',name:'loudness'},
+  cv:['Which buzzer is used','Background noise in the room','Direction the meter points','Which sound meter is used'],tool:'meter',scale:{min:0,max:100,major:20,minor:5},g:10,dir:-1,start:[16,17],steps:[3,2,2,1],curve:true,
+  con:{right:'The further from the buzzer, the quieter the sound.',rev:'The further from the buzzer, the louder the sound.',none:'The distance makes no difference to the loudness.',vague:'The buzzer made a sound in every test.'},
+  gl:[['buzzer','зуммер, звонок'],['loud','громкий'],['quieter','тише'],['further','дальше'],['background noise','фоновый шум'],['sound meter','шумомер']]}
+];
+/* extra investigations used only on the "variables" bench */
+const VAR_EXTRA=[
+ {q:'Does the type of paper towel change the volume of water it soaks up?',ru:'Влияет ли вид бумажного полотенца на объем впитанной воды?',iv:{card:'Type of paper towel'},dv:{card:'Volume of water soaked up'},cv:['Size of the piece of towel','Time the towel stays in the water','Volume of water in the tray','Number of layers'],gl:[['paper towel','бумажное полотенце'],['soak up','впитывать'],['layers','слои'],['tray','поднос, ванночка']]},
+ {q:'Does the material wrapped round a cup change the temperature of the drink after 20 minutes?',ru:'Влияет ли материал обертки чашки на температуру напитка через 20 минут?',iv:{card:'Material wrapped round the cup'},dv:{card:'Temperature of the drink after 20 minutes'},cv:['Volume of the drink','Starting temperature of the drink','Which cup is used','Thickness of the wrapping'],gl:[['wrapped','обернутый'],['material','материал'],['thickness','толщина'],['drink','напиток']]},
+ {q:'Does the number of cells in a circuit change the brightness of the lamp?',ru:'Влияет ли число батареек в цепи на яркость лампы?',iv:{card:'Number of cells'},dv:{card:'Brightness of the lamp'},cv:['Which lamp is used','Length of the wires','Number of lamps','Type of cell'],gl:[['cell','элемент питания, батарейка'],['circuit','электрическая цепь'],['brightness','яркость'],['wire','провод']]},
+ {q:'Does the type of soil change the time water takes to drain through it?',ru:'Влияет ли тип почвы на время, за которое вода просачивается сквозь нее?',iv:{card:'Type of soil'},dv:{card:'Time the water takes to drain through'},cv:['Volume of water poured in','Mass of soil','Size of the funnel','Type of filter paper'],gl:[['soil','почва'],['drain','просачиваться'],['funnel','воронка'],['poured','налитый']]},
+ {q:'Does the volume of water change the time it takes to boil?',ru:'Влияет ли объем воды на время закипания?',iv:{card:'Volume of water'},dv:{card:'Time taken to boil'},cv:['Heat setting of the heater','Starting temperature of the water','Which pan is used','Lid on or off'],gl:[['boil','кипеть'],['heat setting','уровень нагрева'],['pan','кастрюля'],['lid','крышка']]},
+ {q:'Does the height a ball is dropped from change the height it bounces?',ru:'Влияет ли высота, с которой бросают мяч, на высоту отскока?',iv:{card:'Height the ball is dropped from'},dv:{card:'Height of the bounce'},cv:['Which ball is used','Surface it lands on','Dropping it without a push','Air pressure inside the ball'],gl:[['dropped','отпущенный'],['bounce','отскок'],['surface','поверхность'],['air pressure','давление воздуха']]}
+];
+const ROLES=[['iv','I change it'],['dv','I measure it'],['cv','Keep it the same']];
+const VRU=[['I change it','я меняю это'],['I measure it','я измеряю это'],['Keep it the same','оставляю одинаковым']];
+
+function genData(inv){
+  /* half-line positions, monotonic, then one odd result */
+  for(;;){
+    let h=[ri(inv.start[0],inv.start[1])];
+    for(let i=0;i<4;i++){const s=inv.curve?inv.steps[i]:ri(inv.steps[0],inv.steps[1]);h.push(h[i]+inv.dir*s)}
+    if(h.some(x=>x<1||x>20))continue;
+    const a=ri(1,3),cands=[];
+    for(let v=1;v<=20;v++){
+      if(Math.abs(v-(h[a-1]+h[a+1])/2)<5)continue;
+      if(inv.oddMin&&(v<inv.oddMin||v>h[0]))continue;   /* odd value must still be physically possible */
+      const g=h.slice();g[a]=v;
+      const fits=i=>{const r=g.filter((_,j)=>j!==i);return r.every((x,j)=>!j||(x-r[j-1])*inv.dir>0)};
+      if(!fits(a)||[0,1,2,3,4].some(i=>i!==a&&fits(i)))continue;
+      if(g.some((x,i)=>i!==a&&x===v))continue;
+      cands.push(v);
+    }
+    if(!cands.length)continue;
+    const clean=h.slice();h[a]=one(cands);
+    const val=x=>Math.round(x*inv.g/2*100)/100;
+    return {xs:inv.iv.xs.slice(),ys:h.map(val),trend:clean.map(val),a};
+  }
+}
+const head=inv=>[inv.iv.head,inv.dv.head];
+const GL_ENQ=[['investigation','исследование, опыт'],['result','результат'],['graph','график']];
+
+function sortTask(inv){
+  const cards=[{t:inv.iv.card,r:'iv'},{t:inv.dv.card,r:'dv'}].concat(pickN(inv.cv,3).map(t=>({t,r:'cv'})));
+  return {type:'sort',inv,q:inv.q,cards:shuffle(cards),instr:'Sort the variables. For each card, choose one button.',
+    hint:['Read the question again: "Does <b>A</b> change <b>B</b>?"','<b>A</b> is the thing you change on purpose (independent variable).','<b>B</b> is the thing you measure to get your results (dependent variable).','Everything else must stay the same (control variables), or the test is not fair.'],
+    sol:['I change it (independent variable): <b>'+inv.iv.card+'</b>.','I measure it (dependent variable): <b>'+inv.dv.card+'</b>.','All the other cards stay the same (control variables), so the test is fair.'],
+    ru:'Разложи переменные: что ты меняешь, что измеряешь, что оставляешь одинаковым. Вопрос опыта: '+inv.ru,gl:VRU.concat(inv.gl,[['variable','переменная (то, что может меняться)'],['fair test','честный опыт']])};
+}
+function pickTask(o){o.type='pick';o.opts=shuffle(o.opts);return o}
+const FAIR_OK=['So the test is fair: only one thing is changed on purpose.','To make it a fair test, so that only one thing causes a change.','So the test is fair and you know what caused any change.'];
+const FAIR_BAD=[
+  ['So every result in the table comes out as the same number.','The results are supposed to differ if the thing you test has an effect.'],
+  ['So the investigation can be finished as quickly as possible.','Speed is not the reason for controlling a variable.'],
+  ['So that you do not need to measure anything at the end.','You always need to measure your results.'],
+  ['So that you can change two different things at the same time.','Only one thing should be changed on purpose.'],
+  ['So that the thing you are testing cannot have any effect.','You want to find out whether it has an effect, not to stop it.'],
+  ['So that you never need to repeat any of your measurements.','Repeating results is still useful, however carefully you plan.']];
+function fairTask(inv){
+  const c=one(inv.cv);
+  return pickTask({sub:'fair',inv,q:inv.q,instr:'Why must you control this in your test: "'+c+'"?',cv:c,
+    opts:[{t:one(FAIR_OK),ok:true}].concat(pickN(FAIR_BAD,3).map(b=>({t:b[0],why:b[1]}))),
+    hint:['A control variable is kept the same.','Ask yourself: if two things changed at once, would you know which one caused the result?'],
+    sol:['Keep it the same so that the test is <b>fair</b>.','If only one thing changes on purpose, any change in the results is caused by that thing.'],
+    ru:'Почему это нужно оставлять одинаковым? Вопрос опыта: '+inv.ru,gl:[['control','контролировать, держать постоянным'],['fair','честный'],['on purpose','специально'],['quickly','быстро']].concat(inv.gl)});
+}
+const TOOLKEYS=Object.keys(TOOLS);
+function toolTask(inv){
+  const right=inv.tool,others=pickN(TOOLKEYS.filter(k=>k!==right&&!(right==='ruler'&&k==='ruler')),3);
+  return pickTask({sub:'tool',inv,q:inv.q,instr:'Which tool do you need to measure the '+inv.dv.name+'?',tool:right,
+    opts:[right].concat(others).map(k=>({t:cap(TOOLS[k].name),k,ok:k===right,why:'A '+TOOLS[k].name+' measures '+TOOLS[k].q+'.'})),
+    hint:['Look at the unit in the results: <b>'+inv.dv.unit+'</b>.','Which tool has a scale in that unit?'],
+    sol:['The '+inv.dv.name+' is measured in <b>'+inv.dv.unit+'</b>.','Use a <b>'+TOOLS[right].name+'</b>.'],
+    ru:'Каким прибором измерить то, что нужно в опыте?',gl:TOOL_GL.concat(inv.gl)});
+}
+const TOOL_GL=[['thermometer','термометр'],['measuring cylinder','мерный цилиндр'],['force meter','динамометр'],['ruler','линейка'],['tape measure','рулетка'],['stopwatch','секундомер'],['sound level meter','шумомер'],['balance (scales)','весы'],['tool','инструмент, прибор'],['unit','единица измерения'],['measure','измерять']];
+const THINGQ=[
+  ['the temperature of soup','thermo'],['the temperature of melting ice','thermo'],['the temperature in a fridge','thermo'],
+  ['the volume of orange juice','cyl'],['the volume of rain collected in a jar','cyl'],['the volume of water poured into a plant pot','cyl'],
+  ['the force needed to open a drawer','force'],['the pull needed to drag a shoe','force'],['the weight of a pencil case, in newtons','force'],
+  ['the length of a leaf','ruler'],['how far a paper plane flies','ruler'],['the height of a seedling','ruler'],
+  ['how long a sugar cube takes to dissolve','dial'],['how long an ice cube takes to melt','dial'],['the time a marble takes to roll down a tube','dial'],
+  ['how loud a school bell is','meter'],['how much noise gets through a pair of ear muffs','meter'],
+  ['the mass of an apple, in grams','balance'],['the mass of salt left after evaporation, in grams','balance'],['the mass of a stone, in grams','balance']];
+function toolBench(){
+  const [thing,k]=one(THINGQ);
+  if(rnd()<.6){
+    const others=pickN(TOOLKEYS.filter(x=>x!==k),3);
+    return pickTask({sub:'tool',thing,tool:k,instr:'You want to measure '+thing+'. Which tool do you choose?',
+      opts:[k].concat(others).map(x=>({t:cap(TOOLS[x].name),k:x,ok:x===k,why:'A '+TOOLS[x].name+' measures '+TOOLS[x].q+'.'})),
+      hint:['First decide what kind of quantity it is: temperature, volume, force, length, time, loudness or mass.','Then pick the tool made for that quantity.'],
+      sol:['This is a '+TOOLS[k].q+'.','Use a <b>'+TOOLS[k].name+'</b> (unit: '+TOOLS[k].unit+').'],
+      ru:'Какой прибор выбрать для этого измерения?',gl:TOOL_GL.concat([['soup','суп'],['melting','тающий'],['fridge','холодильник'],['jar','банка'],['plant pot','цветочный горшок'],['drawer','выдвижной ящик'],['drag','тащить'],['weight','вес'],['leaf','лист'],['paper plane','бумажный самолетик'],['seedling','росток'],['sugar cube','кубик сахара'],['marble','шарик'],['loud','громкий'],['ear muffs','защитные наушники'],['mass','масса'],['evaporation','испарение'],['stone','камень']])});
+  }
+  const keys=['thermo','cyl','force','ruler','dial','meter','balance'],x=one(keys),units=keys.map(q=>TOOLS[q].unit);
+  const others=pickN(units.filter(q=>q!==TOOLS[x].unit),3);
+  return pickTask({sub:'unit',tool:x,instr:'Which unit would you read on a '+TOOLS[x].name+'?',
+    opts:[TOOLS[x].unit].concat(others).map(q=>{const o=keys.find(y=>TOOLS[y].unit===q);return {t:q,ok:q===TOOLS[x].unit,why:q+' is the unit for '+TOOLS[o].q+'.'}}),
+    hint:['Think what this tool measures: '+TOOLS[x].q+'.','°C is temperature, ml is volume, N is force, cm is length, s is time, dB is loudness, g is mass.'],
+    sol:['A '+TOOLS[x].name+' measures '+TOOLS[x].q+'.','Its unit here is <b>'+TOOLS[x].unit+'</b>.'],
+    ru:'В каких единицах показывает этот прибор?',gl:TOOL_GL});
+}
+function plotTask(inv,d){
+  const g=inv.g;
+  return {type:'plot',inv,d,instr:'Plot the points: tap the graph, adjust, then Pin.',
+    ru:'Отметь точки на графике: нажми на график, подвинь стрелками и нажми Pin. По горизонтали - то, что меняли; по вертикали - то, что измеряли.',
+    gl:[['plot','отмечать точки на графике'],['axis (axes)','ось (оси)'],['grid line','линия сетки'],['halfway','посередине'],['pin','закрепить']].concat(inv.gl),g};
+}
+function anomGraph(inv,d){
+  return {type:'anom',view:'graph',inv,d,q:inv.q,instr:'One result does not fit the pattern. Tap it on the graph.',
+    hint:['Run your finger along the points, from left to right.','Most of them follow the same smooth trend (all going '+'the same way, without a jump). Which one breaks it?'],
+    sol:['The other points go steadily '+(inv.dir>0?'up':'down')+'.','The point at '+num(d.xs[d.a])+' '+inv.iv.unit+' breaks the trend: it is the odd (anomalous) result.'],
+    ru:'Один результат не вписывается в закономерность. Нажми на него.',gl:[['pattern','закономерность'],['fit','вписываться'],['anomalous result','аномальный (выпадающий) результат'],['trend','тенденция']].concat(inv.gl)};
+}
+function anomTable(inv,d){const t=anomGraph(inv,d);t.view='table';t.instr='One result does not fit the pattern. Tap that row in the table.';t.hint[0]='Read down the second column, one number at a time.';return t}
+const REPEATS=[['time for an ice cube to melt','s',200,3],['distance a toy car rolls','cm',120,3],['time a spinning top keeps spinning','s',24,1],['temperature of warm water in the same jug','°C',46,1],['volume of water soaked up by a sponge','ml',60,2],['height of a ball bounce','cm',75,2],['time for sugar to dissolve','s',48,2],['force needed to drag the same box','N',14,1]];
+function anomRepeat(){
+  const [what,u,base,sp]=one(REPEATS),m=base+ri(-2,2)*sp,off=shuffle([-1,0,0,1,1]).map(k=>k*sp),vals=off.map(o=>m+o),a=ri(0,4);
+  const jump=sp*ri(10,14);vals[a]=m+(rnd()<.5&&m-jump>0?-jump:jump);
+  return {type:'anom',view:'repeat',rep:{what,u,vals},d:{a},instr:'The same test was repeated 5 times. Tap the odd result.',
+    hint:['Repeats of the same test should give numbers that are close together.','Which number is far away from all the others?'],
+    sol:['Four results are close to each other.','<b>'+num(vals[a])+' '+u+'</b> is far from the rest, so it is the anomalous result.'],
+    ru:'Один и тот же опыт повторили 5 раз. Нажми на результат, который сильно отличается.',gl:[['repeated','повторен'],['odd result','странный (выпадающий) результат'],['ice cube','кубик льда'],['melt','таять'],['spinning top','волчок'],['jug','кувшин'],['soaked up','впитанный'],['sponge','губка'],['bounce','отскок'],['drag','тащить'],['dissolve','растворяться'],['distance','расстояние']]};
+}
+const FIXQ=[
+ ['One result looks very different from the pattern. What should you do?',
+  ['Measure that one again, in the same way, to check it.',['Change the number so that it fits the pattern.','Never invent or change results. Check by measuring again.'],['Delete all the other results and keep only this one.','The other results agree with each other. The odd one is the one to check.'],['Change several variables and then carry on.','That would make the test unfair.']]],
+ ['Why do scientists repeat their measurements?',
+  ['To spot odd results and make the results more reliable.',['To make the odd results look bigger.','Repeating helps you check results, not make mistakes bigger.'],['So that they can change two variables at once.','In a fair test only one variable is changed on purpose.'],['So that the table looks longer and nicer.','The reason is to check the results.']]],
+ ['You measure the odd result again. The new value fits the pattern. What does this show?',
+  ['The first measurement was probably a mistake.',['The pattern was wrong from the start.','The new value agrees with the pattern, so the pattern looks right.'],['The tool must now be thrown away.','One wrong measurement does not mean the tool is broken.'],['The test cannot be called fair any more.','Checking a result is good science and keeps the test fair.']]]];
+function fixTask(i){
+  const [q,[ok,...bad]]=FIXQ[i===undefined?ri(0,FIXQ.length-1):i];
+  return pickTask({sub:'fix',instr:q,opts:[{t:ok,ok:true}].concat(bad.map(b=>({t:b[0],why:b[1]}))),
+    hint:['Good scientists check doubtful results. They never invent numbers.','Think: how can you find out whether that result is right?'],
+    sol:['<b>'+ok+'</b>','Repeating measurements shows which results you can trust.'],
+    ru:'Что нужно делать с подозрительным результатом и зачем повторять измерения?',gl:[['measure','измерять'],['pattern','закономерность'],['check','проверить'],['delete','удалить'],['carry on','продолжать'],['reliable','надежный'],['spot','замечать'],['probably','вероятно'],['thrown away','выброшен'],['value','значение'],['invent','выдумывать']]});
+}
+function conTask(inv,d){
+  const c=inv.con;
+  return pickTask({sub:'concl',inv,d,q:inv.q,instr:'Look at the results. Which is the best conclusion?',showGraph:true,
+    opts:[{t:c.right,ok:true,claim:inv.dir},
+      {t:c.rev,claim:-inv.dir,why:'Check the graph: as you move right, do the points go up or down? This sentence says the opposite.'},
+      {t:c.none,claim:0,why:'The results do change from one test to the next, so there is an effect.'},
+      {t:c.vague,claim:null,why:'That may be true, but it does not answer the question. A conclusion compares: "the more ..., the ...".'}],
+    hint:['A good conclusion answers the question and COMPARES: "The ___er the ___, the ___er the ___."','Follow the points from left to right (ignore the odd one). Do they go up or down?'],
+    sol:['As the '+low(inv.iv.card)+' goes up, the '+inv.dv.name+' goes '+(inv.dir>0?'up':'down')+'.','So: <b>'+c.right+'</b>'],
+    ru:'Выбери лучший вывод по результатам. Вопрос опыта: '+inv.ru,gl:[['conclusion','вывод'],['no difference','никакой разницы'],['makes','делает; составляет'],['every','каждый']].concat(inv.gl,[['warmer','теплее'],['longer','длиннее; дольше'],['shorter','короче'],['greater','больше'],['smaller','меньше'],['bigger','крупнее'],['higher','выше'],['quieter','тише'],['louder','громче']])});
+}
+function predTask(inv,d){
+  const pairs=[0,1,2,3].filter(i=>i!==d.a&&i+1!==d.a),i=one(pairs),x=(d.xs[i]+d.xs[i+1])/2,y1=d.ys[i],y2=d.ys[i+1],lo=Math.min(y1,y2),hi=Math.max(y1,y2),g=inv.g;
+  const mid=Math.round((y1+y2)/2/(g/4))*(g/4),R=v=>Math.round(v*100)/100;
+  const wrong=shuffle([lo-g,hi+g,hi+g*2,lo-g*2,hi+g*3,hi+g*4].filter(v=>v>0)).slice(0,3);
+  const u=inv.dv.unit;
+  return pickTask({sub:'pred',inv,d,q:inv.q,x,i,showGraph:true,instr:'Predict the '+inv.dv.name+' for '+inv.iv.word+' '+num(x)+' '+inv.iv.unit+'.',
+    opts:[{t:num(R(mid))+' '+u,v:R(mid),ok:true}].concat(wrong.map(v=>({t:num(R(v))+' '+u,v:R(v),why:'That is outside the two results on either side of '+num(x)+'.'}))),
+    hint:[num(x)+' is between '+num(d.xs[i])+' and '+num(d.xs[i+1])+' on the bottom axis.','A sensible prediction lies BETWEEN the results for those two.'],
+    sol:['At '+num(d.xs[i])+' the result is '+num(y1)+' '+u+'. At '+num(d.xs[i+1])+' it is '+num(y2)+' '+u+'.','So at '+num(x)+' expect a value between them: about <b>'+num(R(mid))+' '+u+'</b>.'],
+    ru:'Предскажи результат для значения, которое не проверяли.',gl:[['predict','предсказать'],['between','между'],['outside','вне'],['sensible','разумный']].concat(inv.gl)});
+}
+function caseTasks(inv){
+  const d=genData(inv);
+  const meter=inv.tool==='meter'?'meter':inv.tool;
+  /* prefer rows whose value falls between printed numbers, often including the odd result */
+  const between=i=>Math.abs(d.ys[i]/inv.scale.major-Math.round(d.ys[i]/inv.scale.major))>1e-6;
+  const order=shuffle([0,1,2,3,4]);if(rnd()<.5)order.unshift(order.splice(order.indexOf(d.a),1)[0]);
+  const rows=order.filter(between).concat(order.filter(i=>!between(i))).slice(0,2).sort();
+  const reads=rows.map((r,j)=>{const t=readTask(meter==='meter'?'dial':meter,meter==='meter'?Object.assign({unit:'dB'},inv.scale):inv.scale,d.ys[r],2);
+    if(meter==='meter'){t.instr='Read the sound level meter. Type the value.';t.tool='dial';t.gl=[['sound level meter','шумомер'],['needle','стрелка'],['reading','показание']]}
+    t.inv=inv;t.d=d;t.row=r;t.hidden=rows.slice(j);t.instr+=' It is the result for '+num(d.xs[r])+' '+inv.iv.unit+'.';return t});
+  const A=anomGraph(inv,d);
+  return [sortTask(inv),fairTask(inv),toolTask(inv)].concat(reads,[plotTask(inv,d),A,fixTask(),conTask(inv,d),predTask(inv,d)]);
+}
+
+/* ---------- levels ---------- */
+const BENCH=[
+ {ico:'🌡️',name:'Thermometers',ds:'read the temperature',n:8,adapt:true,gen:(t)=>genRead('thermo',t)},
+ {ico:'🧪',name:'Measuring cylinders',ds:'bottom of the meniscus',n:8,adapt:true,gen:(t)=>genRead('cyl',t)},
+ {ico:'🪝',name:'Force meters',ds:'newtons on a scale',n:8,adapt:true,gen:(t)=>genRead('force',t)},
+ {ico:'📏',name:'Rulers & stopwatches',ds:'length and time',n:8,adapt:true,gen:(t,i)=>genRead(i%2?'dial':'ruler',t)},
+ {ico:'🧰',name:'Tools & units',ds:'pick the right tool',n:8,gen:()=>toolBench()},
+ {ico:'🎛️',name:'Variables',ds:'change, measure, keep',n:6,gen:(t,i)=>i%3===2?fairTask(one(INV)):sortTask(one(INV.concat(VAR_EXTRA)))},
+ {ico:'📍',name:'Plot the points',ds:'three graphs',n:3,gen:()=>{const inv=one(INV);return plotTask(inv,genData(inv))}},
+ {ico:'🕵️',name:'Odd result hunt',ds:'spot the anomaly',n:8,gen:(t,i)=>{const inv=one(INV);return i%4===0?anomTable(inv,genData(inv)):i%4===1?anomGraph(inv,genData(inv)):i%4===2?anomRepeat():fixTask()}},
+ {ico:'💡',name:'Conclusions',ds:'compare and predict',n:6,gen:(t,i)=>{const inv=one(INV),d=genData(inv);return i%3===2?predTask(inv,d):conTask(inv,d)}}
+];
+const LV=BENCH.map(b=>Object.assign({case:false},b)).concat(INV.map(inv=>({case:true,inv,ico:inv.ico,name:inv.name,ds:'Case file: '+inv.dv.name,n:10})));
+
+/* ---------- storage ---------- */
+const MEM={};
+const LS=SELFTEST?{getItem:k=>k in MEM?MEM[k]:null,setItem:(k,v)=>{MEM[k]=String(v)}}:{getItem:k=>localStorage.getItem(k),setItem:(k,v)=>localStorage.setItem(k,v)};
+function jget(k){try{const v=LS.getItem(k);if(v==null)return {};const o=JSON.parse(v);return (o&&typeof o==='object'&&!Array.isArray(o))?o:{}}catch(e){return {}}}
+function jset(k,o){try{LS.setItem(k,JSON.stringify(o))}catch(e){}}
+function dayStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return dayStr(d)}
+function touchDay(){const p=jget(PKEY),today=dayStr(new Date());if(p.day===today)return;p.streak=p.day===yesterday()?(p.streak||0)+1:1;p.day=today;jset(PKEY,p)}
+function streak(){const p=jget(PKEY);return (p.day===dayStr(new Date())||p.day===yesterday())?(p.streak||0):0}
+function addQuizXp(x){
+  try{const raw=LS.getItem(QKEY);let o={};if(raw!=null){o=JSON.parse(raw);if(!o||typeof o!=='object'||Array.isArray(o))return}
+    o.xp=(+o.xp||0)+x;LS.setItem(QKEY,JSON.stringify(o))}catch(e){}
+}
+let G;
+function loadG(){G=jget(GKEY);for(const k of ['stars','tiers','up'])if(!G[k]||typeof G[k]!=='object')G[k]={};for(const k of ['answered','right','row','bestRow'])G[k]=+G[k]||0}
+const saveG=()=>jset(GKEY,G);
+
+/* =====================================================================
+   GRAPH
+   ===================================================================== */
+const GX0=58,GX1=372,GY0=18,GY1=300;
+const gx=i=>Math.round((GX0+(GX1-GX0)*(i+.5)/5)*100)/100;
+const gy=h=>Math.round((GY1-(GY1-GY0)*h/20)*100)/100;   /* h = half-lines 0..20 */
+function graphSVG(inv,d,o){
+  o=o||{};let b='<rect x="0" y="0" width="390" height="354" rx="14" fill="#fff"/>';
+  for(let k=0;k<=10;k++){const y=gy(2*k);b+='<line x1="'+GX0+'" y1="'+y+'" x2="'+GX1+'" y2="'+y+'" stroke="'+(k%2?'#dde3d0':'#b9c3a4')+'" stroke-width="1.4"/>';
+    if(k%2===0)b+='<text class="ylb" x="'+(GX0-7)+'" y="'+y+'" dy="0.35em" text-anchor="end" font-size="14" font-weight="600" fill="#23311f">'+num(k*inv.g)+'</text>'}
+  for(let k=0;k<10;k++){const y=gy(2*k+1);b+='<line x1="'+GX0+'" y1="'+y+'" x2="'+GX1+'" y2="'+y+'" stroke="#eef1e6" stroke-width="1" stroke-dasharray="2 4"/>'}
+  for(let i=0;i<5;i++){const x=gx(i);b+='<line x1="'+x+'" y1="'+GY0+'" x2="'+x+'" y2="'+GY1+'" stroke="#cfd8bd" stroke-width="1.4"/><text class="xlb" x="'+x+'" y="'+(GY1+19)+'" text-anchor="middle" font-size="15" font-weight="600" fill="#23311f">'+num(d.xs[i])+'</text>'}
+  b+='<path d="M'+GX0+' '+(GY0-6)+' L'+GX0+' '+GY1+' L'+(GX1+6)+' '+GY1+'" stroke="#23311f" stroke-width="2.5" fill="none"/>';
+  b+='<text x="'+((GX0+GX1)/2)+'" y="'+(GY1+44)+'" text-anchor="middle" font-size="15" font-weight="700" fill="#23311f">'+esc(inv.iv.head)+'</text>';
+  b+='<text transform="rotate(-90)" x="'+(-(GY0+GY1)/2)+'" y="15" text-anchor="middle" font-size="15" font-weight="700" fill="#23311f">'+esc(inv.dv.head)+'</text>';
+  const cross=(x,y,c)=>'<path d="M'+(x-6)+' '+(y-6)+' L'+(x+6)+' '+(y+6)+' M'+(x-6)+' '+(y+6)+' L'+(x+6)+' '+(y-6)+'" stroke="'+c+'" stroke-width="3.5" stroke-linecap="round" fill="none"/>';
+  const H=v=>v/inv.g*2;
+  const upto=o.points===undefined?5:o.points;
+  for(let i=0;i<upto;i++){const x=gx(i),y=gy(H(d.ys[i]));b+=cross(x,y,'#14532d');
+    if(o.ring===i)b+='<circle cx="'+x+'" cy="'+y+'" r="14" fill="none" stroke="#d6452d" stroke-width="3" stroke-dasharray="4 3"/>'+(o.ringText?'<text x="'+(x+(i>2?-18:18))+'" y="'+(y+5)+'" text-anchor="'+(i>2?'end':'start')+'" font-size="13" font-weight="700" fill="#d6452d">odd result</text>':'');
+    if(o.tap)b+='<circle class="pt" data-p="'+i+'" cx="'+x+'" cy="'+y+'" r="24" fill="'+(o.bad===i?'rgba(214,69,45,.25)':'rgba(0,0,0,0)')+'" style="cursor:pointer"/>'}
+  b+='<g id="mark"></g>';
+  return '<svg class="graph" id="graph" viewBox="0 0 390 354" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="graph">'+b+'</svg>';
+}
+function table(inv,d,o){
+  o=o||{};
+  return '<table class="res'+(o.tap?' tap':'')+'"><tr><th>'+esc(inv.iv.head)+'</th><th>'+esc(inv.dv.head)+'</th></tr>'+d.xs.map((x,i)=>'<tr data-r="'+i+'"><td>'+num(x)+'</td><td>'+num(d.ys[i])+'</td></tr>').join('')+'</table>';
+}
+
+function wideTable(inv,d,now,hidden){
+  const row=(label,vals,hid)=>'<tr><th>'+esc(label)+'</th>'+vals.map((v,i)=>'<td'+(i===now?' class="now"':'')+'>'+(hid&&hid.includes(i)?'?':num(v))+'</td>').join('')+'</tr>';
+  return '<table class="res wt">'+row(inv.iv.head,d.xs)+row(inv.dv.head,d.ys,hidden)+'</table>';
+}
+
+/* =====================================================================
+   PLAY
+   ===================================================================== */
+let S=null;
+const $=s=>document.querySelector(s);
+const app=()=>document.getElementById('app');
+function showMap(){
+  S=null;
+  const card=(l,i)=>{const n=i+1,s=G.stars[n]||0;return '<button class="lv'+(l.case?' case':'')+(l.case&&s?' solved':'')+'" data-lv="'+n+'"><span class="ico">'+l.ico+'</span><span class="nm">'+n+'. '+esc(l.name)+'</span><span class="ds">'+esc(l.ds)+'</span><span class="st">'+'★'.repeat(s)+'<i>'+'★'.repeat(3-s)+'</i></span></button>'};
+  const solved=LV.filter((l,i)=>l.case&&G.stars[i+1]).length;
+  app().innerHTML='<div class="top"><a class="btn alt" href="../">← Quiz</a><div class="chips"><span class="chip">🔥 '+streak()+' day'+(streak()===1?'':'s')+'</span><span class="chip">⭐ '+Object.values(G.stars).reduce((a,b)=>a+b,0)+'/'+LV.length*3+'</span><span class="chip">🗂️ '+solved+'/'+INV.length+' cases</span></div></div>'+
+  '<h1>🔍 Science Lab Detective</h1><p class="sub">Practise investigation skills: read tools, control variables, draw graphs, catch odd results, make conclusions.</p>'+
+  '<div class="card"><b>How to play:</b> train a skill on the bench, then solve a full case from question to conclusion. First mistake: you get a clue and try again. Second mistake: you see the full method.<details class="ru"><summary>Перевод на русский</summary><div>Тренируй навык на «скамье», потом раскрывай целое дело: от вопроса опыта до вывода. После первой ошибки - подсказка и вторая попытка, после второй - полный разбор.</div></details></div>'+
+  '<h3 class="sec">🧫 Training bench</h3><div class="map">'+LV.map((l,i)=>l.case?'':card(l,i)).join('')+'</div><h3 class="sec">🗂️ Case files</h3><div class="map">'+LV.map((l,i)=>l.case?card(l,i):'').join('')+'</div>';
+  app().querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>start(+b.dataset.lv));
+  window.scrollTo(0,0);
+}
+function start(n,opt){
+  opt=opt||{};const l=LV[n-1];
+  S={n,i:0,miss:0,xp:0,tasks:l.case?caseTasks(l.inv):[],total:l.n,forceTier:opt.tier||0};
+  if(opt.step)S.i=Math.max(0,Math.min(S.total-1,opt.step-1));
+  showTask();
+}
+function tierNow(){return S.forceTier||G.tiers[S.n]||1}
+function ensureTask(){
+  const l=LV[S.n-1];
+  while(S.tasks.length<=S.i){const k=S.tasks.length;let t;for(let j=0;j<8;j++){t=l.gen(tierNow(),k);if(!S.tasks.some(x=>sig(x)===sig(t)))break}S.tasks.push(t)}
+  return S.tasks[S.i];
+}
+const sig=t=>t.type+(t.view||'')+t.instr+(t.v===undefined?'':t.v+JSON.stringify(t.cfg))+(t.cards?t.cards.map(c=>c.t).sort().join():'')+(t.d?JSON.stringify(t.d):'')+(t.rep?JSON.stringify(t.rep):'')+(t.inv?t.inv.id:'');
+function showTask(){
+  if(S.i>=S.total)return finish();
+  const t=ensureTask();
+  Object.assign(S,{t,tries:0,done:false,buf:'',sel:{},mark:null,pin:0,failed:false});
+  const l=LV[S.n-1];
+  const hasStage=t.type==='read'||t.type==='plot'||t.type==='anom'||!!t.showGraph;
+  app().innerHTML='<div class="ptop"><button class="btn alt" id="mapbtn">← Map</button><div class="ptitle">'+l.ico+' '+esc(l.name)+'<small>'+(l.case?'Clue ':'Task ')+(S.i+1)+' of '+S.total+'</small></div><span class="chip" id="rowchip">⚡ '+G.row+'</span></div>'+
+  '<div class="clues">'+Array.from({length:S.total},(_,i)=>'<i class="'+(i<S.i?'on':i===S.i?'now':'')+'"></i>').join('')+'</div>'+
+  '<div class="pgrid'+(hasStage?'':' nostage')+'"><div class="card" id="task">'+(t.q&&t.type!=='sort'?'<div class="case-q">Question: '+esc(t.q)+'</div>':'')+(t.type==='sort'?'<div class="sub2" style="margin:0 0 4px">Question: <b>'+esc(t.q)+'</b></div>':'')+(t.rep?'<div class="sub2" style="margin:0 0 4px">Measured: <b>'+esc(t.rep.what)+'</b></div>':'')+'<div class="instr" id="instr">'+esc(t.instr)+'</div><details class="ru" id="ru"'+(G.ru?' open':'')+'><summary>Перевод на русский</summary><div>'+esc(t.ru)+'</div><div class="gl">'+uniqGl(t.gl).map(g=>'<span><b>'+esc(g[0])+'</b> - '+esc(g[1])+'</span>').join('')+'</div></details></div>'+
+  (hasStage?'<div class="card" id="stage"></div>':'')+'<div id="ctrl"><div id="fbslot"></div><div id="input"></div></div></div>';
+  $('#mapbtn').onclick=showMap;
+  $('#ru').ontoggle=e=>{G.ru=e.target.open;saveG()};
+  renderTask();window.scrollTo(0,0);
+}
+const uniqGl=gl=>gl.filter((g,i)=>gl.findIndex(x=>x[0]===g[0])===i);
+function renderTask(){
+  const t=S.t,st=$('#stage'),inp=$('#input');
+  if(t.type==='read'){
+    st.innerHTML=instSVG(t.tool,t.cfg,t.v)+(t.inv?wideTable(t.inv,t.d,t.row,t.hidden):'');
+    const keys=['7','8','9','⌫','4','5','6','.','1','2','3','−','0','OK'];
+    inp.innerHTML='<div class="disp" id="disp"></div><div class="pad">'+keys.map(k=>'<button class="key'+(k==='OK'?' ok':/[⌫.−]/.test(k)?' fn':'')+'" data-k="'+k+'">'+k+'</button>').join('')+'</div>';
+    inp.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>key(b.dataset.k));drawDisp();
+  }else if(t.type==='sort'){
+    inp.innerHTML=t.cards.map((c,i)=>'<div class="vcard" data-card="'+i+'"><div class="t">'+esc(c.t)+'</div><div class="seg">'+ROLES.map(r=>'<button data-c="'+i+'" data-r="'+r[0]+'">'+r[1]+'</button>').join('')+'</div></div>').join('')+'<button class="btn wide" id="check" disabled>Check ✓</button>';
+    inp.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{if(S.done)return;const i=+b.dataset.c;S.sel[i]=b.dataset.r;inp.querySelectorAll('[data-c="'+i+'"]').forEach(x=>x.classList.toggle('sel',x===b));b.closest('.vcard').classList.remove('no');$('#check').disabled=Object.keys(S.sel).length<t.cards.length});
+    $('#check').onclick=()=>answer(Object.assign({},S.sel));
+  }else if(t.type==='pick'){
+    if(t.showGraph)st.innerHTML=graphSVG(t.inv,t.d,{ring:t.d.a,ringText:true});
+    inp.innerHTML='<div class="opts">'+t.opts.map((o,i)=>'<button class="opt" data-o="'+i+'">'+esc(o.t)+'</button>').join('')+'</div>';
+    inp.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>answer(+b.dataset.o));
+  }else if(t.type==='anom'){
+    if(t.view==='graph'){st.innerHTML=graphSVG(t.inv,t.d,{tap:true});st.querySelectorAll('.pt').forEach(c=>c.addEventListener('click',()=>answer(+c.dataset.p)))}
+    else{
+      st.innerHTML=t.view==='table'?table(t.inv,t.d,{tap:true}):'<table class="res tap"><tr><th>Test</th><th>'+esc(cap(t.rep.what))+' ('+t.rep.u+')</th></tr>'+t.rep.vals.map((v,i)=>'<tr data-r="'+i+'"><td>'+(i+1)+'</td><td>'+num(v)+'</td></tr>').join('')+'</table>';
+      st.querySelectorAll('tr[data-r]').forEach(r=>r.onclick=()=>answer(+r.dataset.r));
+    }
+    inp.innerHTML='';
+  }else if(t.type==='plot'){drawPlot()}
+}
+function drawDisp(){const d=$('#disp');if(d)d.innerHTML='<span>'+(S.buf?esc(S.buf):'<span class="ph">type the value</span>')+'</span><span class="unit">'+S.t.unit+'</span>'}
+function key(k){
+  if(!S||S.done||S.t.type!=='read')return;let b=S.buf;
+  if(k==='OK'){if(!isNaN(toNum(b)))answer(b);return}
+  if(k==='⌫')b=b.slice(0,-1);else if(k==='−')b=b.startsWith('−')?b.slice(1):'−'+b;else if(k==='.'){if(!b.includes('.')&&/\d$/.test(b))b+='.'}else if(/^\d$/.test(k)&&b.length<7)b+=k;
+  S.buf=b;drawDisp();
+}
+/* ---- plotting ---- */
+function drawPlot(){
+  const t=S.t,st=$('#stage'),inp=$('#input'),i=S.pin;
+  st.innerHTML=wideTable(t.inv,t.d,i)+graphSVG(t.inv,t.d,{points:i});
+  const svg=$('#graph');svg.addEventListener('click',e=>{if(S.done)return;const m=svg.getScreenCTM();if(!m)return;const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(m.inverse());tapAt(q.x,q.y)});
+  svg.style.cursor='crosshair';
+  inp.innerHTML='<div class="pointno" id="pointno">Point '+(i+1)+' of 5: use the orange column</div><div class="nudge"><button class="btn alt" data-n="-1,0" aria-label="left">◀</button><button class="btn alt" data-n="0,1" aria-label="up">▲</button><button class="btn alt" data-n="0,-1" aria-label="down">▼</button><button class="btn alt" data-n="1,0" aria-label="right">▶</button></div><button class="btn wide" id="check" disabled>Pin the point 📍</button>';
+  inp.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{if(S.done)return;const [dx,dy]=b.dataset.n.split(',').map(Number);if(!S.mark)S.mark={c:i,h:10};else S.mark={c:Math.max(0,Math.min(4,S.mark.c+dx)),h:Math.max(0,Math.min(20,S.mark.h+dy))};if(!dx&&!dy)return;drawMark()});
+  $('#check').onclick=()=>answer(Object.assign({},S.mark));
+}
+function tapAt(x,y){
+  if(x<GX0-12||x>GX1+14||y<GY0-14||y>GY1+14)return;
+  const c=Math.max(0,Math.min(4,Math.floor((x-GX0)/((GX1-GX0)/5))));
+  const h=Math.max(0,Math.min(20,Math.round((GY1-y)/((GY1-GY0)/20))));
+  S.mark={c,h};drawMark();
+}
+function drawMark(){
+  const {c,h}=S.mark,x=gx(c),y=gy(h);
+  $('#mark').innerHTML='<line x1="'+GX0+'" y1="'+y+'" x2="'+x+'" y2="'+y+'" stroke="#e8710a" stroke-width="2.5" stroke-dasharray="6 4"/><line x1="'+x+'" y1="'+GY1+'" x2="'+x+'" y2="'+y+'" stroke="#e8710a" stroke-width="2.5" stroke-dasharray="6 4"/><circle cx="'+x+'" cy="'+y+'" r="9" fill="rgba(245,158,11,.35)" stroke="#e8710a" stroke-width="3"/>';
+  $('#check').disabled=false;
+}
+/* ---- answering ---- */
+function isRight(t,u){
+  if(t.type==='read')return Math.abs(toNum(u)-t.v)<1e-9;
+  if(t.type==='sort')return t.cards.every((c,i)=>u[i]===c.r);
+  if(t.type==='pick')return !!t.opts[u].ok;
+  if(t.type==='anom')return u===t.d.a;
+  if(t.type==='plot')return u.c===S.pin&&Math.abs(u.h*t.inv.g/2-t.d.ys[S.pin])<1e-9;
+}
+function diagnose(t,u){
+  if(t.type==='read'){
+    const x=toNum(u),m=t.cfg.minor;
+    if(t.onLabel)return '';
+    if(m!==1&&Math.abs(x-(t.A+t.k))<1e-9)return 'It looks like you counted each small space as 1. Here one space is not 1.';
+    if(Math.abs(x+t.v)<1e-9&&t.v!==0)return 'Check the sign: is the mark above or below zero?';
+    if(Math.abs(x-t.A)<1e-9||Math.abs(x-t.B)<1e-9)return 'That is a labelled number nearby. The mark is between two labels, so count the small spaces.';
+    if(Math.abs(Math.abs(x-t.v)-m)<1e-9)return 'Very close: you are one small space out. Count the spaces, not the lines.';
+    return '';
+  }
+  if(t.type==='sort'){const w=t.cards.map((c,i)=>u[i]===c.r?null:c.t).filter(Boolean);return 'Think again about: '+w.join('; ')+'.'}
+  if(t.type==='pick')return t.opts[u].why||'';
+  if(t.type==='anom')return t.view==='repeat'?'That value is close to the other repeats.':'That result fits the trend with its neighbours. Look at all of them together.';
+  if(t.type==='plot'){const xo=u.c!==S.pin,y=u.h*t.inv.g/2,want=t.d.ys[S.pin];
+    if(xo&&Math.abs(y-want)>1e-9)return 'Check both: first the number along the bottom, then the height.';
+    if(xo)return 'The height is right, but you are on the line for '+num(t.d.xs[u.c])+' along the bottom.';
+    return 'Right column, but your point is '+(y>want?'too high':'too low')+'. It shows '+num(y)+'.'}
+}
+function answer(u){
+  if(!S||S.done)return;const t=S.t;
+  if(t.type==='pick'&&$('[data-o="'+u+'"]').disabled)return;
+  const ok=isRight(t,u);S.tries++;
+  G.answered++;let gain=0,bonus=0;
+  if(ok){
+    if(S.tries===1){G.right++;G.row++;if(G.row>G.bestRow)G.bestRow=G.row;if(G.row%5===0)bonus=10;gain=t.type==='plot'?3:t.type==='sort'?10:6+(t.type==='read'?t.tier:0)}
+    else gain=t.type==='plot'?1:3;
+  }else{S.miss++;G.row=0}
+  const reveal=!ok&&S.tries>=2;
+  let more=false;
+  if(t.type==='plot'&&(ok||reveal)){S.pin++;more=S.pin<5}
+  const taskOver=(ok||reveal)&&!more;
+  if(taskOver){
+    const l=LV[S.n-1],clean=ok&&S.tries===1&&!S.failed;
+    if(l.adapt&&!S.forceTier){if(clean){G.up[S.n]=(G.up[S.n]||0)+1;if(G.up[S.n]>=2){G.tiers[S.n]=Math.min(3,tierNow()+1);G.up[S.n]=0}}else{G.up[S.n]=0;if(reveal)G.tiers[S.n]=Math.max(1,tierNow()-1)}}
+    /* on the bench a revealed answer brings one fresh twin task (at most three extra) */
+    if(reveal&&!l.case&&S.total<l.n+3)S.total++;
+  }
+  if(reveal)S.failed=true;
+  S.xp+=gain+bonus;saveG();if(gain+bonus)addQuizXp(gain+bonus);touchDay();
+  $('#rowchip').textContent='⚡ '+G.row;
+  show(u,ok,reveal,gain+bonus,bonus,more);
+}
+const PRAISE=['Sharp eyes!','Correct!','Great detective work!','Spot on!','Brilliant!'];
+function lockInput(){document.querySelectorAll('#input button').forEach(b=>b.disabled=true)}
+function show(u,ok,reveal,gain,bonus,more){
+  const t=S.t,slot=$('#fbslot');
+  const li=a=>'<ol>'+a.map(s=>'<li>'+s+'</li>').join('')+'</ol>';
+  if(t.type==='plot'){
+    if(ok||reveal){
+      const j=S.pin-1,inv=t.inv,d=t.d;
+      const msg=ok?'<div class="fb" id="fb"><b>📍 '+PRAISE[G.answered%PRAISE.length]+' +'+gain+' XP</b></div>':
+        '<div class="fb bad" id="fb"><h2>Here is where it goes</h2><div>'+esc(diagnose2(u,j))+'</div>'+li(['Go along the bottom axis to <b>'+num(d.xs[j])+'</b>.','Go up to <b>'+num(d.ys[j])+'</b>. The numbers go up in '+num(inv.g*2)+'s; each solid line is '+num(inv.g)+' and a dotted line is halfway ('+num(inv.g/2)+').','The point is now pinned for you.'])+'</div>';
+      S.mark=null;S.tries=0;
+      if(more){drawPlot();$('#fbslot').innerHTML=msg;return}
+      S.done=true;$('#stage').innerHTML=wideTable(inv,d,-1)+graphSVG(inv,d);lockInput();$('#input').innerHTML='';
+      slot.innerHTML=msg;slot.querySelector('.fb').insertAdjacentHTML('beforeend','<div style="margin-top:6px">All five points are on the graph.</div><div class="act"><button class="btn" id="next">'+nextLabel()+'</button></div>');
+      $('#next').onclick=nextTask;scrollToFb();return;
+    }
+    const inv=t.inv;
+    slot.innerHTML='<div class="fb bad" id="fb"><h2>Not quite. Try that point again.</h2><div class="trap">'+esc(diagnose(t,u))+'</div>'+li(['First go ALONG the bottom axis to the right number.','Then go UP. The numbers go up in '+num(inv.g*2)+'s, each solid line is '+num(inv.g)+', a dotted line is '+num(inv.g/2)+' more.','Use ▲ ▼ ◀ ▶ to move your point exactly.'])+'</div>';
+    return;
+  }
+  if(!ok&&!reveal){
+    slot.innerHTML='<div class="fb bad" id="fb"><h2>Not yet. Here is a clue.</h2>'+(diagnose(t,u)?'<div class="trap">'+esc(diagnose(t,u))+'</div>':'')+li(t.hint)+(t.tip?'<div>'+esc(t.tip)+'</div>':'')+'<div style="font-weight:700;margin-top:4px">Try once more!</div></div>';
+    if(t.type==='read'){$('#stage').innerHTML=instSVG(t.tool,t.cfg,t.v,t.onLabel?null:{a:t.A,b:t.B})+(t.inv?wideTable(t.inv,t.d,t.row,t.hidden):'');S.buf='';drawDisp()}
+    if(t.type==='pick'){const b=$('[data-o="'+u+'"]');b.classList.add('no');b.disabled=true}
+    if(t.type==='sort')t.cards.forEach((c,i)=>$('[data-card="'+i+'"]').classList.toggle('no',u[i]!==c.r));
+    if(t.type==='anom'){if(t.view==='graph'){const c=$('.pt[data-p="'+u+'"]');c.setAttribute('fill','rgba(214,69,45,.25)')}else $('tr[data-r="'+u+'"]').classList.add('no')}
+    scrollToFb();return;
+  }
+  /* task finished */
+  S.done=true;
+  const head=ok?'✅ '+PRAISE[G.answered%PRAISE.length]+' +'+gain+' XP':'Here is the full method';
+  slot.innerHTML='<div class="fb'+(ok?'':' bad')+'" id="fb"><h2>'+head+'</h2>'+(bonus?'<div class="trap">⚡ '+G.row+' first-try answers in a row! Bonus +'+bonus+' XP</div>':'')+(!ok&&diagnose(t,u)?'<div class="trap">'+esc(diagnose(t,u))+'</div>':'')+li(t.sol)+(t.tip&&!ok?'<div>'+esc(t.tip)+'</div>':'')+(!ok&&!LV[S.n-1].case&&S.total>LV[S.n-1].n?'<div>One extra task is added, so you can practise again.</div>':'')+'<div class="act"><button class="btn" id="next">'+nextLabel()+'</button></div></div>';
+  if(t.type==='read'){$('#stage').innerHTML=instSVG(t.tool,t.cfg,t.v,{a:t.A,b:t.B})+(t.inv?wideTable(t.inv,t.d,t.row,t.hidden.slice(1)):'');$('#input').innerHTML='<div class="disp">'+num(t.v)+' <span class="unit">'+t.unit+'</span></div>'}
+  if(t.type==='pick'){lockInput();t.opts.forEach((o,i)=>{if(o.ok)$('[data-o="'+i+'"]').classList.add('yes')});if(!ok)$('[data-o="'+u+'"]').classList.add('no')}
+  if(t.type==='sort'){lockInput();t.cards.forEach((c,i)=>{const el=$('[data-card="'+i+'"]');el.classList.remove('no');el.classList.add(u[i]===c.r?'yes':'no');el.querySelectorAll('[data-r]').forEach(b=>b.classList.toggle('sel',b.dataset.r===c.r))})}
+  if(t.type==='anom'){
+    if(t.view==='graph')$('#stage').innerHTML=graphSVG(t.inv,t.d,{ring:t.d.a,ringText:true});
+    else{document.querySelectorAll('#stage tr[data-r]').forEach(r=>r.onclick=null);$('tr[data-r="'+t.d.a+'"]').classList.add('yes')}
+  }
+  $('#next').onclick=nextTask;scrollToFb();
+}
+function diagnose2(u,j){const p=S.pin;S.pin=j;const m=diagnose(S.t,u);S.pin=p;return m}
+const nextLabel=()=>S.i+1>=S.total?(LV[S.n-1].case?'Close the case 🗂️':'Finish 🏁'):'Next ▶';
+function nextTask(){S.i++;showTask()}
+function scrollToFb(){if(SELFTEST||window.innerWidth>=900)return;const f=$('#fb');if(!f)return;const r=f.getBoundingClientRect();if(r.bottom>window.innerHeight||r.top<0)window.scrollTo({top:r.top+window.scrollY-Math.max(8,window.innerHeight-r.height-12),behavior:'smooth'})}
+function finish(){
+  const n=S.n,l=LV[n-1],m=S.miss,stars=m<=1?3:m<=3?2:1,prev=G.stars[n]||0,first=!prev;
+  const xp=(first?(l.case?30:20):5)+10*Math.max(0,stars-prev);
+  G.stars[n]=Math.max(prev,stars);saveG();addQuizXp(xp);touchDay();
+  const total=S.xp+xp;S.finished={stars,xp};
+  const nx=LV.findIndex((x,i)=>x.case===l.case&&!G.stars[i+1]);
+  app().innerHTML='<div class="card done" id="done"><div style="font-size:60px">'+l.ico+'</div>'+(l.case?'<div class="stamp">CASE CLOSED</div>':'<h2>Bench complete!</h2>')+'<div class="big">'+'★'.repeat(stars)+'<i>'+'★'.repeat(3-stars)+'</i></div><p>'+(m===0?'Not a single mistake. Top detective!':m+' mistake'+(m>1?'s':'')+' on the way.')+' <b>+'+total+' XP</b>.</p>'+(l.case?'<p><b>Your conclusion:</b> '+esc(l.inv.con.right)+'</p>':'')+'<p style="color:var(--soft)">'+(stars<3?'Three stars: finish with 0 or 1 mistakes.':'')+'</p><div class="row">'+(nx>=0&&nx+1!==n?'<button class="btn" id="nextlv">Next: '+esc(LV[nx].name)+' ▶</button>':'')+'<button class="btn alt" id="again">Play again</button><button class="btn alt" id="mapbtn">Map</button></div></div>';
+  $('#again').onclick=()=>start(n);$('#mapbtn').onclick=showMap;const b=$('#nextlv');if(b)b.onclick=()=>start(nx+1);window.scrollTo(0,0);
+}
+document.addEventListener('keydown',e=>{
+  if(!S||e.ctrlKey||e.metaKey||e.altKey||!S.t)return;
+  if(S.done){if(e.key==='Enter'&&$('#next')&&document.activeElement!==$('#next')){e.preventDefault();$('#next').click()}return}
+  if(S.t.type==='read'){const k={'Backspace':'⌫','-':'−',',':'.','.':'.','Enter':'OK'}[e.key]||(/^\d$/.test(e.key)?e.key:null);if(k){e.preventDefault();key(k)}}
+  else if(S.t.type==='plot'){const m={ArrowLeft:'-1,0',ArrowRight:'1,0',ArrowUp:'0,1',ArrowDown:'0,-1'}[e.key];if(m){e.preventDefault();$('[data-n="'+m+'"]').click()}else if(e.key==='Enter'&&S.mark){e.preventDefault();answer(Object.assign({},S.mark))}}
+});
+
+/* =====================================================================
+   SELFTEST
+   Part 1: verifier that recomputes every answer by another route (reads the
+           instrument and graph drawings back, counts inversions, own tables).
+   Part 2: plays every level through the real controls, with right, wrong and
+           twice-wrong answers.
+   ===================================================================== */
+const V={
+  parse(svg){const d=new DOMParser().parseFromString(svg,'image/svg+xml');if(d.querySelector('parsererror'))throw new Error('bad svg');return d},
+  /* read an instrument drawing: map positions of the printed numbers to the mark */
+  read(svg,tool){
+    const d=V.parse(svg),A=e=>n=>+e.getAttribute(n);
+    let pos,labs;const L=[...d.querySelectorAll('.lb')].map(e=>({v:toNum(e.textContent),x:A(e)('x'),y:A(e)('y')}));
+    const ticks=[...d.querySelectorAll('.tk')].map(e=>({x1:A(e)('x1'),y1:A(e)('y1'),x2:A(e)('x2'),y2:A(e)('y2')}));
+    const el=s=>{const e=d.querySelector(s);if(!e)throw new Error('no '+s);return A(e)};
+    let tp;
+    if(tool==='thermo'){pos=el('.liq')('y');labs=L.map(l=>[l.y,l.v]);tp=ticks.map(t=>t.y1)}
+    else if(tool==='force'){pos=el('.ptr')('y1');labs=L.map(l=>[l.y,l.v]);tp=ticks.map(t=>t.y1)}
+    else if(tool==='cyl'){const m=d.querySelector('.men').getAttribute('d').match(/-?\d+(\.\d+)?/g).map(Number);pos=.25*m[1]+.5*m[3]+.25*m[5];labs=L.map(l=>[l.y,l.v]);tp=ticks.map(t=>t.y1)}
+    else if(tool==='ruler'){const o=el('.obj');pos=o('x')+o('width');labs=L.map(l=>[l.x,l.v]);tp=ticks.map(t=>t.x1)}
+    else{const ang=(x,y)=>(Math.atan2(y-135,x-135)*180/Math.PI-110+720)%360;const n=el('.ndl');pos=ang(n('x2'),n('y2'));labs=L.map(l=>[ang(l.x,l.y),l.v]);tp=ticks.map(t=>ang(t.x2,t.y2))}
+    labs.sort((a,b)=>a[1]-b[1]);const [p1,v1]=labs[0],[p2,v2]=labs[labs.length-1];
+    const val=v1+(pos-p1)*(v2-v1)/(p2-p1);
+    /* every printed number must be evenly placed, and the mark must sit on a tick */
+    for(const [p,v] of labs)if(Math.abs(v1+(p-p1)*(v2-v1)/(p2-p1)-v)>(v2-v1)*.002)throw new Error('labels uneven '+v);
+    const near=Math.min(...tp.map(t=>Math.abs(t-pos)));if(near>(tool==='dial'?.35:.06))throw new Error('mark not on a tick '+near);
+    return {val,step:(v2-v1)/(tp.length-1),count:tp.length};
+  },
+  /* the only index that takes part in every pair that goes the wrong way */
+  odd(ys,dir){const inv=[];for(let i=0;i<ys.length;i++)for(let j=i+1;j<ys.length;j++)if((ys[j]-ys[i])*dir<=0)inv.push([i,j]);if(inv.length<2)return -1;const c=ys.map((_,k)=>k).filter(k=>inv.every(p=>p.includes(k)));return c.length===1?c[0]:-1},
+  data(inv,d){const E=[];if(d.ys.length!==5||d.xs.join()!==inv.iv.xs.join())E.push('data shape');
+    for(const y of d.ys){const h=y/(inv.g/2);if(Math.abs(h-Math.round(h))>1e-6||y<=0||h>20)E.push('value off grid '+y);if(y<inv.scale.min||y>inv.scale.max||Math.abs((y-inv.scale.min)/inv.scale.minor-Math.round((y-inv.scale.min)/inv.scale.minor))>1e-6)E.push('value off instrument scale '+inv.id+' '+y)}
+    if(V.odd(d.ys,inv.dir)!==d.a)E.push('odd result not unique '+inv.id+' '+d.ys);
+    const mid=(d.ys[d.a-1]+d.ys[d.a+1])/2;if(!(d.a>0&&d.a<4)||Math.abs(d.ys[d.a]-mid)<inv.g*2.4)E.push('odd result not obvious '+inv.id+' '+d.ys);
+    return E},
+  graph(inv,d){const g=V.parse(graphSVG(inv,d));const yl=[...g.querySelectorAll('.ylb')].map(e=>[+e.getAttribute('y'),toNum(e.textContent)]),xl=[...g.querySelectorAll('.xlb')].map(e=>[+e.getAttribute('x'),toNum(e.textContent)]);
+    const paths=[...g.querySelectorAll('path')].filter(p=>p.getAttribute('stroke')==='#14532d').map(p=>{const m=p.getAttribute('d').match(/-?\d+(\.\d+)?/g).map(Number);return [m[0]+6,m[1]+6]});
+    if(paths.length!==5||xl.length!==5||yl.length!==6)return ['graph parts '+paths.length+' '+xl.length+' '+yl.length];
+    const [a,b]=[yl[0],yl[yl.length-1]];
+    return paths.some((p,i)=>{const y=a[1]+(p[1]-a[0])*(b[1]-a[1])/(b[0]-a[0]);return Math.abs(p[0]-xl[i][0])>.1||xl[i][1]!==d.xs[i]||Math.abs(y-d.ys[i])>inv.g*.02})?['graph point wrong '+inv.id]:[]},
+  UNIT:{'thermometer':['°C','temperature'],'measuring cylinder':['ml','volume'],'force meter':['N','force'],'ruler or tape measure':['cm','length'],'stopwatch':['s','time'],'sound level meter':['dB','loudness'],'balance (scales)':['g','mass']},
+  WORDS:{thermometer:/temperature/,'measuring cylinder':/volume/,'force meter':/force|pull|newtons/,'ruler or tape measure':/length|far|height|distance/,stopwatch:/time|long/,'sound level meter':/loud|noise/,'balance (scales)':/mass/},
+  check(t){
+    const E=[];const txt=[t.instr,t.ru,t.q||''].concat(t.hint||[],t.sol||[],(t.opts||[]).map(o=>o.t+(o.why||'')),(t.cards||[]).map(c=>c.t));
+    if(txt.some(s=>/NaN|undefined|Infinity|\[object|\d\.\d{4,}/.test(s)))E.push('bad text '+t.instr);
+    if(txt.some(s=>/\u0451|\u2014|\u2013/.test(s)))E.push('forbidden character '+t.instr);
+    if(!t.ru||!t.gl||!t.gl.length)E.push('no translation');
+    if(t.type!=='plot'&&(!t.hint||!t.sol))E.push('no method');
+    try{
+      if(t.type==='read'){
+        const r=V.read(instSVG(t.tool,t.cfg,t.v),t.tool);
+        if(Math.abs(r.val-t.v)>t.cfg.minor*.04)E.push('reading '+t.tool+' '+r.val+' != '+t.v+' '+JSON.stringify(t.cfg));
+        if(Math.abs(r.step-t.cfg.minor)>1e-6)E.push('tick step '+r.step);
+        const steps=(t.v-t.A)/t.cfg.minor;if(Math.abs(steps-t.k)>1e-6||t.k<0||t.A>t.v||t.B<t.v||Math.abs(t.A+t.k*t.cfg.minor-t.v)>1e-6)E.push('method numbers');
+        if(!t.sol[t.sol.length-1].includes('<b>'+num(t.v)+' '))E.push('method end');
+        if(Math.abs(toNum(num(t.v))-t.v)>1e-9||num(t.v).length>7)E.push('not typeable '+t.v);
+        if(t.v!==t.cfg.minor&&t.hint.join().includes('<b>'+num(t.v)+' '+t.unit))E.push('hint gives the answer');
+        if(t.onLabel!==(Math.abs(t.v%t.cfg.major)<1e-6||Math.abs(Math.abs(t.v%t.cfg.major)-t.cfg.major)<1e-6))E.push('label flag '+t.v+' '+t.cfg.major);
+        if(t.inv){if(t.d.ys[t.row]!==t.v)E.push('case reading row')}
+      }else if(t.type==='sort'){
+        const c=r=>t.cards.filter(x=>x.r===r);
+        if(t.cards.length!==5||c('iv').length!==1||c('dv').length!==1||c('cv').length!==3)E.push('card counts');
+        if(new Set(t.cards.map(x=>x.t)).size!==5)E.push('duplicate card');
+        /* the question reads "Does A change B": A must match the changed card, B the measured card */
+        const m=/^Does (.+?) (?:change|affect) (.+)\?$/.exec(t.q);if(!m)E.push('question pattern '+t.q);else{
+          const key=s=>s.toLowerCase().split(/\W+/).filter(w=>w.length>3&&!/^(since|start|taken|takes|after|shown|reading|needed|round|from|used|inside|left|time|water|height|type|volume|temperature|mass|distance)$/.test(w));
+          const score=(card,part)=>card.toLowerCase().split(/\W+/).filter(w=>w.length>2&&!/^(the|and|for)$/.test(w)&&part.toLowerCase().includes(w.replace(/s$/,''))).length;
+          const iv=c('iv')[0].t,dv=c('dv')[0].t;
+          if(!(score(iv,m[1])>=1))E.push('changed card not in question: '+iv+' | '+t.q);
+          if(!(score(dv,m[2]+(t.q.includes('time that passes')?' time':''))>=1))E.push('measured card not in question: '+dv+' | '+t.q)}
+      }else if(t.type==='pick'){
+        if(t.opts.length!==4||new Set(t.opts.map(o=>o.t)).size!==4)E.push('options '+t.instr);
+        if(t.opts.filter(o=>o.ok).length!==1)E.push('exactly one');
+        if(t.opts.some(o=>!o.ok&&!o.why))E.push('no reason');
+        const ok=t.opts.find(o=>o.ok);
+        if(t.sub==='concl'){
+          let s=0;const ys=t.d.ys.filter((_,i)=>i!==t.d.a);for(let i=1;i<ys.length;i++)s+=Math.sign(ys[i]-ys[i-1]);
+          if(Math.abs(s)!==3)E.push('trend not clear');
+          const real=Math.sign(s);const good=t.opts.filter(o=>o.claim===real);if(good.length!==1||good[0]!==ok)E.push('conclusion direction '+t.inv.id);
+          E.push(...V.data(t.inv,t.d),...V.graph(t.inv,t.d));
+        }else if(t.sub==='pred'){
+          const xs=t.d.xs;let i=0;while(xs[i+1]<t.x)i++;const lo=Math.min(t.d.ys[i],t.d.ys[i+1]),hi=Math.max(t.d.ys[i],t.d.ys[i+1]);
+          if(i===t.d.a||i+1===t.d.a||!(xs[i]<t.x&&t.x<xs[i+1]))E.push('prediction next to odd result');
+          const good=t.opts.filter(o=>o.v>lo&&o.v<hi);if(good.length!==1||good[0]!==ok)E.push('prediction '+t.inv.id+' '+t.opts.map(o=>o.v)+' '+lo+' '+hi);
+          if(t.opts.some(o=>o.v<=0||toNum(o.t.split(' ')[0])!==o.v))E.push('prediction value text');
+        }else if(t.sub==='tool'){
+          const what=(t.thing||t.inv.dv.name);const m=Object.keys(V.WORDS).filter(n=>V.WORDS[n].test(what));
+          if(!m.includes(ok.t.toLowerCase()))E.push('tool '+what+' '+ok.t);
+          if(t.opts.filter(o=>!o.ok).some(o=>{const n=o.t.toLowerCase(),u=t.inv?t.inv.dv.unit:null;return u&&V.UNIT[n][0]===u}))E.push('second right tool '+what);
+          if(t.inv&&V.UNIT[ok.t.toLowerCase()][0]!==t.inv.dv.unit)E.push('tool unit '+what);
+        }else if(t.sub==='unit'){
+          const n=Object.keys(V.UNIT).find(n=>t.instr.includes('a '+n+'?'));if(!n||V.UNIT[n][0]!==ok.t)E.push('unit '+t.instr);
+        }else if(t.sub==='fair'){if(!/fair/.test(ok.t))E.push('fair');if(!t.inv.cv.includes(t.cv))E.push('not a control')}
+        else if(t.sub==='fix'){if(!FIXQ.some(f=>f[0]===t.instr&&f[1][0]===ok.t))E.push('fix')}
+        else E.push('unknown pick');
+      }else if(t.type==='anom'){
+        if(t.view==='repeat'){const v=t.rep.vals,s=v.slice().sort((a,b)=>a-b),med=s[2],dev=v.map(x=>Math.abs(x-med)),big=Math.max(...dev),rest=dev.filter((_,i)=>i!==t.d.a);
+          if(dev[t.d.a]!==big||Math.max(...rest)*2.4>big||v.some(x=>x<=0))E.push('repeat odd '+v)}
+        else E.push(...V.data(t.inv,t.d),...V.graph(t.inv,t.d));
+      }else if(t.type==='plot')E.push(...V.data(t.inv,t.d),...V.graph(t.inv,t.d));
+    }catch(e){E.push('exception '+e.message+' '+t.instr)}
+    return E;
+  }
+};
+function runSelftest(){
+  const errs=[],seen=new Set();let items=0,played=0,wrongPaths=0;
+  const bad=m=>{if(errs.length<40&&!errs.includes(m))errs.push(m)};
+  try{
+    /* verifier sanity */
+    const br=genRead('cyl',2);br.v+=br.cfg.minor;if(!V.check(br).length)bad('verifier accepted wrong reading');
+    if(V.odd([1,2,9,4,5],1)!==2||V.odd([1,2,3,4,5],1)!==-1)bad('odd sanity');
+    const add=t=>{items++;seen.add(sig(t));V.check(t).forEach(bad)};
+    for(const k in SCALES)for(let tier=1;tier<=3;tier++){for(let i=0;i<110;i++)add(genRead(k,tier));
+      for(const cfg of SCALES[k][tier-1]){const n=Math.round((cfg.max-cfg.min)/cfg.minor);for(let i=0;i<=n;i++)add(readTask(k,cfg,Math.round((cfg.min+i*cfg.minor)*100)/100,tier))}}
+    for(let r=0;r<40;r++)for(const inv of INV){caseTasks(inv).forEach(add);add(anomTable(inv,genData(inv)))}
+    for(const inv of INV.concat(VAR_EXTRA))for(let i=0;i<4;i++)add(sortTask(inv));
+    for(let i=0;i<300;i++)add(toolBench());for(let i=0;i<120;i++)add(anomRepeat());for(let i=0;i<3;i++)add(fixTask(i));
+    if(seen.size<1200)bad('little variation '+seen.size);
+    /* ---- play through the real controls ---- */
+    const click=s=>{const b=$(s);if(!b)throw new Error('no element '+s);if(b.disabled)throw new Error('disabled '+s);b.dispatchEvent(new MouseEvent('click',{bubbles:true}))};
+    const type=s=>{while(S.buf)click('[data-k="⌫"]');const neg=s.startsWith('−');for(const c of neg?s.slice(1):s)click('[data-k="'+c+'"]');if(neg)click('[data-k="−"]');if(S.buf!==s)throw new Error('typed '+S.buf+' not '+s);click('[data-k="OK"]')};
+    const tapGraph=(c,h)=>{const svg=$('#graph'),m=svg.getScreenCTM(),p=svg.createSVGPoint();p.x=gx(c)+7;p.y=gy(h)+3;const q=p.matrixTransform(m);svg.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:q.x,clientY:q.y}))};
+    let wrongSel=0;
+    const act=right=>{
+      const t=S.t;
+      if(t.type==='read')type(right?num(t.v):num(t.v+t.cfg.minor*(t.v<t.cfg.max?1:-1)));
+      else if(t.type==='sort'){t.cards.forEach((c,i)=>{const r=right?c.r:(c.r==='iv'?'dv':c.r==='dv'?'iv':'cv');click('[data-c="'+i+'"][data-r="'+r+'"]')});click('#check')}
+      else if(t.type==='pick'){const i=t.opts.findIndex((o,j)=>right?o.ok:!o.ok&&!$('[data-o="'+j+'"]').disabled);click('[data-o="'+i+'"]')}
+      else if(t.type==='anom'){const i=right?t.d.a:[0,1,2,3,4].filter(i=>i!==t.d.a)[wrongSel++%4];click(t.view==='graph'?'.pt[data-p="'+i+'"]':'tr[data-r="'+i+'"] td')}
+      else{const j=S.pin,h=Math.round(t.d.ys[j]/(t.inv.g/2)),wh=right?h:(h>10?h-3:h+3);
+        if(j%2===0){tapGraph(j,wh);if(!S.mark||S.mark.c!==j||S.mark.h!==wh)throw new Error('tap snapped to '+JSON.stringify(S.mark)+' wanted '+j+','+wh)}
+        else{click('[data-n="0,1"]');let g=0;while(S.mark.c<j&&g++<30)click('[data-n="1,0"]');while(S.mark.c>j&&g++<30)click('[data-n="-1,0"]');while(S.mark.h<wh&&g++<60)click('[data-n="0,1"]');while(S.mark.h>wh&&g++<90)click('[data-n="0,-1"]')}
+        click('#check')}
+    };
+    const solve=mode=>{ /* mode 0: right, 1: wrong then right, 2: wrong twice */
+      const t=S.t,i=S.i;let guard=0;
+      while(!S.done&&guard++<20){
+        const pin=S.pin;
+        if(mode>0){act(false);wrongPaths++;const fb=$('#fb');
+          if(!fb||!fb.classList.contains('bad')||!fb.querySelector('ol li'))bad('no method after mistake '+t.type);
+          if(S.done||S.pin!==pin)bad('first mistake ended the task '+t.type);
+          const html=fb.innerHTML;
+          if(t.type==='read'&&t.v!==t.cfg.minor&&fb.textContent.includes('= '+num(t.v)+' '))bad('clue reveals reading');
+          if(mode===2){act(false);const f2=$('#fb');if(!f2||!f2.classList.contains('bad')||!f2.querySelector('ol li'))bad('no solution after second mistake '+t.type);if(t.type!=='plot'&&!S.done)bad('second mistake did not finish '+t.type);if(t.type==='plot'&&!S.done&&S.pin!==pin+1)bad('plot not pinned after two mistakes');played+=2}
+          else{act(true);played+=2}
+        }else{act(true);played++;if($('#fb').classList.contains('bad'))throw new Error('right answer rejected '+t.type+' '+t.instr+' '+t.v)}
+      }
+      if(!S.done||!$('#next'))throw new Error('task not finished '+t.type);
+    };
+    loadG();
+    for(let n=1;n<=LV.length;n++){
+      for(const mode of [0,1,2]){
+        G.stars={};G.tiers={};G.up={};G.row=0;const xp0=jget(QKEY).xp||0;
+        start(n);let guard=0,top=1;
+        while(!S.finished&&guard++<30){const t=S.t;if(t.type==='read')top=Math.max(top,t.tier);V.check(t).forEach(bad);solve(mode);click('#next')}
+        if(!S.finished||!$('#done'))bad('level '+n+' not finished');
+        else if(mode===0&&(S.finished.stars!==3||G.stars[n]!==3))bad('stars L'+n);
+        else if(mode===2&&S.finished.stars!==1)bad('stars with mistakes L'+n);
+        if(mode===0&&LV[n-1].adapt&&top<3)bad('level '+n+' never got hard');
+        if(mode===2&&!LV[n-1].case&&S.total!==LV[n-1].n+3)bad('no twin tasks L'+n);
+        if(!((jget(QKEY).xp||0)>xp0))bad('no xp L'+n);
+      }
+    }
+    /* every tier of every reading bench, wrong paths included */
+    for(let n=1;n<=4;n++)for(let tier=1;tier<=3;tier++){start(n,{tier});for(let i=0;i<6;i++){solve(i%3);click('#next')}}
+    /* double answer is ignored */
+    start(5);act(true);const x1=jget(QKEY).xp;answer(0);if(jget(QKEY).xp!==x1)bad('double answer');
+    /* map and storage rules */
+    showMap();if(document.querySelectorAll('[data-lv]').length!==LV.length)bad('map');
+    for(const k in MEM)delete MEM[k];
+    MEM[QKEY]=JSON.stringify({xp:5,best:{boss:80},mist:{a:1}});MEM[PKEY]=JSON.stringify({day:yesterday(),streak:3});loadG();
+    start(1);act(true);
+    const q=JSON.parse(MEM[QKEY]),g=JSON.parse(MEM[GKEY]),p=JSON.parse(MEM[PKEY]);
+    if(q.xp!==5+S.xp||q.best.boss!==80||!q.mist||Object.keys(q).length!==3)bad('quiz record merge');
+    if('xp' in g||g.answered!==1)bad('game record');if(p.streak!==4||p.day!==dayStr(new Date()))bad('streak');
+    click('#next');act(true);if(JSON.parse(MEM[PKEY]).streak!==4)bad('streak twice a day');
+    delete MEM[QKEY];click('#next');act(true);if(!(JSON.parse(MEM[QKEY]).xp>0))bad('create quiz record');
+    MEM[QKEY]='not json';click('#next');act(true);if(MEM[QKEY]!=='not json')bad('corrupt record overwritten');
+  }catch(e){bad('exception: '+e.message+' '+String(e.stack).split('\n')[1])}
+  if(items<2000)bad('too few items '+items);
+  const msg=errs.length?'GAME_SELFTEST_FAIL '+errs.join(' ; '):'GAME_SELFTEST_OK levels='+LV.length+' verified='+items+' distinct='+seen.size+' wrongPaths='+wrongPaths+' played='+played;
+  document.body.innerHTML='<pre id="selftest" style="color:#fff;white-space:pre-wrap">'+esc(msg)+'</pre>';
+}
+
+/* ---------- boot ---------- */
+loadG();
+if(SELFTEST)runSelftest();
+else{
+  const n=+QS.get('level');
+  if(n>=1&&n<=LV.length){
+    start(n,{tier:+QS.get('tier')||0,step:+QS.get('step')||0});
+    const show=QS.get('show');
+    if(show==='done'){S.i=S.total;finish()}
+    else if(show){
+      const t=S.t,right=show==='right';
+      const u=()=>t.type==='read'?(right?num(t.v):num(t.A+t.k)===num(t.v)?num(t.B):num(t.A+t.k)):t.type==='sort'?Object.fromEntries(t.cards.map((c,i)=>[i,right?c.r:(c.r==='iv'?'dv':c.r==='dv'?'iv':'cv')])):t.type==='pick'?t.opts.findIndex((o,j)=>right?o.ok:!o.ok&&!$('[data-o="'+j+'"]').disabled):t.type==='anom'?(right?t.d.a:(t.d.a+1)%5):{c:S.pin,h:Math.round(t.d.ys[S.pin]/(t.inv.g/2))-(right?0:3)};
+      if(t.type==='sort'&&!right){const x=u();for(const i in x){const b=$('[data-c="'+i+'"][data-r="'+x[i]+'"]');b.click()}}
+      if(t.type==='plot'){if(show==='mark'){const x=u();tapAt(gx(x.c),gy(x.h+3))}else if(right){answer(u());answer(u());const x=u();tapAt(gx(x.c),gy(x.h))}else{S.mark=u();drawMark();answer(u());if(show==='solution'){answer(u())}}}
+      else{answer(u());if(show==='solution'&&!S.done)answer(u())}
+    }
+  }else showMap();
+}
+</script>
+</body>
+</html>
